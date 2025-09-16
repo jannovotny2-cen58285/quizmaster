@@ -1,17 +1,18 @@
 import type { Page, TestInfo } from '@playwright/test'
 
 import {
-    QuestionEditPage,
     CreateQuestionListPage,
+    CreateQuizPage,
+    HomePage,
+    QuestionEditPage,
+    QuestionListPage,
     QuizQuestionPage,
-    TakeQuestionPage,
     QuizScorePage,
     QuizWelcomePage,
-    QuestionListPage,
-    HomePage,
+    TakeQuestionPage,
 } from '../../pages'
 import { emptyQuestion, type Question } from './question.ts'
-import { emptyQuiz, type QuizBookmark, type Quiz } from './quiz.ts'
+import { emptyQuiz, type Quiz, type QuizBookmark } from './quiz.ts'
 
 export class QuizmasterWorld {
     constructor(
@@ -25,6 +26,7 @@ export class QuizmasterWorld {
         this.quizWelcomePage = new QuizWelcomePage(this.page)
         this.quizScorePage = new QuizScorePage(this.page)
         this.questionListPage = new QuestionListPage(this.page)
+        this.quizCreatePage = new CreateQuizPage(this.page)
         this.homePage = new HomePage(this.page)
     }
 
@@ -35,6 +37,7 @@ export class QuizmasterWorld {
     readonly quizWelcomePage: QuizWelcomePage
     readonly quizScorePage: QuizScorePage
     readonly questionListPage: QuestionListPage
+    readonly quizCreatePage: CreateQuizPage
     readonly homePage: HomePage
     quizId = ''
 

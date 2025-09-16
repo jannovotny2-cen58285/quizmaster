@@ -1,11 +1,11 @@
-import './question-list.scss'
-import { Button, type WithOnClick } from 'pages/components/button'
-import { useParams, useNavigate } from 'react-router-dom'
-import type { QuestionListData } from '.'
-import { QuestionItem } from './question-item'
-import copyClipboardIcon from '../../assets/icons/copy-clipboard.svg'
-import { useState } from 'react'
 import { linkQuestionToList } from 'api/quiz-question'
+import { Button, type WithOnClick } from 'pages/components/button'
+import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import type { QuestionListData } from '.'
+import copyClipboardIcon from '../../assets/icons/copy-clipboard.svg'
+import { QuestionItem } from './question-item'
+import './question-list.scss'
 
 type Props = {
     questionListData?: QuestionListData
@@ -52,6 +52,12 @@ export const CopyQuestionButton = ({ id, kind, onClick }: CopyQuestionButtonProp
 export const AddExistingQuestion = ({ onClick }: WithOnClick) => (
     <Button id="add-existing-question" onClick={onClick}>
         Add Existing Question
+    </Button>
+)
+
+export const CreateQuizButton = ({ onClick }: WithOnClick) => (
+    <Button id="create-quiz" onClick={onClick}>
+        Create Quiz
     </Button>
 )
 
@@ -120,6 +126,10 @@ export function QuestionList({ questionListData, onRefresh }: Props) {
         }
     }
 
+    const onCreateQuiz = () => {
+        navigate(`/quiz-create/new?listguid=${questionListId}`)
+    }
+
     return questionListData ? (
         <div className="question-list-page">
             <h1 id="question-title-header" data-testid="question-list-title">
@@ -155,6 +165,7 @@ export function QuestionList({ questionListData, onRefresh }: Props) {
                     />
                 ))}
             </div>
+            <CreateQuizButton onClick={onCreateQuiz} />
         </div>
     ) : null
 }
