@@ -94,14 +94,14 @@ Then('I see no error messages in quiz form', async function () {
     await this.quizCreatePage.hasAnyError().then(result => expect(result).toBe(false))
 })
 
-When('I filter questions by {string}', (s: string) => {
-  fail('Not implemented yet')
+When('I filter questions by {string}', (_s: string) => {
+    fail('Not implemented yet')
 })
 
 Then("I don't see questions in quiz creation form", () => {
-  fail('Not implemented yet')
+    fail('Not implemented yet')
 })
 
 Then('I see questions in quiz creation form', () => {
-  fail('Not implemented yet')
+    fail('Not implemented yet')
 })
