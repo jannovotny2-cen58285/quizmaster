@@ -16,5 +16,4 @@ export class QuizStatisticsPage {
     failureRate = async () => Number.parseInt((await this.page.locator('span#failure-rate').textContent()) ?? '')
     timeoutCount = async () => Number.parseInt((await this.page.locator('span#timeout-count').textContent()) ?? '')
     averageTime = async () => Number.parseInt((await this.page.locator('span#average-time').textContent()) ?? '')
-
 }

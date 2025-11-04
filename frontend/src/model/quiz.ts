@@ -18,5 +18,3 @@ export interface QuizStats {
     readonly timesFinished: number
     readonly averageScore: number
 }
-
-
