@@ -31,15 +31,10 @@ Then(
     },
 )
 
-Then(
-    /^I see the correct number of questions (\d+)/,
-    async function (
-        expectedTotalQuestions: number,
-    ) {
-        const totalQuestions = await this.quizScorePage.totalQuestions()
-        expect(totalQuestions).toBe(expectedTotalQuestions)
-    },
-)
+Then(/^I see the correct number of questions (\d+)/, async function (expectedTotalQuestions: number) {
+    const totalQuestions = await this.quizScorePage.totalQuestions()
+    expect(totalQuestions).toBe(expectedTotalQuestions)
+})
 
 Then(
     /^I see the original result (\d+), (\d+)%, (passed|failed)/,

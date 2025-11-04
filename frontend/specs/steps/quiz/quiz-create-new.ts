@@ -16,7 +16,6 @@ When('I enter number of randomized questions in quiz {int}', async function (fin
     await this.quizCreatePage.enterQuizFinalCount(finalCount)
 })
 
-
 When('I see empty quiz title', async function () {
     await this.quizCreatePage.getQuizTitleValue().then(value => expect(value).toBe(''))
 })

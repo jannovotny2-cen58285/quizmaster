@@ -73,7 +73,7 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
             <QuestionSelect questions={questions} onSelect={toggleSelectedId} />
 
             <div className="label">Ramdomize questions</div>
-            <input type="checkbox" id="isRandomized"/>
+            <input type="checkbox" id="isRandomized" />
             <NumberInput id="quiz-finalCount" value={finalCount} onChange={setFinalCount} />
 
             {atLeastOneQuestionError && <FormFieldError errorCode="atLeastOneQuestionRequired" />}
