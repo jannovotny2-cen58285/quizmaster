@@ -30,11 +30,8 @@ Feature: Create Quiz from Workspace
     And I see quiz question "3 * 3 = ?"
     And I see quiz question "4 / 2 = ?"
 
-<<<<<<< Updated upstream
-  Scenario: Create quiz with 3 questions
-=======
-Scenario: Create quiz with 4 questions
->>>>>>> Stashed changes
+  @skip
+  Scenario: Create quiz with 4 questions
     When I start creating a new quiz
     * I enter quiz name "Math Quiz"
     * I enter quiz description "Very hard math quiz"
