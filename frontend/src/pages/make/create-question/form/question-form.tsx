@@ -9,6 +9,8 @@ import {
     type QuestionFormData,
 } from 'pages/make/create-question/form'
 import { useState } from 'react'
+import { type ErrorCodes, ErrorMessages } from './error-message.tsx'
+import { validateQuestionFormData } from '../validators.ts'
 
 interface QuestionEditProps {
     readonly initialQuestionData: QuestionFormData
@@ -37,6 +39,7 @@ function setEasyModeChoiceInQuestionData(isEasyModeChoice: boolean, questionData
 
 export const QuestionEditForm = ({ initialQuestionData, onSubmit }: QuestionEditProps) => {
     const [questionData, setQuestionData] = useState(initialQuestionData)
+    const [errors, setErrors] = useState<ErrorCodes>(new Set())
 
     const setQuestion = (question: string) => setQuestionData({ ...questionData, question })
     const setIsMultipleChoice = (isMultipleChoice: boolean) =>
@@ -47,7 +50,12 @@ export const QuestionEditForm = ({ initialQuestionData, onSubmit }: QuestionEdit
     const setQuestionExplanation = (questionExplanation: string) =>
         setQuestionData({ ...questionData, questionExplanation })
 
-    const handleSubmit = () => onSubmit(questionData)
+    const handleSubmit = () => {
+        const errors = validateQuestionFormData(questionData)
+        setErrors(errors)
+
+        if (errors.size === 0) onSubmit(questionData)
+    }
 
     return (
         <Form id="question-create-form" onSubmit={handleSubmit}>
@@ -76,6 +84,7 @@ export const QuestionEditForm = ({ initialQuestionData, onSubmit }: QuestionEdit
             <div className="flex-container">
                 <SubmitButton />
             </div>
+            <ErrorMessages errorCodes={errors} />
         </Form>
     )
 }
