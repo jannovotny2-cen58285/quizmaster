@@ -52,8 +52,6 @@ export function CreateQuestionContainer() {
         })
     }
 
-    const handleQuestionDelete = () => ({})
-
     return (
         <>
             <h1>Create Question</h1>
@@ -62,8 +60,6 @@ export function CreateQuestionContainer() {
                     questionData={questionData}
                     setQuestionData={setQuestionData}
                     onSubmit={handleSubmit}
-                    isEdit={false}
-                    handleQuestionDelete={handleQuestionDelete}
                 />
                 <ErrorMessages errorCodes={errors} />
                 <QuestionLink url={linkToQuestion} />

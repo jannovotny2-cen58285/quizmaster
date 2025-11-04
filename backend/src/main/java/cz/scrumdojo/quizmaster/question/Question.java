@@ -44,7 +44,4 @@ public class Question {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Generated(event = EventType.INSERT)
     private String editId;
-
-    @Transient
-    private boolean isDeletable;
 }

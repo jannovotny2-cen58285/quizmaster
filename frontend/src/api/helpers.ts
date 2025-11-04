@@ -24,4 +24,3 @@ const sendData =
 export const postJson = sendData('POST')
 export const patchJson = sendData('PATCH')
 export const putJson = sendData('PUT')
-export const deleteJson = sendData('DELETE')

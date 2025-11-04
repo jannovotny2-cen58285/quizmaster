@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -28,26 +27,9 @@ public class QuestionController {
     }
 
     @Transactional
-    @DeleteMapping("/question/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Integer id) {
-        try {
-            Question question = questionRepository.findById(id).orElse(null);
-            if (question != null) {
-                questionRepository.delete(question);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            log.error("Error deleting question with ID: {}", id, e);
-            return ResponseEntity.internalServerError().build();
-        }
-    }
-
-    @Transactional
     @GetMapping("/question/{editId}/edit")
     public ResponseEntity<Question> getQuestionByEditId(@PathVariable String editId) {
-        var question = questionRepository.findByEditId(editId);
-        return response(question.map(q -> isQuestionsInQuiz(List.of(q)).stream().findFirst().orElse(null)));
+        return response(questionRepository.findByEditId(editId));
     }
 
     @Transactional
@@ -69,22 +51,7 @@ public class QuestionController {
     }
 
     private Optional<Question> findQuestion(Integer id) {
-        var question = questionRepository.findById(id);
-        if( question.isEmpty()) {
-            return question;
-        }
-        return Optional.of(isQuestionsInQuiz(question.stream().toList()).stream().findFirst().orElse(null));
-    }
-
-    private List<Question> isQuestionsInQuiz(List<Question> questions) {
-        var idsInQuiz = questionRepository.findQuestionsInQuizs(questions.stream().map(Question::getId).toList());
-        return questions.stream().map(question -> {
-            if (idsInQuiz.contains(question.getId())) {
-                question.setDeletable(false);
-            } else {
-                question.setDeletable(true);
-            }
-            return question;}).toList();
+        return questionRepository.findById(id);
     }
 
     private <T> ResponseEntity<T> response(Optional<T> entity) {

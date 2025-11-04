@@ -73,41 +73,9 @@ public class QuestionControllerTest {
     }
 
     @Test
-    public void deleteQuestion() {
-        var question = fixtures.save(fixtures.question());
-
-        questionController.deleteQuestion(question.getId());
-
-        var response = questionController.getQuestion(question.getId());
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertNull(response.getBody());
-    }
-
-    @Test
     public void nonExistingQuestion() {
         ResponseEntity<?> response = questionController.getQuestion(-1);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-
-    @Test
-    public void isQuestionDefaultDeletable() {
-        var question = fixtures.save(fixtures.question());
-
-        var response = questionController.getQuestion(question.getId()).getBody();
-        assertNotNull(response);
-
-        assertTrue(response.isDeletable());
-    }
-
-    @Test
-    public void questionInQuizIsNotDeletable() {
-        var question = fixtures.save(fixtures.question());
-        fixtures.save(fixtures.quiz(question));
-
-        var response = questionController.getQuestion(question.getId()).getBody();
-        assertNotNull(response);
-
-        assertFalse(response.isDeletable());
     }
 }

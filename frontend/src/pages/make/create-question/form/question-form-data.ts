@@ -16,7 +16,6 @@ export interface QuestionFormData {
     readonly isMultipleChoice: boolean
     readonly workspaceGuid: string | null
     readonly isEasyModeChoice: boolean
-    readonly isDeletable?: boolean
 }
 
 export const emptyQuestionFormData = (): QuestionFormData => ({
@@ -42,7 +41,6 @@ export const toQuestionFormData = (questionData: QuestionApiData): QuestionFormD
         isMultipleChoice: questionData.correctAnswers.length > 1,
         workspaceGuid: questionData.workspaceGuid,
         isEasyModeChoice: questionData.easyMode,
-        isDeletable: questionData.isDeletable ?? true,
     }
 }
 

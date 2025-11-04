@@ -1,5 +1,5 @@
 import type { Question } from 'model/question.ts'
-import { fetchJson, postJson, patchJson, deleteJson } from './helpers.ts'
+import { fetchJson, postJson, patchJson } from './helpers.ts'
 
 export const fetchQuestion = async (questionId: string) => await fetchJson<Question>(`/api/question/${questionId}`)
 
@@ -17,5 +17,3 @@ export const saveQuestion = async (question: QuestionApiData) =>
 
 export const updateQuestion = async (question: QuestionApiData, editId: string) =>
     await patchJson<QuestionApiData, number>(`/api/question/${editId}`, question)
-
-export const deleteQuestion = async (questionId: number) => await deleteJson(`/api/question/${questionId}`)

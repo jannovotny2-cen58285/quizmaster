@@ -17,7 +17,6 @@ Feature: Edit question GUI
       | Prague | * | Yes     |
       | Berlin |   | Germany |
     * I see "Czechia is a country in Europe. Czechs love beer." in the question explanation field
-    * I see delete button is enable
 
   Scenario: Edit all fields
     Given I enter question "What is the capital of Slovakia?"
@@ -46,9 +45,3 @@ Feature: Edit question GUI
     Then I see answer 1 as correct
     * I see answer 2 as correct
     * I see answer 3 as incorrect
-
-  Scenario: Delete the question
-    When I click delete button
-    Then I am on the home page
-    And I should see a link to create a new question
-    And I should see a link to create a new workspace

@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useApi } from 'api/hooks'
-import { useNavigate } from 'react-router-dom'
-import { type QuestionApiData, fetchQuestionByEditId, updateQuestion, deleteQuestion } from 'api/question.ts'
+import { type QuestionApiData, fetchQuestionByEditId, updateQuestion } from 'api/question.ts'
 
 import { emptyQuestionFormData, QuestionEditForm, toQuestionApiData, toQuestionFormData } from './form'
 import { validateQuestionFormData } from './validators'
@@ -12,7 +11,6 @@ import { LoadedIndicator, QuestionEditLink, QuestionLink } from './components.ts
 export function EditQuestionContainer() {
     const params = useParams()
     const questionEditId = params.id
-    const navigate = useNavigate()
 
     const [questionData, setQuestionData] = useState(emptyQuestionFormData())
 
@@ -20,7 +18,7 @@ export function EditQuestionContainer() {
     const [linkToQuestion, setLinkToQuestion] = useState<string>('')
     const [linkToEditQuestion, setLinkToEditQuestion] = useState<string>('')
     const [errors, setErrors] = useState<ErrorCodes>(new Set())
-    const [questionId, setQuestionId] = useState<number>(0)
+    const [, setQuestionId] = useState<number>(0)
 
     useApi(questionEditId, fetchQuestionByEditId, question => {
         setQuestionData(toQuestionFormData(question))
@@ -49,11 +47,6 @@ export function EditQuestionContainer() {
         }
     }
 
-    const handleQuestionDelete = () => {
-        deleteQuestion(questionId)
-        navigate('/')
-    }
-
     return (
         <>
             <h1 data-testid="edit-question-title">Edit Question</h1>
@@ -62,8 +55,6 @@ export function EditQuestionContainer() {
                     questionData={questionData}
                     setQuestionData={setQuestionData}
                     onSubmit={handleSubmit}
-                    isEdit={true}
-                    handleQuestionDelete={handleQuestionDelete}
                 />
                 <ErrorMessages errorCodes={errors} />
                 <QuestionLink url={linkToQuestion} />

@@ -8,7 +8,6 @@ export interface Question {
     readonly explanations: string[]
     readonly questionExplanation: string
     readonly correctAnswers: AnswerIdxs
-    readonly isDeletable?: boolean
     workspaceGuid: string | null
     easyMode: boolean
 }

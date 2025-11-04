@@ -1,4 +1,4 @@
-import { Button, SubmitButton, Form } from 'pages/components'
+import { SubmitButton, Form } from 'pages/components'
 import {
     type AnswerData,
     AnswersEdit,
@@ -13,8 +13,6 @@ interface QuestionEditProps {
     readonly questionData: QuestionFormData
     readonly setQuestionData: (questionData: QuestionFormData) => void
     readonly onSubmit: () => void
-    readonly handleQuestionDelete: () => void
-    readonly isEdit: boolean
 }
 
 function setMultipleChoiceInQuestionData(isMultipleChoice: boolean, questionData: QuestionFormData): QuestionFormData {
@@ -37,13 +35,7 @@ function setEasyModeChoiceInQuestionData(isEasyModeChoice: boolean, questionData
     }
 }
 
-export const QuestionEditForm = ({
-    questionData,
-    setQuestionData,
-    onSubmit,
-    handleQuestionDelete,
-    isEdit,
-}: QuestionEditProps) => {
+export const QuestionEditForm = ({ questionData, setQuestionData, onSubmit }: QuestionEditProps) => {
     const setQuestion = (question: string) => setQuestionData({ ...questionData, question })
     const setIsMultipleChoice = (isMultipleChoice: boolean) =>
         setQuestionData(setMultipleChoiceInQuestionData(isMultipleChoice, questionData))
@@ -79,17 +71,6 @@ export const QuestionEditForm = ({
             />
             <div className="flex-container">
                 <SubmitButton />
-                {isEdit && (
-                    <Button
-                        onClick={handleQuestionDelete}
-                        disabled={!questionData.isDeletable}
-                        title={!questionData.isDeletable ? 'Otázku nelze smazat je obsažena v kvízu!' : ''}
-                        data-testid="delete-button"
-                        className="secondary button"
-                    >
-                        Delete question
-                    </Button>
-                )}
             </div>
         </Form>
     )
