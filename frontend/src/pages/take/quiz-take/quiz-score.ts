@@ -18,6 +18,14 @@ export const evaluate = (quiz: Quiz, quizAnswers: QuizAnswers): QuizScore => ({
         isAnsweredCorrectly(quizAnswers.firstAnswers[idx], question.correctAnswers),
     ).length,
     total: quiz.questions.length,
-    score: quiz.questions.map((question, idx) => calculateScore(quizAnswers.finalAnswers[idx], question.correctAnswers, isAnsweredCorrectly(quizAnswers.finalAnswers[idx], question.correctAnswers)).score).reduce((a, b) => a + b, 0),
+    score: quiz.questions
+        .map(
+            (question, idx) =>
+                calculateScore(
+                    quizAnswers.finalAnswers[idx],
+                    question.correctAnswers,
+                    isAnsweredCorrectly(quizAnswers.finalAnswers[idx], question.correctAnswers),
+                ).score,
+        )
+        .reduce((a, b) => a + b, 0),
 })
-
