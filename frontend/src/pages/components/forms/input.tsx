@@ -1,4 +1,4 @@
-interface InputProps<V> {
+export interface InputProps<V> {
     readonly placeholder?: string
     readonly className?: string
     readonly id?: string

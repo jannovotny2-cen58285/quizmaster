@@ -5,7 +5,7 @@ import { useStateSet } from 'helpers'
 import type { QuestionListItem } from 'model/question-list-item.ts'
 import type { QuizCreateRequest } from 'api/quiz.ts'
 
-import { Field, Form, NumberInput, SubmitButton, TextInput } from 'pages/components'
+import { Field, Form, NumberInput, SubmitButton, TextArea, TextInput } from 'pages/components'
 import { QuestionSelect } from './components/question-select.tsx'
 import { FormFieldError } from 'pages/components/forms/form-field-error.tsx'
 
@@ -67,7 +67,7 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
                 <TextInput id="quiz-title" value={title} onChange={setTitle} />
             </Field>
             <Field label="Quiz description" isSubmitted={isSubmitted} errorCode={quizDescriptionError}>
-                <TextInput id="quiz-description" value={description} onChange={setDescription} />
+                <TextArea id="quiz-description" value={description} onChange={setDescription} />
             </Field>
             <Field label="Time limit (in seconds)" isSubmitted={isSubmitted} errorCode={timeLimitError}>
                 <NumberInput id="time-limit" value={timeLimit} onChange={setTimeLimit} />
