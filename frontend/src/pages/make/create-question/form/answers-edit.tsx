@@ -9,8 +9,7 @@ interface AnswerRowProps {
 export const AnswerRow = ({ state, isMultipleChoice }: AnswerRowProps) => (
     <div className="answer-row">
         <input
-            className={!isMultipleChoice ? 'answer-isCorrect-checkbox' : 'answer-isCorrect-checkbox-multi'}
-            type="checkbox"
+            type={isMultipleChoice ? 'checkbox' : 'radio'}
             checked={state.isCorrect}
             onChange={state.toggleCorrect}
         />
