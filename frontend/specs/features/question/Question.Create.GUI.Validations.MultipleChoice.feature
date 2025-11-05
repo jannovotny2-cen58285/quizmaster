@@ -23,7 +23,7 @@ Feature: Create question GUI
     When I mark the question as multiple choice
     And I attempt to save the question
     Then I see error messages
-      | multiple-choice-must-have-more-correct-answers |
+      | few-correct-answers |
 
   Scenario: Create multiple choice question with all correct answers
     Given I mark answer 2 as correct

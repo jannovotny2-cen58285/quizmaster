@@ -24,4 +24,4 @@ Feature: Edit question GUI
       | empty-answer |
       | no-correct-answer |
       | empty-answer-explanation |
-      | multiple-choice-must-have-more-correct-answers |
+      | few-correct-answers |

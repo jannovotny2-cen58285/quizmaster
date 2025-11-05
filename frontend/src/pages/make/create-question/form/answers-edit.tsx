@@ -41,7 +41,7 @@ export const AnswersEdit = ({ answerStates, isMultipleChoice, addAnswer }: Answe
             <ErrorMessage errorCode="no-correct-answer" />
             <ErrorMessage errorCode="empty-answer" />
             <ErrorMessage errorCode="empty-answer-explanation" />
-            <ErrorMessage errorCode="multiple-choice-must-have-more-correct-answers" />
+            <ErrorMessage errorCode="few-correct-answers" />
         </Field>
     )
 }
