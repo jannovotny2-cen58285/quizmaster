@@ -17,16 +17,16 @@ export const QuizTakePage = () => {
         }
     }, [])
 
-    function updateSessionStorage(answers: any) {
+    function updateSessionStorage(answers: QuizAnswers | null) {
         if (answers !== null) {
-            sessionStorage.setItem('quizAnswers', JSON.stringify(answers));
+            sessionStorage.setItem('quizAnswers', JSON.stringify(answers))
         } else {
-            sessionStorage.removeItem('quizAnswers');
+            sessionStorage.removeItem('quizAnswers')
         }
     }
-    function handleEvaluate(answers: any) {
-        updateSessionStorage(answers);
-        setQuizAnswers(answers);
+    function handleEvaluate(answers: QuizAnswers | null) {
+        updateSessionStorage(answers)
+        setQuizAnswers(answers)
     }
 
     if (quiz) {
@@ -34,6 +34,6 @@ export const QuizTakePage = () => {
             <QuizScorePage quiz={quiz} quizAnswers={quizAnswers} />
         ) : (
             <QuestionForm quiz={quiz} onEvaluate={handleEvaluate} />
-        );
+        )
     }
 }
