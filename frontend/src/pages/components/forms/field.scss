@@ -1,16 +1,6 @@
 .field {
     display: block;
     margin-bottom: 1rem;
-
-    input[type="text"],
-    input[type="number"],
-    textarea {
-        box-sizing: border-box;
-        width: 100%;
-        padding: .5rem;
-        border-radius: .25rem;
-        border: 1px solid #eee;
-    }
 }
 
 .label {

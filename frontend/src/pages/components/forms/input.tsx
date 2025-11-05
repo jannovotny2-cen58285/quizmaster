@@ -1,3 +1,5 @@
+import './input.scss'
+
 export interface InputProps<V> {
     readonly placeholder?: string
     readonly className?: string

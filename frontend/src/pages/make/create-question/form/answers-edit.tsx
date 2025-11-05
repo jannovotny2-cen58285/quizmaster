@@ -8,20 +8,14 @@ interface AnswerRowProps {
 
 export const AnswerRow = ({ state, isMultipleChoice }: AnswerRowProps) => (
     <div key={`answer-${state.index}`} className="answer-row" id={`answer-${state.index}`}>
-        <div className="answer-row-section">
-            <input
-                className={!isMultipleChoice ? 'answer-isCorrect-checkbox' : 'answer-isCorrect-checkbox-multi'}
-                type="checkbox"
-                checked={state.isCorrect}
-                onChange={state.toggleCorrect}
-            />
-            <span className="answer-row-correct-icon">{state.isCorrect ? '✅' : '❌'}</span>
-            <span className="answer-row-correct-text">{state.isCorrect ? 'Correct answer' : 'Incorrect answer'}</span>
-        </div>
-        <div className="answer-row-section">
+        <input
+            className={!isMultipleChoice ? 'answer-isCorrect-checkbox' : 'answer-isCorrect-checkbox-multi'}
+            type="checkbox"
+            checked={state.isCorrect}
+            onChange={state.toggleCorrect}
+        />
+        <div>
             <TextInput className="text" value={state.answer} onChange={state.setAnswer} />
-        </div>
-        <div className="answer-row-section">
             <TextInput className="explanation" value={state.explanation} onChange={state.setExplanation} />
         </div>
     </div>
