@@ -109,7 +109,7 @@ Feature: Create Quiz from Workspace
     Then I see no error messages in quiz form
     And I see pass score "0"
 
-  @skip
+  
   Scenario Outline: Filter questions in quiz creation form
     When I start creating a new quiz
     And I filter questions by "<filter>"

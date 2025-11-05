@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { useStateSet } from 'helpers'
@@ -26,6 +26,7 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [filter, setFilter] = useState<string>('')
     const [searchParams] = useSearchParams()
+    const [filteredQuestions, setFilteredQuestions] = useState<readonly QuestionListItem[]>(questions)
 
     const toFormData = (): QuizCreateFormData => ({
         title,
@@ -44,6 +45,15 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
     const timeLimitError = timeLimit < 0 ? 'negativeTimeLimit' : timeLimit > 21600 ? 'timeLimitAboveMax' : undefined
     const passScoreError = passScore > 100 ? 'scoreAboveMax' : undefined
     const atLeastOneQuestionError = isSubmitted && selectedIds.size === 0 ? 'atLeastOneQuestionRequired' : undefined
+
+    useEffect(() => {
+        if (filter === '') {
+            setFilteredQuestions(questions)
+        } else {
+            const filtered = questions.filter(q => q.question.toLowerCase().includes(filter.toLowerCase()))
+            setFilteredQuestions(filtered)
+        }
+    }, [filter, questions])
 
     return (
         <Form
@@ -70,7 +80,7 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
             <Field label="Filter" isSubmitted={isSubmitted}>
                 <TextInput id="question-filter" value={filter} onChange={setFilter} />
             </Field>
-            <QuestionSelect questions={questions} onSelect={toggleSelectedId} />
+            <QuestionSelect questions={filteredQuestions} onSelect={toggleSelectedId} />
 
             <div className="label">Ramdomize questions</div>
             <input type="checkbox" id="isRandomized" />
