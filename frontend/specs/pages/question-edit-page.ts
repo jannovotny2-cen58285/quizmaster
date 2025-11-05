@@ -40,7 +40,7 @@ export class QuestionEditPage {
     private answerRowsLocator = () => this.page.locator('.answer-row')
     answerRowCount = () => this.answerRowsLocator().count()
 
-    private answerRowLocator = (index: number) => this.page.locator(`.answer-row`).nth(index)
+    private answerRowLocator = (index: number) => this.page.locator('.answer-row').nth(index)
     private answerTextLocator = (index: number) => this.answerRowLocator(index).locator('input.text')
     enterAnswerText = (index: number, value: string) => this.answerTextLocator(index).fill(value)
     answerText = (index: number) => this.answerTextLocator(index).inputValue()
