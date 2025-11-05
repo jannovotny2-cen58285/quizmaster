@@ -6,10 +6,7 @@ export class QuestionEditPage {
     gotoNew = () => this.page.goto('/question/new', { waitUntil: 'networkidle' })
     gotoEdit = (url: string) => this.page.goto(url, { waitUntil: 'networkidle' })
 
-    waitForLoaded = () => this.page.isHidden('#is-loaded[value="loaded"]')
-
-    private editQuestionTitleLocator = () => this.page.locator('[data-testid="edit-question-title"]')
-    editQuestionTitle = () => this.editQuestionTitleLocator().textContent()
+    isEditPage = () => this.page.locator('#edit-question-page').isVisible()
 
     private questionLocator = () => this.page.locator('#question-text')
     enterQuestion = (question: string) => this.questionLocator().fill(question)

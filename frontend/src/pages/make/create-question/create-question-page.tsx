@@ -19,7 +19,7 @@ export function CreateQuestionPage() {
     }
 
     return (
-        <Page title="Create Question">
+        <Page title="Create Question" id="create-question-page">
             <QuestionEditForm onSubmit={handleSubmit} />
         </Page>
     )

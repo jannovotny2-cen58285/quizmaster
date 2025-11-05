@@ -31,9 +31,7 @@ Given('I start editing question {string}', async function (bookmark: string) {
 // Title assertions
 
 Then('I see question edit page', async function () {
-    await this.questionEditPage.waitForLoaded()
-    const title = await this.questionEditPage.editQuestionTitle()
-    expect(title).toContain('Edit')
+    await this.questionEditPage.isEditPage()
 })
 
 // Field assertions

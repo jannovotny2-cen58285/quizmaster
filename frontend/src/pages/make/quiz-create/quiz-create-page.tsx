@@ -33,7 +33,7 @@ export const QuizCreatePage = () => {
         })
 
     return (
-        <Page title="Create Quiz">
+        <Page title="Create Quiz" id="create-quiz-page">
             <QuizCreateForm questions={workspaceQuestions} onSubmit={onSubmit} />
 
             {errorMessage && <Alert type="error">{errorMessage}</Alert>}
