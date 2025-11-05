@@ -34,6 +34,11 @@ export const useQuestionFormState = (question?: Question) => {
 
     const [questionExplanation, setQuestionExplanation] = useState(question?.questionExplanation || '')
 
+    const toggleMultipleChoice = () => {
+        if (isMultipleChoice && correctAnswers.length > 1) setCorrectAnswers([])
+        setIsMultipleChoice(!isMultipleChoice)
+    }
+
     const setAnswer = (index: number, answer: string) => setAnswers(updated(answers, index, answer))
 
     const setExplanation = (index: number, explanation: string) =>
@@ -41,12 +46,10 @@ export const useQuestionFormState = (question?: Question) => {
 
     const toggleCorrect = (index: number) => {
         if (isMultipleChoice) {
-            // Multiple choice: toggle the index in/out of the array
             setCorrectAnswers(
                 correctAnswers.includes(index) ? correctAnswers.filter(i => i !== index) : [...correctAnswers, index],
             )
         } else {
-            // Single choice: simulate radio buttons - unset previous, set new
             setCorrectAnswers(correctAnswers.includes(index) ? [] : [index])
         }
     }
@@ -79,7 +82,7 @@ export const useQuestionFormState = (question?: Question) => {
         setQuestionText,
         addAnswer,
         setQuestionExplanation,
-        setIsMultipleChoice,
+        toggleMultipleChoice,
         setEasyMode,
     }
 }

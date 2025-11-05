@@ -16,21 +16,6 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
     const state = useQuestionFormState(question)
     const [errors, setErrors] = useState<ErrorCodes>(new Set())
 
-    const handleMultipleChoiceChange = (isMultipleChoice: boolean) => {
-        state.setIsMultipleChoice(isMultipleChoice)
-
-        // When switching to single choice mode, keep only the first correct answer
-        if (!isMultipleChoice && state.correctAnswers.length > 1) {
-            const firstCorrectAnswer = state.correctAnswers[0]
-            // Clear all and set only the first one
-            for (const idx of state.correctAnswers) {
-                if (idx !== firstCorrectAnswer) {
-                    state.answerStates[idx].toggleCorrect()
-                }
-            }
-        }
-    }
-
     const handleSubmit = () => {
         const errors = validateQuestionFormState(state)
         setErrors(errors)
@@ -48,7 +33,7 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
                     id="is-multiple-choice"
                     label="Multiple choice"
                     checked={state.isMultipleChoice}
-                    onToggle={handleMultipleChoiceChange}
+                    onToggle={state.toggleMultipleChoice}
                 />
                 {state.isMultipleChoice && (
                     <CheckField
