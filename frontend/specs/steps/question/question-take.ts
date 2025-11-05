@@ -93,13 +93,9 @@ Then('I see individual color feedback per answer:', async function (dataTable: D
     for (const { answer, color } of dataTable.hashes()) {
         const graphemes = Array.from(segmenter.segment(color), s => s.segment)
         const className = answerRowClass[graphemes[0]]
-        const checkMark = graphemes[2]
 
         const answerRow = this.takeQuestionPage.answerRowLocator(answer)
         await expect(answerRow).toHaveClass(new RegExp(className))
-
-        const feedbackLocator = this.takeQuestionPage.answerFeedbackLocator(answer)
-        await expect(feedbackLocator).toHaveText(checkMark)
     }
 })
 

@@ -3,7 +3,6 @@ import type { QuestionTakeState } from 'pages/take/question-take'
 
 export interface QuestionFeedbackState {
     readonly isAnswerCorrect: (idx: number) => boolean
-    readonly isUserSelected: (idx: number) => boolean
     readonly showFeedback: (idx: number) => boolean
     readonly score: QuestionFeedbackScore
 }
@@ -19,13 +18,11 @@ export const useQuestionFeedbackState = (state: QuestionTakeState, answers: Answ
         (answers.correctAnswers.includes(idx) && state.selectedAnswerIdxs.includes(idx)) ||
         (!answers.correctAnswers.includes(idx) && !state.selectedAnswerIdxs.includes(idx))
 
-    const isUserSelected = (idx: number) => state.selectedAnswerIdxs.includes(idx)
-
     const showFeedback = (idx: number) => (state.isMultipleChoice ? true : state.selectedAnswerIdxs[0] === idx)
 
     const score = calculateScore(state.selectedAnswerIdxs, answers.correctAnswers, isQuestionCorrect)
 
-    return { isAnswerCorrect, showFeedback, isUserSelected, score }
+    return { isAnswerCorrect, showFeedback, score }
 }
 
 export const calculateScore = (

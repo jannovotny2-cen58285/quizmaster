@@ -23,7 +23,7 @@ ul.answers {
         }
 
         &.correctly-selected { background-color: #b2dfb2 }
-        &.incorrect { background-color: #f4b6b8 }
+        &.incorrect { background-color: #f4b6b8; color: black }
     }
 }
 

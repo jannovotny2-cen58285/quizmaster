@@ -8,7 +8,6 @@ export interface AnswerProps {
     readonly answer: string
     readonly explanation: string
     readonly isCorrect: boolean
-    readonly isUserSelected: boolean
     readonly showFeedback: boolean
     readonly onAnswerChange: (idx: number, selected: boolean) => void
     readonly isAnswerChecked: (idx: number) => boolean
@@ -27,10 +26,7 @@ export const Answer = (props: AnswerProps) => {
     const isChecked = props.isAnswerChecked(props.idx)
 
     const className = props.isCorrect
-        ? props.isUserSelected
-            ? 'correctly-selected'
-            : 'correctly-not-selected'
-        : 'incorrect'
+        ? 'correctly-selected' : isChecked ? 'incorrect': 'correctly-not-selected'
 
     return (
         <li key={props.idx} id={`answer-row-${props.idx}`}>
@@ -47,7 +43,6 @@ export const Answer = (props: AnswerProps) => {
                 <label htmlFor={answerId} id={`answer-label-${props.idx}`}>
                     {props.answer}
                 </label>
-                {props.showFeedback && <div className="answer-feedback">{props.isCorrect ? '✅' : '❌'}</div>}
             </div>
             {props.showFeedback && props.explanation && <Explanation text={props.explanation} />}
         </li>

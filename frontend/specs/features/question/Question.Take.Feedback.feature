@@ -35,7 +35,6 @@ Feature: Take a single question
       | Mars, Pluto, Venus, Titan | Incorrect! |
       | Pluto, Titan              | Incorrect! |
 
-  @skip
   @screenshot:quiz-take-feedback-multiple-choice.png:3
   Scenario Outline: Multiple choice question per-answer feedback
     Upon submitting the question, each answer is marked with a color:

@@ -12,10 +12,6 @@ interface QuestionFeedbackProps {
 export const QuestionFeedback = ({ question, selectedAnswerIdxs }: QuestionFeedbackProps) => {
     const isMultipleChoice = question.correctAnswers.length > 1
 
-    const isAnswerCorrect = (idx: number) =>
-        (question.correctAnswers.includes(idx) && selectedAnswerIdxs?.includes(idx)) ||
-        (!question.correctAnswers.includes(idx) && !selectedAnswerIdxs?.includes(idx))
-
     return (
         <fieldset
             key={question.id}
@@ -34,8 +30,7 @@ export const QuestionFeedback = ({ question, selectedAnswerIdxs }: QuestionFeedb
                         idx={idx}
                         questionId={question.id}
                         answer={answer}
-                        isCorrect={isAnswerCorrect(idx)}
-                        isUserSelected={selectedAnswerIdxs?.includes(idx) ?? false}
+                        isCorrect={question.correctAnswers.includes(idx)}
                         explanation={question.explanations[idx]}
                         showFeedback={true}
                         onAnswerChange={() => {}}
