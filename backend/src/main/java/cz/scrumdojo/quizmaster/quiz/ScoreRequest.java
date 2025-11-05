@@ -8,13 +8,8 @@ import lombok.*;
 @Builder
 @ToString
 public class ScoreRequest {
-    private int score;
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
+    private double score;
+    private boolean passed;
+    private boolean timeout;
+    private double timeTaken;
 }

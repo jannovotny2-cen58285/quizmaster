@@ -52,28 +52,31 @@ public class QuizController {
             questions[i] = questionRepository.getReferenceById(quiz.getQuestionIds()[i]);
         }
 
-        if(quiz.getFinalCount() != null && quiz.getFinalCount() > 0 && questions.length > 0){
-            questions = QuizUtils.shuffleQuestions(questions);
-            questions = QuizUtils.shrinkQuestions(questions, quiz.getFinalCount());
+        if (quiz.getFinalCount() != null && quiz.getFinalCount() > 0  && questions.length > 0) {
+            List<Question> questionList = Arrays.asList(questions);
+            Collections.shuffle(questionList);
+            questions = questionList.subList(0, quiz.getFinalCount())
+                    .toArray(new Question[quiz.getFinalCount() - 1]);
+                    questions = QuizUtils.shrinkQuestions(questions, quiz.getFinalCount());
         }
 
-       QuizResponse build = QuizResponse.builder()
-        .id(quiz.getId())
-        .title(quiz.getTitle())
-        .description(quiz.getDescription())
-        .questions(questions)
-        .mode(quiz.getMode())
-        .passScore(quiz.getPassScore())
-        .timeLimit(quiz.getTimeLimit())
-        .timesTaken(stats.getTimesTaken())
-        .timesFinished(stats.getTimesFinished())
-        .averageScore(stats.getAverageScore())
-        .timeoutCount(stats.getTimeoutCount())
-        .failureRate(stats.getFailureRate())
-        .successRate(stats.getSuccessRate())
-        .averageTime(stats.getAverageTime())
-        .size(quiz.getSize())
-        .build();
+        QuizResponse build = QuizResponse.builder()
+                .id(quiz.getId())
+                .title(quiz.getTitle())
+                .description(quiz.getDescription())
+                .questions(questions)
+                .mode(quiz.getMode())
+                .passScore(quiz.getPassScore())
+                .timeLimit(quiz.getTimeLimit())
+                .timesTaken(stats.getTimesTaken())
+                .timesFinished(stats.getTimesFinished())
+                .averageScore(stats.getAverageScore())
+                .timeoutCount(stats.getTimeoutCount())
+                .failureRate(stats.getFailureRate())
+                .successRate(stats.getSuccessRate())
+                .averageTime(stats.getAverageTime())
+                .size(quiz.getSize())
+                .build();
 
         return ResponseEntity.ok(build);
     }
@@ -104,18 +107,47 @@ public class QuizController {
 
     @Transactional
     @PutMapping("/quiz/{id}/evaluate")
-    public ResponseEntity<Void> updateQuizFinishedCounts(@PathVariable Integer id, @RequestBody ScoreRequest payload) {
-        int score = payload.getScore();
-
+    public ResponseEntity<Void> updateQuizFinishedCounts(
+            @PathVariable Integer id,
+            @RequestBody ScoreRequest payload) {
+    
+        double scorePct = payload.getScore();
+        boolean passed = payload.isPassed();
+    
+        Quiz quiz = quizRepository.findById(id).orElse(null);
+        if (quiz == null) {
+            return ResponseEntity.notFound().build();
+        }
+    
         QuizStats stats = quizStatsRepository.findByQuizId(id);
         if (stats == null) {
             return ResponseEntity.notFound().build();
         }
-
-        stats.setTimesFinished(stats.getTimesFinished() + 1);
-        stats.setAverageScore(stats.getAverageScore() + (score - stats.getAverageScore()) / stats.getTimesFinished());
+    
+        if (!passed) {
+            passed = scorePct >= quiz.getPassScore();
+        }
+    
+        if (passed) {
+            stats.setTimesFinished(stats.getTimesFinished() + 1);
+        }
+    
+        int totalAttempts = stats.getTimesTaken();
+        if (totalAttempts > 0) {
+            double newAvgScore = stats.getAverageScore() +
+                    (scorePct - stats.getAverageScore()) / totalAttempts;
+            stats.setAverageScore(newAvgScore);
+        }
+    
+        double successRate = (stats.getTimesTaken() > 0)
+                ? (stats.getTimesFinished() * 100.0) / stats.getTimesTaken()
+                : 0.0;
+    
+        stats.setSuccessRate(successRate);
+        stats.setFailureRate(100.0 - successRate);
+    
         quizStatsRepository.save(stats);
-
         return ResponseEntity.ok().build();
     }
+
 }

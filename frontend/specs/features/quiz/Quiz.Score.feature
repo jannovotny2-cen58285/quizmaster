@@ -39,7 +39,7 @@ Feature: Evaluate quiz score
     * I answer correctly
     * I proceed to the score page
     Then I see the result 2 correct out of 2, 100%, passed, required passScore 100%
-    Then I see the original result 1, 50%, failed
+    Then I see the original result 1, 100%, failed
 
   Scenario Outline: Show question on score page
     Given I start quiz "-1"

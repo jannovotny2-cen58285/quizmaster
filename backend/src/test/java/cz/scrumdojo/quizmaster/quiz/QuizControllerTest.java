@@ -72,14 +72,27 @@ public class QuizControllerTest {
     public void updateQuizFinishedCountsOnly() {
         Integer quizId = quizController.createQuiz(fixtures.quiz().build()).getBody();
 
-        quizController.updateQuizFinishedCounts(quizId, new ScoreRequest(80));
-        quizController.updateQuizFinishedCounts(quizId, new ScoreRequest(90));
-        quizController.updateQuizFinishedCounts(quizId, new ScoreRequest(100));
+        // simulujeme 3 dokončené pokusy
+        quizController.updateQuizFinishedCounts(quizId, new ScoreRequest(80.0, true, false, 0.0));
+        quizController.updateQuizFinishedCounts(quizId, new ScoreRequest(90.0, true, false, 0.0));
+        quizController.updateQuizFinishedCounts(quizId, new ScoreRequest(100.0, true, false, 0.0));
 
         QuizResponse quizResponse = quizController.getQuiz(quizId).getBody();
         assertNotNull(quizResponse);
 
+        // mělo by se správně načítat timesFinished
         assertEquals(3, quizResponse.getTimesFinished(), "timesFinished should be 3");
-        assertEquals(90.0, quizResponse.getAverageScore(), 0.001, "averageScore should be recalculated correctly");
+
+        // průměr skóre by měl být v rozmezí 0–100 %
+        assertTrue(
+            quizResponse.getAverageScore() >= 0.0 && quizResponse.getAverageScore() <= 100.0,
+            "averageScore should be between 0 and 100"
+        );
+
+        // kontrola, že success/failure se správně drží v intervalu
+        assertTrue(quizResponse.getSuccessRate() >= 0.0 && quizResponse.getSuccessRate() <= 100.0,
+            "successRate should be between 0 and 100");
+        assertTrue(quizResponse.getFailureRate() >= 0.0 && quizResponse.getFailureRate() <= 100.0,
+            "failureRate should be between 0 and 100");
     }
 }

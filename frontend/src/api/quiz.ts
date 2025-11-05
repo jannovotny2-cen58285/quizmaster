@@ -14,8 +14,18 @@ export interface QuizCreateRequest {
     readonly finalCount?: number
 }
 
+export interface ScoreRequest {
+    score: number
+    passed: boolean
+    timeout: boolean
+    timeTaken: number
+}
+
 export const fetchQuiz = async (quizId: string) => await fetchJson<Quiz>(`/api/quiz/${quizId}`)
 
 export const putQuiz = async (quiz: Quiz, id: string) => await putJson<Quiz, string>(`/api/quiz/${id}`, quiz)
 
 export const postQuiz = async (quiz: QuizCreateRequest) => await postJson<QuizCreateRequest, string>('/api/quiz', quiz)
+
+export const evaluateQuiz = async (quizId: string, payload: ScoreRequest) =>
+    await putJson<ScoreRequest, void>(`/api/quiz/${quizId}/evaluate`, payload)
