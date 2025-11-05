@@ -7,13 +7,9 @@ export class QuestionEditPage {
     gotoEdit = (url: string) => this.page.goto(url, { waitUntil: 'networkidle' })
 
     waitForLoaded = () => this.page.isHidden('#is-loaded[value="loaded"]')
-    waitForEditButton = () => this.page.waitForSelector('.edit-question')
-    waitForLoadedTitle = () => this.page.waitForSelector('#question-page-title')
 
     private editQuestionTitleLocator = () => this.page.locator('[data-testid="edit-question-title"]')
     editQuestionTitle = () => this.editQuestionTitleLocator().textContent()
-    isCreatePage = () => this.page.locator('[data-testid="create-question-title"]').isVisible()
-    isEditPage = () => this.page.locator('[data-testid="edit-question-title"]').isVisible()
 
     private questionLocator = () => this.page.locator('#question-text')
     enterQuestion = (question: string) => this.questionLocator().fill(question)
@@ -27,15 +23,7 @@ export class QuestionEditPage {
     private easyModeLocator = () => this.page.locator('#easy-mode')
     isEasyMode = () => this.easyModeLocator().isChecked()
     setEasyModeChecked = () => this.easyModeLocator().check()
-    setEasyModeUnchecked = () => this.easyModeLocator().uncheck()
     isEasyModeVisible = () => this.easyModeLocator().isVisible()
-
-    // deprecated
-    isCorrectCheckboxLocator = (answerText: string) =>
-        this.page.locator(`.answer-row input[value="${answerText}"]+input[type="checkbox"]`)
-
-    // deprecated
-    isCorrectCheckboxesLocator = () => this.page.locator('.answer-row input[type="checkbox"]')
 
     private answerRowsLocator = () => this.page.locator('.answer-row')
     answerRowCount = () => this.answerRowsLocator().count()
@@ -63,9 +51,6 @@ export class QuestionEditPage {
     }
 
     private addAnswerButtonLocator = () => this.page.locator('button#add-answer')
-    private addDeleteQuestionButtonLocator = () => this.page.locator('[data-testid="delete-button"]')
-    isDeleteQuestionButtonEnabled = () => this.addDeleteQuestionButtonLocator().isEnabled()
-    clickDeleteButton = () => this.addDeleteQuestionButtonLocator().click()
     addAdditionalAnswer = async () => {
         const idx = await this.answerRowCount()
         await this.addAnswerButtonLocator().click()
