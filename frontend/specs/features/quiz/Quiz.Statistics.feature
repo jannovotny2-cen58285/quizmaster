@@ -36,7 +36,7 @@ Feature: Display Quiz Statistics from Quiz
   # * I see times finished 2
   # * I see average score 75 %
   # * I see success rate 100 %
-
+  # * I see failure rate 0 %
 
   Scenario Outline: refresh evaluated quiz
     Given a quiz "Quiz" with 2 questions, exam mode and 75% pass score
