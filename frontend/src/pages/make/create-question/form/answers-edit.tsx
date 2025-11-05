@@ -1,5 +1,6 @@
 import { Button, Field, TextInput, Row } from 'pages/components'
 import type { AnswerState } from './question-form-state.ts'
+import { ErrorMessage } from 'pages/components/forms/validations.tsx'
 
 interface AnswerRowProps {
     readonly state: AnswerState
@@ -37,6 +38,10 @@ export const AnswersEdit = ({ answerStates, isMultipleChoice, addAnswer }: Answe
                     Add Answer
                 </Button>
             </Row>
+            <ErrorMessage error="no-correct-answer" />
+            <ErrorMessage error="empty-answer" />
+            <ErrorMessage error="empty-answer-explanation" />
+            <ErrorMessage error="multiple-choice-must-have-more-correct-answers" />
         </Field>
     )
 }

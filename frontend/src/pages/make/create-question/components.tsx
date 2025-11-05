@@ -22,6 +22,3 @@ export const QuestionEditLink = ({ editUrl }: { editUrl: string }) =>
             <p>*You wont be able to get this link once you close this page</p>
         </>
     )
-
-export const ErrorMessage = ({ errorMessage }: { errorMessage: string }) =>
-    errorMessage && <span id="error-message">{errorMessage}</span>

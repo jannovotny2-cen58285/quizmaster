@@ -192,6 +192,7 @@ Then('I see question-take URL and question-edit URL', async function () {
 // Error messages assertions
 
 const expectErrorCount = async (world: QuizmasterWorld, n: number) => {
+    await world.page.waitForTimeout(100)
     const errorCount = await world.questionEditPage.errorMessageCount()
     expect(errorCount).toBe(n)
 }

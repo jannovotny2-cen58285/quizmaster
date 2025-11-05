@@ -1,11 +1,10 @@
 import { SubmitButton, Form, Field, TextArea, CheckField, Row } from 'pages/components'
 import { AnswersEdit, stateToQuestionApiData } from 'pages/make/create-question/form'
 import { useQuestionFormState } from './question-form-state'
-import { useState } from 'react'
-import { type ErrorCodes, ErrorMessages } from './error-message.tsx'
-import { validateQuestionFormState } from './validators.ts'
+import { validateQuestionFormState, errorMessage } from './validators.ts'
 import type { QuestionApiData } from 'api/question.ts'
 import type { Question } from 'model/question.ts'
+import { ErrorMessage } from 'pages/components/forms/validations.tsx'
 
 interface QuestionEditProps {
     readonly question?: Question
@@ -14,19 +13,20 @@ interface QuestionEditProps {
 
 export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
     const state = useQuestionFormState(question)
-    const [errors, setErrors] = useState<ErrorCodes>(new Set())
 
-    const handleSubmit = () => {
-        const errors = validateQuestionFormState(state)
-        setErrors(errors)
-
-        if (errors.size === 0) onSubmit(stateToQuestionApiData(state))
-    }
+    const handleSubmit = () => onSubmit(stateToQuestionApiData(state))
 
     return (
-        <Form id="question-create-form" onSubmit={handleSubmit}>
+        <Form
+            id="question-create-form"
+            data={state}
+            errorMessages={errorMessage}
+            validate={validateQuestionFormState}
+            onSubmit={handleSubmit}
+        >
             <Field label="Question" required>
                 <TextArea id="question-text" value={state.questionText} onChange={state.setQuestionText} />
+                <ErrorMessage error="empty-question" />
             </Field>
             <Row>
                 <CheckField
@@ -59,7 +59,6 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
             <Row>
                 <SubmitButton />
             </Row>
-            <ErrorMessages errorCodes={errors} />
         </Form>
     )
 }
