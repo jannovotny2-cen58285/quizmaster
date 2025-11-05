@@ -1,31 +1,42 @@
-import { type AnswerData, emptyAnswerData } from './question-form-data.ts'
-
 interface AnswerRowProps {
-    readonly answer: AnswerData
+    readonly answer: string
+    readonly explanation: string
+    readonly isCorrect: boolean
     readonly index: number
     readonly isMultipleChoice: boolean
-    readonly updateAnswerData: (index: number, newValue: Partial<AnswerData>) => void
+    readonly setAnswer: (index: number, answer: string) => void
+    readonly setExplanation: (index: number, explanation: string) => void
+    readonly toggleCorrectAnswer: (index: number) => void
 }
 
-export const AnswerRow = ({ answer, index, isMultipleChoice, updateAnswerData }: AnswerRowProps) => (
+export const AnswerRow = ({
+    answer,
+    explanation,
+    isCorrect,
+    index,
+    isMultipleChoice,
+    setAnswer,
+    setExplanation,
+    toggleCorrectAnswer,
+}: AnswerRowProps) => (
     <div key={`answer-${index}`} className="answer-row" id={`answer-${index}`}>
         <div className="answer-row-section">
             <input
                 className={!isMultipleChoice ? 'answer-isCorrect-checkbox' : 'answer-isCorrect-checkbox-multi'}
                 type="checkbox"
-                checked={answer.isCorrect}
-                onChange={e => updateAnswerData(index, { isCorrect: e.target.checked })}
+                checked={isCorrect}
+                onChange={() => toggleCorrectAnswer(index)}
             />
-            <span className="answer-row-correct-icon">{answer.isCorrect ? '✅' : '❌'}</span>
-            <span className="answer-row-correct-text">{answer.isCorrect ? 'Correct answer' : 'Incorrect answer'}</span>
+            <span className="answer-row-correct-icon">{isCorrect ? '✅' : '❌'}</span>
+            <span className="answer-row-correct-text">{isCorrect ? 'Correct answer' : 'Incorrect answer'}</span>
         </div>
         <div className="answer-row-section">
             <input
                 className="text"
                 type="text"
                 placeholder={`Input answer ${index + 1} here...`}
-                value={answer.answer}
-                onChange={e => updateAnswerData(index, { answer: e.target.value })}
+                value={answer}
+                onChange={e => setAnswer(index, e.target.value)}
             />
         </div>
         <div className="answer-row-section">
@@ -33,8 +44,8 @@ export const AnswerRow = ({ answer, index, isMultipleChoice, updateAnswerData }:
                 className="explanation"
                 type="text"
                 placeholder="You can add explanation of the anwser here..."
-                value={answer.explanation}
-                onChange={e => updateAnswerData(index, { explanation: e.target.value })}
+                value={explanation}
+                onChange={e => setExplanation(index, e.target.value)}
             />
         </div>
     </div>
@@ -53,52 +64,39 @@ export const AddAnswerButton = ({ addAnswer }: AddAnswerProps) => (
 )
 
 interface AnswersProps {
-    readonly answers: readonly AnswerData[]
+    readonly answers: readonly string[]
+    readonly explanations: readonly string[]
+    readonly correctAnswers: readonly number[]
     readonly isMultipleChoice: boolean
-    readonly setAnswers: (answers: readonly AnswerData[]) => void
+    readonly setAnswer: (index: number, answer: string) => void
+    readonly setExplanation: (index: number, explanation: string) => void
+    readonly toggleCorrectAnswer: (index: number) => void
+    readonly addAnswer: () => void
 }
 
-const updateIsCorrect = (
-    answers: readonly AnswerData[],
-    index: number,
-    isMultipleChoice: boolean,
-    isCorrect: boolean,
-) => {
-    const newAnswers = [...answers]
-    if (isMultipleChoice) {
-        newAnswers[index] = { ...newAnswers[index], isCorrect: isCorrect }
-    } else {
-        newAnswers.forEach((answer, i) => {
-            newAnswers[i] = { ...answer, isCorrect: index === i }
-        })
-    }
-    return newAnswers
-}
-
-export const AnswersEdit = ({ answers, isMultipleChoice, setAnswers }: AnswersProps) => {
-    const updateAnswerData = (index: number, newValue: Partial<AnswerData>) => {
-        let newAnswerData = [...answers]
-        if ('isCorrect' in newValue) {
-            const isCorrect = newValue.isCorrect || false
-            newAnswerData = updateIsCorrect(newAnswerData, index, isMultipleChoice, isCorrect)
-        } else {
-            newAnswerData[index] = { ...newAnswerData[index], ...newValue }
-        }
-        setAnswers(newAnswerData)
-    }
-
-    const addAnswer = () => setAnswers([...answers, emptyAnswerData()])
-
+export const AnswersEdit = ({
+    answers,
+    explanations,
+    correctAnswers,
+    isMultipleChoice,
+    setAnswer,
+    setExplanation,
+    toggleCorrectAnswer,
+    addAnswer,
+}: AnswersProps) => {
     return (
         <>
             <h3 className="answers-header">Enter your answers</h3>
             {answers.map((answer, index) => (
                 <AnswerRow
                     answer={answer}
-                    // key={index}
+                    explanation={explanations[index] || ''}
+                    isCorrect={correctAnswers.includes(index)}
                     index={index}
                     isMultipleChoice={isMultipleChoice}
-                    updateAnswerData={updateAnswerData}
+                    setAnswer={setAnswer}
+                    setExplanation={setExplanation}
+                    toggleCorrectAnswer={toggleCorrectAnswer}
                 />
             ))}
             <AddAnswerButton addAnswer={addAnswer} />

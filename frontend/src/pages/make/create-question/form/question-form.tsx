@@ -1,16 +1,13 @@
 import { SubmitButton, Form } from 'pages/components'
 import {
-    type AnswerData,
     AnswersEdit,
     MultipleChoiceEdit,
     QuestionEdit,
     QuestionExplanationEdit,
     EasyModeChoiceEdit,
-    type QuestionFormData,
-    toQuestionApiData,
-    toQuestionFormData,
-    emptyQuestionFormData,
 } from 'pages/make/create-question/form'
+import { useQuestionFormState } from './question-form-state'
+import { stateToQuestionFormData, toQuestionApiData } from './question-form-data'
 import { useState } from 'react'
 import { type ErrorCodes, ErrorMessages } from './error-message.tsx'
 import { validateQuestionFormData } from '../validators.ts'
@@ -22,69 +19,61 @@ interface QuestionEditProps {
     readonly onSubmit: (questionData: QuestionApiData) => void
 }
 
-function setMultipleChoiceInQuestionData(isMultipleChoice: boolean, questionData: QuestionFormData): QuestionFormData {
-    const numberOfCorrectAnswers = questionData.answers.filter(answer => answer.isCorrect).length
-
-    return {
-        ...questionData,
-        isMultipleChoice,
-        answers:
-            !isMultipleChoice && numberOfCorrectAnswers > 1
-                ? questionData.answers.map(answer => ({ ...answer, isCorrect: false }))
-                : questionData.answers,
-    }
-}
-
-function setEasyModeChoiceInQuestionData(isEasyModeChoice: boolean, questionData: QuestionFormData): QuestionFormData {
-    return {
-        ...questionData,
-        isEasyModeChoice,
-    }
-}
-
 export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
-    const [questionData, setQuestionData] = useState(question ? toQuestionFormData(question) : emptyQuestionFormData())
+    const state = useQuestionFormState(question)
     const [errors, setErrors] = useState<ErrorCodes>(new Set())
 
-    const setQuestion = (question: string) => setQuestionData({ ...questionData, question })
-    const setIsMultipleChoice = (isMultipleChoice: boolean) =>
-        setQuestionData(setMultipleChoiceInQuestionData(isMultipleChoice, questionData))
-    const setIsEasyModeChoice = (isEasyModeChoice: boolean) =>
-        setQuestionData(setEasyModeChoiceInQuestionData(isEasyModeChoice, questionData))
-    const setAnswers = (answers: readonly AnswerData[]) => setQuestionData({ ...questionData, answers })
-    const setQuestionExplanation = (questionExplanation: string) =>
-        setQuestionData({ ...questionData, questionExplanation })
+    const handleMultipleChoiceChange = (isMultipleChoice: boolean) => {
+        state.setIsMultipleChoice(isMultipleChoice)
+
+        // When switching to single choice mode, keep only the first correct answer
+        if (!isMultipleChoice && state.correctAnswers.length > 1) {
+            const firstCorrectAnswer = state.correctAnswers[0]
+            // Clear all and set only the first one
+            state.correctAnswers.forEach(idx => {
+                if (idx !== firstCorrectAnswer) {
+                    state.toggleCorrectAnswer(idx)
+                }
+            })
+        }
+    }
 
     const handleSubmit = () => {
-        const errors = validateQuestionFormData(questionData)
+        const formData = stateToQuestionFormData(state)
+        const errors = validateQuestionFormData(formData)
         setErrors(errors)
 
-        if (errors.size === 0) onSubmit(toQuestionApiData(questionData))
+        if (errors.size === 0) onSubmit(toQuestionApiData(formData))
     }
 
     return (
         <Form id="question-create-form" onSubmit={handleSubmit}>
-            <QuestionEdit question={questionData.question} setQuestion={setQuestion} />
+            <QuestionEdit question={state.questionText} setQuestion={state.setQuestionText} />
             <div className="questiion-options">
                 <MultipleChoiceEdit
-                    isMultipleChoice={questionData.isMultipleChoice}
-                    setIsMultipleChoice={setIsMultipleChoice}
+                    isMultipleChoice={state.isMultipleChoice}
+                    setIsMultipleChoice={handleMultipleChoiceChange}
                 />
-                {questionData.isMultipleChoice && (
+                {state.isMultipleChoice && (
                     <EasyModeChoiceEdit
-                        isEasyModeChoice={questionData.isEasyModeChoice}
-                        setIsEasyModeChoice={setIsEasyModeChoice}
+                        isEasyModeChoice={state.easyMode}
+                        setIsEasyModeChoice={state.setEasyMode}
                     />
                 )}
             </div>
             <AnswersEdit
-                answers={questionData.answers}
-                setAnswers={setAnswers}
-                isMultipleChoice={questionData.isMultipleChoice}
+                answers={state.answers}
+                explanations={state.explanations}
+                correctAnswers={state.correctAnswers}
+                isMultipleChoice={state.isMultipleChoice}
+                setAnswer={state.setAnswer}
+                setExplanation={state.setExplanation}
+                toggleCorrectAnswer={state.toggleCorrectAnswer}
+                addAnswer={state.addAnswer}
             />
             <QuestionExplanationEdit
-                questionExplanation={questionData.questionExplanation}
-                setQuestionExplanation={setQuestionExplanation}
+                questionExplanation={state.questionExplanation}
+                setQuestionExplanation={state.setQuestionExplanation}
             />
             <div className="flex-container">
                 <SubmitButton />
