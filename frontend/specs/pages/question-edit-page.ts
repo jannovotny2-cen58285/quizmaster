@@ -24,7 +24,7 @@ export class QuestionEditPage {
     setMultipleChoice = () => this.multipleChoiceLocator().check()
     setSingleChoice = () => this.multipleChoiceLocator().uncheck()
 
-    private easyModeLocator = () => this.page.locator('#is-easy-mode-choice')
+    private easyModeLocator = () => this.page.locator('#easy-mode')
     isEasyMode = () => this.easyModeLocator().isChecked()
     setEasyModeChecked = () => this.easyModeLocator().check()
     setEasyModeUnchecked = () => this.easyModeLocator().uncheck()

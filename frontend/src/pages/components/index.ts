@@ -2,6 +2,7 @@ export * from './alert.tsx'
 export * from './button.tsx'
 export * from './page.tsx'
 
+export * from './forms/checkbox.tsx'
 export * from './forms/field.tsx'
 export * from './forms/form.tsx'
 export * from './forms/input.tsx'

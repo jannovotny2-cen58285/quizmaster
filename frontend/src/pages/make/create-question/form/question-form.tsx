@@ -1,10 +1,5 @@
-import { SubmitButton, Form, Field, TextArea } from 'pages/components'
-import {
-    AnswersEdit,
-    MultipleChoiceEdit,
-    EasyModeChoiceEdit,
-    stateToQuestionApiData,
-} from 'pages/make/create-question/form'
+import { SubmitButton, Form, Field, TextArea, CheckField } from 'pages/components'
+import { AnswersEdit, stateToQuestionApiData } from 'pages/make/create-question/form'
 import { useQuestionFormState } from './question-form-state'
 import { useState } from 'react'
 import { type ErrorCodes, ErrorMessages } from './error-message.tsx'
@@ -49,12 +44,19 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
                 <TextArea id="question-text" value={state.questionText} onChange={state.setQuestionText} />
             </Field>
             <div className="questiion-options">
-                <MultipleChoiceEdit
-                    isMultipleChoice={state.isMultipleChoice}
-                    setIsMultipleChoice={handleMultipleChoiceChange}
+                <CheckField
+                    id="is-multiple-choice"
+                    label="Multiple choice"
+                    checked={state.isMultipleChoice}
+                    onToggle={handleMultipleChoiceChange}
                 />
                 {state.isMultipleChoice && (
-                    <EasyModeChoiceEdit isEasyModeChoice={state.easyMode} setIsEasyModeChoice={state.setEasyMode} />
+                    <CheckField
+                        id="easy-mode"
+                        label="Easy mode"
+                        checked={state.easyMode}
+                        onToggle={state.setEasyMode}
+                    />
                 )}
             </div>
             <AnswersEdit
