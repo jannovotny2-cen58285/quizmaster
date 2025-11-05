@@ -31,6 +31,18 @@ export const QuizStatisticsPage = () => {
                     <p>
                         Average score: <span id="average-score">{statisticData?.averageScore} %</span>
                     </p>
+                    <p>
+                        Timeout count: <span id="timeout-count">{statisticData?.timeoutCount}</span>
+                    </p>
+                    <p>
+                        Success rate: <span id="success-rate">{statisticData?.successRate}%</span>
+                    </p>
+                    <p>
+                        Failure rate: <span id="failure-rate">{statisticData?.failureRate}%</span>
+                    </p>
+                    <p>
+                        Average time: <span id="average-time">{statisticData?.averageTime} s</span>
+                    </p>
                 </div>
             </>
         )

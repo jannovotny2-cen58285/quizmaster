@@ -1,4 +1,3 @@
-
 package cz.scrumdojo.quizmaster.quiz;
 
 import cz.scrumdojo.quizmaster.question.Question;
@@ -17,29 +16,39 @@ public class QuizController {
 
     private final QuestionRepository questionRepository;
     private final QuizRepository quizRepository;
+    private final QuizStatsRepository quizStatsRepository;
 
     @Autowired
-    public QuizController(QuestionRepository questionRepository, QuizRepository quizRepository) {
+    public QuizController(QuestionRepository questionRepository,
+                          QuizRepository quizRepository,
+                          QuizStatsRepository quizStatsRepository) {
         this.questionRepository = questionRepository;
         this.quizRepository = quizRepository;
+        this.quizStatsRepository = quizStatsRepository;
     }
 
     @Transactional
     @GetMapping("/quiz/{id}")
     public ResponseEntity<QuizResponse> getQuiz(@PathVariable Integer id) {
-        Quiz quiz = this.quizRepository.findById(id).orElse(null);
-
+        Quiz quiz = quizRepository.findById(id).orElse(null);
         if (quiz == null) {
             return ResponseEntity.notFound().build();
         }
 
+        QuizStats stats = quizStatsRepository.findByQuizId(id);
+        if (stats == null) {
+            stats = new QuizStats();
+            stats.setQuiz(quiz);
+            quizStatsRepository.save(stats);
+        }
 
-        int questionsLimit = (quiz.getSize() != null &&  quiz.getSize() > 0 ) ? quiz.getSize() : quiz.getQuestionIds().length;
+        int questionsLimit = (quiz.getSize() != null && quiz.getSize() > 0)
+                ? quiz.getSize()
+                : quiz.getQuestionIds().length;
 
         Question[] questions = new Question[questionsLimit];
-
         for (int i = 0; i < questionsLimit; i++) {
-            questions[i] = this.questionRepository.getReferenceById(quiz.getQuestionIds()[i]);
+            questions[i] = questionRepository.getReferenceById(quiz.getQuestionIds()[i]);
         }
 
         if(quiz.getFinalCount() != null && quiz.getFinalCount() > 0){
@@ -48,19 +57,29 @@ public class QuizController {
             questions = questionList.subList(0, quiz.getFinalCount()).toArray(new Question[quiz.getFinalCount()-1]);
         }
 
-        QuizResponse build = QuizResponse.builder()
-            .id(quiz.getId())
-            .title(quiz.getTitle())
-            .description(quiz.getDescription())
-            .questions(questions)
-            .mode(quiz.getMode())
-            .passScore(quiz.getPassScore())
-            .timeLimit(quiz.getTimeLimit())
-            .timesTaken(quiz.getTimesTaken())
-            .timesFinished(quiz.getTimesFinished())
-            .averageScore(quiz.getAverageScore())
-            .size(quiz.getSize())
-            .build();
+        if(quiz.getFinalCount() != null && quiz.getFinalCount() > 0){
+            List<Question> questionList = Arrays.asList(questions);
+            Collections.shuffle(questionList);
+            questions = questionList.subList(0, quiz.getFinalCount()).toArray(new Question[quiz.getFinalCount()-1]);
+        }
+
+       QuizResponse build = QuizResponse.builder()
+        .id(quiz.getId())
+        .title(quiz.getTitle())
+        .description(quiz.getDescription())
+        .questions(questions)
+        .mode(quiz.getMode())
+        .passScore(quiz.getPassScore())
+        .timeLimit(quiz.getTimeLimit())
+        .timesTaken(stats.getTimesTaken())
+        .timesFinished(stats.getTimesFinished())
+        .averageScore(stats.getAverageScore())
+        .timeoutCount(stats.getTimeoutCount())
+        .failureRate(stats.getFailureRate())
+        .successRate(stats.getSuccessRate())
+        .averageTime(stats.getAverageTime())
+        .size(quiz.getSize())
+        .build();
 
         return ResponseEntity.ok(build);
     }
@@ -69,41 +88,40 @@ public class QuizController {
     @PostMapping("/quiz")
     public ResponseEntity<Integer> createQuiz(@RequestBody Quiz quizInput) {
         Quiz output = quizRepository.save(quizInput);
-
+        QuizStats stats = new QuizStats();
+        stats.setQuiz(output);
+        quizStatsRepository.save(stats);
         return ResponseEntity.ok(output.getId());
     }
 
-     @Transactional
+    @Transactional
     @PutMapping("/quiz/{id}/start")
     public ResponseEntity<Void> updateQuizCounts(@PathVariable Integer id) {
-        Quiz quiz = this.quizRepository.findById(id).orElse(null);
-
-        if (quiz == null) {
+        QuizStats stats = quizStatsRepository.findByQuizId(id);
+        if (stats == null) {
             return ResponseEntity.notFound().build();
         }
 
-        quiz.setTimesTaken(quiz.getTimesTaken() + 1);
+        stats.setTimesTaken(stats.getTimesTaken() + 1);
+        quizStatsRepository.save(stats);
 
-        Quiz output = quizRepository.save(quiz);
         return ResponseEntity.ok().build();
     }
-
 
     @Transactional
     @PutMapping("/quiz/{id}/evaluate")
     public ResponseEntity<Void> updateQuizFinishedCounts(@PathVariable Integer id, @RequestBody ScoreRequest payload) {
         int score = payload.getScore();
 
-        Quiz quiz = this.quizRepository.findById(id).orElse(null);
-
-        if (quiz == null) {
+        QuizStats stats = quizStatsRepository.findByQuizId(id);
+        if (stats == null) {
             return ResponseEntity.notFound().build();
         }
 
-        quiz.setTimesFinished(quiz.getTimesFinished() + 1);
-        quiz.setAverageScore(quiz.getAverageScore() + (score - quiz.getAverageScore()) / (quiz.getTimesFinished()));
+        stats.setTimesFinished(stats.getTimesFinished() + 1);
+        stats.setAverageScore(stats.getAverageScore() + (score - stats.getAverageScore()) / stats.getTimesFinished());
+        quizStatsRepository.save(stats);
 
-        quizRepository.save(quiz);
         return ResponseEntity.ok().build();
     }
 }

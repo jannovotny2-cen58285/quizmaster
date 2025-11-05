@@ -65,9 +65,7 @@ public class TestFixtures {
             .mode(QuizMode.LEARN)
             .passScore(85)
             .questionIds(questionIds)
-            .timesTaken(0)
-            .timesFinished(0)
-            .averageScore(0.0);
+            .size(questions.length);
     }
 
     public Quiz.QuizBuilder quizIn(Workspace workspace) {

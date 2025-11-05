@@ -30,13 +30,9 @@ public class Quiz {
     private QuizMode mode;
     private int passScore;
     private Integer timeLimit; // time limit in seconds, null means no limit
-
-    private int timesTaken;
-    private int timesFinished;
-    private double averageScore;
     private String workspaceGuid; // Workspace GUID
     private Integer size;
-    
+
     @Column(nullable = true)
     private Integer finalCount;
 }

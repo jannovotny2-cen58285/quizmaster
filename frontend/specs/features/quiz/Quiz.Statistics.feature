@@ -8,7 +8,6 @@ Feature: Display Quiz Statistics from Quiz
   - number of timeouts
   - average time taken to finish the quiz
 
-  @skip
   Scenario Outline: Display initial statistics
     Given a quiz "Quiz" with 2 questions, exam mode and 75% pass score
     When I open quiz stats
