@@ -5,12 +5,12 @@ import {
     QuestionEdit,
     QuestionExplanationEdit,
     EasyModeChoiceEdit,
+    stateToQuestionApiData,
 } from 'pages/make/create-question/form'
 import { useQuestionFormState } from './question-form-state'
-import { stateToQuestionFormData, toQuestionApiData } from './question-form-data'
 import { useState } from 'react'
 import { type ErrorCodes, ErrorMessages } from './error-message.tsx'
-import { validateQuestionFormData } from '../validators.ts'
+import { validateQuestionFormState } from './validators.ts'
 import type { QuestionApiData } from 'api/question.ts'
 import type { Question } from 'model/question.ts'
 
@@ -30,20 +30,19 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
         if (!isMultipleChoice && state.correctAnswers.length > 1) {
             const firstCorrectAnswer = state.correctAnswers[0]
             // Clear all and set only the first one
-            state.correctAnswers.forEach(idx => {
+            for (const idx of state.correctAnswers) {
                 if (idx !== firstCorrectAnswer) {
                     state.toggleCorrectAnswer(idx)
                 }
-            })
+            }
         }
     }
 
     const handleSubmit = () => {
-        const formData = stateToQuestionFormData(state)
-        const errors = validateQuestionFormData(formData)
+        const errors = validateQuestionFormState(state)
         setErrors(errors)
 
-        if (errors.size === 0) onSubmit(toQuestionApiData(formData))
+        if (errors.size === 0) onSubmit(stateToQuestionApiData(state))
     }
 
     return (
@@ -55,10 +54,7 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
                     setIsMultipleChoice={handleMultipleChoiceChange}
                 />
                 {state.isMultipleChoice && (
-                    <EasyModeChoiceEdit
-                        isEasyModeChoice={state.easyMode}
-                        setIsEasyModeChoice={state.setEasyMode}
-                    />
+                    <EasyModeChoiceEdit isEasyModeChoice={state.easyMode} setIsEasyModeChoice={state.setEasyMode} />
                 )}
             </div>
             <AnswersEdit
