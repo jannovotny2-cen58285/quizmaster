@@ -4,7 +4,6 @@ import type { Question } from 'model/question.ts'
 import type { QuestionApiData } from 'api/question.ts'
 
 export interface AnswerState {
-    readonly index: number
     readonly answer: string
     readonly explanation: string
     readonly isCorrect: boolean
@@ -60,7 +59,6 @@ export const useQuestionFormState = (question?: Question) => {
     }
 
     const answerStates: readonly AnswerState[] = answers.map((answer, index) => ({
-        index,
         answer,
         explanation: explanations[index] || '',
         isCorrect: correctAnswers.includes(index),

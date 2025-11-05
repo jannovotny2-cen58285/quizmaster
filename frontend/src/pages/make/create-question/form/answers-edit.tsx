@@ -7,7 +7,7 @@ interface AnswerRowProps {
 }
 
 export const AnswerRow = ({ state, isMultipleChoice }: AnswerRowProps) => (
-    <div key={`answer-${state.index}`} className="answer-row" id={`answer-${state.index}`}>
+    <div className="answer-row">
         <input
             className={!isMultipleChoice ? 'answer-isCorrect-checkbox' : 'answer-isCorrect-checkbox-multi'}
             type="checkbox"
