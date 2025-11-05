@@ -1,13 +1,13 @@
 import './create-question.scss'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { type QuestionApiData, saveQuestion } from 'api/question.ts'
 
 import { Page } from 'pages/components/page.tsx'
 import { QuestionEditForm } from './form/question-form.tsx'
+import { useWorkspaceGuid } from 'urls.ts'
 
 export function CreateQuestionPage() {
-    const [searchParams] = useSearchParams()
-    const workspaceGuid = searchParams.get('workspaceguid') ? searchParams.get('workspaceguid') : ''
+    const workspaceGuid = useWorkspaceGuid()
     const navigate = useNavigate()
 
     const handleSubmit = (questionData: QuestionApiData) => {
