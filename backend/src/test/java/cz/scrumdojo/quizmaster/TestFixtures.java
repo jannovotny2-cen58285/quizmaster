@@ -33,6 +33,16 @@ public class TestFixtures {
             .isEasyMode(false);
     }
 
+    public Question.QuestionBuilder questionWithId(int id) {
+        return Question.builder()
+            .id(id)
+            .question("What is the capital of Italy?")
+            .answers(new String[]{"Naples", "Rome", "Florence", "Palermo"})
+            .correctAnswers(new int[]{1})
+            .explanations(new String[]{"No", "Correct!", "No", "No"})
+            .isEasyMode(false);
+    }
+
     public Question.QuestionBuilder questionIn(Workspace workspace) {
         return question().workspaceGuid(workspace.getGuid());
     }
@@ -65,7 +75,8 @@ public class TestFixtures {
             .mode(QuizMode.LEARN)
             .passScore(85)
             .questionIds(questionIds)
-            .size(questions.length);
+            .size(questions.length)
+            .finalCount(1);
     }
 
     public Quiz.QuizBuilder quizIn(Workspace workspace) {

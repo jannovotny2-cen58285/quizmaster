@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import cz.scrumdojo.quizmaster.QuizUtils;
 import java.util.*;
 
 @Slf4j
@@ -51,16 +52,9 @@ public class QuizController {
             questions[i] = questionRepository.getReferenceById(quiz.getQuestionIds()[i]);
         }
 
-        if(quiz.getFinalCount() != null && quiz.getFinalCount() > 0){
-            List<Question> questionList = Arrays.asList(questions);
-            Collections.shuffle(questionList);
-            questions = questionList.subList(0, quiz.getFinalCount()).toArray(new Question[quiz.getFinalCount()-1]);
-        }
-
-        if(quiz.getFinalCount() != null && quiz.getFinalCount() > 0){
-            List<Question> questionList = Arrays.asList(questions);
-            Collections.shuffle(questionList);
-            questions = questionList.subList(0, quiz.getFinalCount()).toArray(new Question[quiz.getFinalCount()-1]);
+        if(quiz.getFinalCount() != null && quiz.getFinalCount() > 0 && questions.length > 0){
+            questions = QuizUtils.shuffleQuestions(questions);
+            questions = QuizUtils.shrinkQuestions(questions, quiz.getFinalCount());
         }
 
        QuizResponse build = QuizResponse.builder()
