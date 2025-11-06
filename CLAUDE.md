@@ -56,37 +56,45 @@ pnpm test:e2e:ui       # Playwright UI at :3333
 
 ## Domain Model
 
-**Three entities:**
-1. **QuizQuestion** - Question text, multiple answers, correct answer indices, explanations
+**Four entities:**
+1. **Question** - Question text, multiple answers, correct answer indices, explanations
+   - Fields: `id`, `question`, `answers[]`, `correctAnswers[]`, `answerExplanations[]`, `questionExplanation`, `isEasyMode`, `editId` (UUID), `workspaceGuid`
 2. **Workspace** - Collection of questions and quizzes (identified by GUID/UUID)
-3. **Quiz** - Assessment config: title, question IDs array, pass score, time limit, `mode` (EXAM/LEARNING), statistics
+   - Fields: `guid`, `name`
+3. **Quiz** - Assessment configuration
+   - Fields: `id`, `title`, `description`, `questionIds[]`, `passScore`, `timeLimit`, `mode` (EXAM/LEARN), `finalCount`, `workspaceGuid`
+4. **QuizStats** - Quiz performance statistics (one-to-one with Quiz)
+   - Fields: `timesTaken`, `timesFinished`, `averageScore`, `timeoutCount`, `failureRate`, `successRate`, `averageTime`
 
 **Key concepts:**
-- **`mode` field**: `EXAM` = exam mode (feedback at end), `LEARNING` = learning mode (feedback after each question)
-- **`size` field**: Limits quiz to N random questions from larger pool (may be unfinished feature)
-- **No authentication**: Questions use encrypted/hashed IDs for edit URLs to prevent unauthorized editing
+- **`mode` field**: `EXAM` = exam mode (feedback at end), `LEARN` = learning mode (feedback after each question)
+- **`finalCount` field**: Limits quiz to N random questions from the question pool
+- **`editId` field**: UUID used for editing questions without authentication (NOT encryption/hashing)
+- **QuizStats separation**: Statistics were refactored into a separate entity for better data modeling
 - **Standalone questions**: Original feature; users can take individual questions outside quizzes
 
 ## API Endpoints
 
 **Quiz Management:**
-- `GET /api/quiz/{id}` - Get quiz with all questions
+- `GET /api/quiz/{id}` - Get quiz with all questions (returns `QuizResponse` DTO)
 - `POST /api/quiz` - Create quiz with question IDs array
-- `PUT /api/quiz/{id}/start` - Increment `timesTaken` counter
-- `PUT /api/quiz/{id}/evaluate` - Submit score, update `timesFinished` and `averageScore`
-- `GET /api/quiz/by-workspace/{guid}` - Find quizzes in a workspace
+- `PUT /api/quiz/{id}/start` - Increment `timesTaken` counter in QuizStats
+- `PUT /api/quiz/{id}/evaluate` - Submit score (via `ScoreRequest` DTO), update QuizStats
+- `GET /api/workspaces/{guid}/quizzes` - Find quizzes in a workspace (returns array of `QuizListItem` DTOs)
 
 **Question Management:**
-- `GET /api/quiz-question/{id}` - Get question (with `deletable` flag)
-- `POST /api/quiz-question` - Create question, returns ID and hash
-- `PATCH /api/quiz-question/{hash}` - Update question by hash
-- `DELETE /api/quiz-question/{id}` - Delete if not used in any quiz
-- `GET /api/quiz-question/{hash}/edit` - Get question by hash for editing
-- `GET /api/quiz-question/by-workspace/{guid}` - Get questions in a workspace
+- `GET /api/question/{id}` - Get question (with `deletable` flag)
+- `POST /api/question` - Create question, returns `QuestionCreateResponse` DTO with `id` and `editId`
+- `PATCH /api/question/{editId}` - Update question by editId (UUID)
+- `GET /api/question/{editId}/edit` - Get question by editId for editing
+- `GET /api/workspaces/{guid}/questions` - Get questions in a workspace (returns array of `QuestionListItem` DTOs)
 
 **Workspace Management:**
-- `GET /api/workspace/{guid}` - Get workspace
-- `POST /api/workspace` - Create workspace, returns GUID
+- `GET /api/workspaces/{guid}` - Get workspace
+- `POST /api/workspaces` - Create workspace, returns `WorkspaceCreateResponse` DTO with GUID
+
+**Feature Flags:**
+- `GET /api/feature-flag` - Returns whether feature flag is enabled
 
 **Quiz-Taking Workflow:**
 1. Frontend loads quiz via `GET /api/quiz/{id}` (shows welcome page)
@@ -94,14 +102,32 @@ pnpm test:e2e:ui       # Playwright UI at :3333
 3. User answers questions
 4. User finishes → `PUT /api/quiz/{id}/evaluate` (updates statistics)
 
+## API DTOs (Data Transfer Objects)
+
+The API uses type-safe DTOs for cleaner responses:
+
+**Backend DTOs:**
+- `QuestionCreateResponse` - `{id: number, editId: string}` - Returned when creating questions
+- `WorkspaceCreateResponse` - `{guid: string}` - Returned when creating workspaces
+- `QuizResponse` - Complete quiz data including all Quiz and QuizStats fields
+- `ScoreRequest` - `{score: number}` - Request body for evaluate endpoint
+- `QuestionListItem` - `{id: number, question: string, editId: string}` - Lightweight question in workspace list
+- `QuizListItem` - `{id: number, title: string}` - Lightweight quiz in workspace list
+
+**Frontend Types:**
+- `/frontend/src/model/question-list-item.ts`
+- `/frontend/src/model/quiz-list-item.ts`
+
+These DTOs are part of an ongoing API refactoring (see `API_REFACTORING_PLAN.md`).
+
 ## Frontend Routes
 
 - `/` - Home (question/quiz creation)
 - `/question/new` - Create question
 - `/question/:id` - Take standalone question
-- `/question/:id/edit` - Edit question (uses hash)
+- `/question/:editId/edit` - Edit question (uses editId UUID)
 - `/workspace/new` - Create workspace
-- `/workspace/:id` - View workspace (questions and quizzes)
+- `/workspace/:guid` - View workspace (questions and quizzes)
 - `/quiz-create/new` - Create quiz
 - `/quiz/:id` - Quiz welcome/info page
 - `/quiz/:id/questions` - Take quiz
@@ -137,7 +163,10 @@ Training repository emphasizing:
 
 ## Known Technical Debt / Future Improvements
 
-1. **Replace encrypted question IDs** → Simple UUIDs (encryption is excessive)
-2. **Quiz-Question relationship** → Refactor int array to M:N junction table with referential integrity
-3. **Progress state endpoint** → May not be optimal implementation
-4. **Standalone questions** → Consider deprecation (kept for backward compatibility)
+1. **API Refactoring** → In progress (see `API_REFACTORING_PLAN.md`)
+   - ✅ Completed: Entity renames (QuizQuestion→Question), endpoint path cleanup, DTO implementations
+   - ⏳ Remaining: Additional DTO types, complete REST standardization
+2. **Question edit IDs** → Already using UUIDs (`editId` field) - originally planned as "encrypted IDs" but implemented more simply
+3. **Quiz-Question relationship** → Refactor int array to M:N junction table with referential integrity
+4. **Progress state endpoint** → May not be optimal implementation
+5. **Standalone questions** → Consider deprecation (kept for backward compatibility)
