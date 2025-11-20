@@ -20,7 +20,7 @@ export const App = () => (
             <Route path="/workspace/:id" element={<WorkspaceContainer />} />
             <Route path="/quiz/:id" element={<QuizWelcomePage />} />
             <Route path="/quiz/:id/stats" element={<QuizStatisticsPage />} />
-            <Route path="/quiz/:id/questions" element={<QuizTakePage />} />
+            <Route path="/quiz/:id/questions/:questionId?" element={<QuizTakePage />} />
             <Route path="/quiz-create/new" element={<QuizCreatePage />} />
             <Route path="/question/:id/edit" element={<EditQuestionPage />} />
             <Route path="/question/:id" element={<QuestionTakePage />} />

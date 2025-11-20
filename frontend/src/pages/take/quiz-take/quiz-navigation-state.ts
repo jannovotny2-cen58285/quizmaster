@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import { useStateSet } from 'helpers'
 import type { Quiz } from 'model/quiz.ts'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export interface QuizNavigationState {
     readonly currentQuestionIdx: number
@@ -18,18 +18,24 @@ export interface QuizNavigationState {
 }
 
 export const useQuizNavigationState = (quiz: Quiz): QuizNavigationState => {
-    const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
+    const { questionId } = useParams();
+
+    const navigate = useNavigate();
+
+    const currentQuestionIdx = !questionId ? 0 : Number(questionId)
+
     const [skippedQuestions, , addSkippedQuestion, removeSkippedQuestion] = useStateSet<number>()
 
     const isFirstQuestion = currentQuestionIdx === 0
     const isLastQuestion = currentQuestionIdx === quiz.questions.length - 1
 
     const next = () => {
+        console.log('next called', quiz)
+        console.log('isLastQuestion', isLastQuestion)
         if (isLastQuestion) {
-            const firstSkippedQuestion = Array.from(skippedQuestions).sort()[0]
-            setCurrentQuestionIdx(firstSkippedQuestion)
+            navigate(`/quiz/${quiz.id}/questions`)
         } else {
-            setCurrentQuestionIdx(prev => prev + 1)
+            navigate(`/quiz/${quiz.id}/questions/${currentQuestionIdx + 1}`)
         }
     }
 
@@ -47,14 +53,14 @@ export const useQuizNavigationState = (quiz: Quiz): QuizNavigationState => {
 
     const canBack = currentQuestionIdx > 0
 
-    const back = () => setCurrentQuestionIdx(prev => prev - 1)
+    const back = () => navigate(`/quiz/${quiz.id}/questions/${currentQuestionIdx - 1}`)
 
     return {
         currentQuestionIdx,
         isFirstQuestion,
         isLastQuestion,
         skippedQuestions,
-        goto: setCurrentQuestionIdx,
+        goto: (questionIdx: number) => navigate(`/quiz/${quiz.id}/questions/${questionIdx}`),
         canNext,
         canSkip,
         canBack,

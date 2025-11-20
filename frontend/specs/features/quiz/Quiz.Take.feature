@@ -78,3 +78,16 @@ Feature: Take a quiz
 
     When I answer "Venus"
     Then I see feedback "Incorrect!"
+
+  Scenario: Browser navigation during quiz
+    - User can use browser back and forward buttons to navigate between questions
+    When I start quiz "Learn"
+    Then I see question "Planet"
+    When I answer "Mars"
+    Then I see feedback "Correct!"
+    Then I proceed to the next question
+    Then I see question "Australia"
+    When I use the browser back button
+    Then I see question "Planet"
+    When I use the browser forward button
+    Then I see question "Australia"
