@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 export const QuizTakePage = () => {
     const quiz = useQuizApi()
     const [quizAnswers, setQuizAnswers] = useState<QuizAnswers | null>(null)
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     useEffect(() => {
         const stored = sessionStorage.getItem('quizAnswers')

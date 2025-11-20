@@ -18,9 +18,9 @@ export interface QuizNavigationState {
 }
 
 export const useQuizNavigationState = (quiz: Quiz): QuizNavigationState => {
-    const { questionId } = useParams();
+    const { questionId } = useParams()
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const currentQuestionIdx = !questionId ? 0 : Number(questionId)
 
@@ -30,8 +30,6 @@ export const useQuizNavigationState = (quiz: Quiz): QuizNavigationState => {
     const isLastQuestion = currentQuestionIdx === quiz.questions.length - 1
 
     const next = () => {
-        console.log('next called', quiz)
-        console.log('isLastQuestion', isLastQuestion)
         if (isLastQuestion) {
             navigate(`/quiz/${quiz.id}/questions`)
         } else {
