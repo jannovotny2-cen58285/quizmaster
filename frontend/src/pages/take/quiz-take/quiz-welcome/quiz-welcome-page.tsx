@@ -19,6 +19,7 @@ export const QuizWelcomePage = () => {
             method: 'PUT',
         })
         navigate(`/quiz/${quizId}/questions`)
+        sessionStorage.removeItem('quizAnswers')
     }
 
     return quiz && <QuizDetails quiz={quiz} onStart={onStart} />
