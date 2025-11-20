@@ -9,7 +9,7 @@ import { Field, Form, NumberInput, SubmitButton, TextArea, TextInput } from 'pag
 import { QuestionSelect } from './components/question-select.tsx'
 import { ErrorMessage, createValidator } from 'pages/components/forms/validations.tsx'
 import { validateQuizForm, errorMessage } from './validations.ts'
-import { QuizMode } from 'model/quiz.ts'
+import type { QuizMode } from 'model/quiz.ts'
 
 export type QuizCreateFormData = QuizCreateRequest
 
