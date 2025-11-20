@@ -42,7 +42,7 @@ Feature: Take a quiz
     And I see feedback mode "LEARN"
 
   Scenario: Exam mode
-    - Quiz in exam mode does not show feedback until the quiz is finished
+    - Quiz in exam mode does not show feedback until the quiz is finished.
     - Submitting an answer proceeds directly to the next question
 
     When I start quiz "Exam"
