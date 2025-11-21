@@ -16,7 +16,8 @@ export const QuizStatisticsPage = () => {
     useApi(quizId, fetchQuizStats, setStatsData)
 
     return (
-        quizData && statsData && (
+        quizData &&
+        statsData && (
             <>
                 <h2>Quiz statistics</h2>
                 for quiz: <h3 id="quiz-name">{quizData.title}</h3>

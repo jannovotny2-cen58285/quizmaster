@@ -4,13 +4,13 @@ import { QuizTakePage } from 'pages/take/quiz-take/quiz-take-page.tsx'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { QuizWelcomePage } from 'pages/take/quiz-take/quiz-welcome/quiz-welcome-page'
-import { QuizStatisticsPage } from 'pages/take/quiz-take/quiz-statistics-page.tsx'
 
 import { WorkspaceCreatePage } from 'pages/make/create-workspace/workspace-create-page'
 import { CreateQuestionPage } from 'pages/make/create-question/create-question-page'
 import { EditQuestionPage } from 'pages/make/create-question/edit-question-page'
 import { WorkspaceContainer } from 'pages/make/workspace/workspace-container'
 import { QuizCreatePage } from 'pages/make/quiz-create/quiz-create-page.tsx'
+import { QuizStatisticsPage } from 'pages/make/quiz-make/quiz-statistics-page.tsx'
 
 export const App = () => (
     <BrowserRouter>
