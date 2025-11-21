@@ -19,12 +19,5 @@ public class QuizResponse {
     private int passScore;
     private String description;
     private Integer timeLimit;
-    private int timesTaken;
-    private int timesFinished;
-    private double averageScore;
-    private Integer timeoutCount;
-    private Double failureRate;
-    private Double successRate;
-    private Double averageTime;
     private Integer size;
 }

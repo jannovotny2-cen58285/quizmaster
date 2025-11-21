@@ -36,13 +36,6 @@ public class QuizController {
             return ResponseEntity.notFound().build();
         }
 
-        QuizStats stats = quizStatsRepository.findByQuizId(id);
-        if (stats == null) {
-            stats = new QuizStats();
-            stats.setQuiz(quiz);
-            quizStatsRepository.save(stats);
-        }
-
         int questionsLimit = (quiz.getSize() != null && quiz.getSize() > 0)
                 ? quiz.getSize()
                 : quiz.getQuestionIds().length;
@@ -69,13 +62,6 @@ public class QuizController {
                 .easyMode(quiz.getEasyMode())
                 .passScore(quiz.getPassScore())
                 .timeLimit(quiz.getTimeLimit())
-                .timesTaken(stats.getTimesTaken())
-                .timesFinished(stats.getTimesFinished())
-                .averageScore(stats.getAverageScore())
-                .timeoutCount(stats.getTimeoutCount())
-                .failureRate(stats.getFailureRate())
-                .successRate(stats.getSuccessRate())
-                .averageTime(stats.getAverageTime())
                 .size(quiz.getSize())
                 .build();
 

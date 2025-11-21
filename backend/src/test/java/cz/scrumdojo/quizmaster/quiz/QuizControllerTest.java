@@ -45,14 +45,6 @@ public class QuizControllerTest {
         assertEquals(quiz.getPassScore(), quizResponse.getPassScore());
         assertEquals(quiz.getTimeLimit(), quizResponse.getTimeLimit());
         assertEquals(quiz.getSize(), quizResponse.getSize());
-
-        assertEquals(0, quizResponse.getTimesTaken());
-        assertEquals(0, quizResponse.getTimesFinished());
-        assertEquals(0.0, quizResponse.getAverageScore());
-        assertEquals(0, quizResponse.getTimeoutCount());
-        assertEquals(0.0, quizResponse.getFailureRate());
-        assertEquals(0.0, quizResponse.getSuccessRate());
-        assertEquals(0.0, quizResponse.getAverageTime());
         assertEquals(1, quizResponse.getQuestions().length);
         assertEquals(question.getId(), quizResponse.getQuestions()[0].getId());
     }
@@ -77,22 +69,58 @@ public class QuizControllerTest {
         quizController.updateQuizFinishedCounts(quizId, new ScoreRequest(90.0, true, false, 0.0));
         quizController.updateQuizFinishedCounts(quizId, new ScoreRequest(100.0, true, false, 0.0));
 
-        QuizResponse quizResponse = quizController.getQuiz(quizId).getBody();
-        assertNotNull(quizResponse);
+        QuizStats stats = quizStatsRepository.findByQuizId(quizId);
+        assertNotNull(stats);
 
         // mělo by se správně načítat timesFinished
-        assertEquals(3, quizResponse.getTimesFinished(), "timesFinished should be 3");
+        assertEquals(3, stats.getTimesFinished(), "timesFinished should be 3");
 
         // průměr skóre by měl být v rozmezí 0–100 %
         assertTrue(
-            quizResponse.getAverageScore() >= 0.0 && quizResponse.getAverageScore() <= 100.0,
+            stats.getAverageScore() >= 0.0 && stats.getAverageScore() <= 100.0,
             "averageScore should be between 0 and 100"
         );
 
         // kontrola, že success/failure se správně drží v intervalu
-        assertTrue(quizResponse.getSuccessRate() >= 0.0 && quizResponse.getSuccessRate() <= 100.0,
+        assertTrue(stats.getSuccessRate() >= 0.0 && stats.getSuccessRate() <= 100.0,
             "successRate should be between 0 and 100");
-        assertTrue(quizResponse.getFailureRate() >= 0.0 && quizResponse.getFailureRate() <= 100.0,
+        assertTrue(stats.getFailureRate() >= 0.0 && stats.getFailureRate() <= 100.0,
             "failureRate should be between 0 and 100");
+    }
+
+    @Test
+    public void getQuizStats() {
+        Integer quizId = quizController.createQuiz(fixtures.quiz().build()).getBody();
+
+        QuizStats stats = quizController.getQuizStats(quizId).getBody();
+        assertNotNull(stats, "QuizStats should be returned");
+        assertEquals(0, stats.getTimesTaken());
+        assertEquals(0, stats.getTimesFinished());
+        assertEquals(0.0, stats.getAverageScore());
+        assertEquals(0, stats.getTimeoutCount());
+        assertEquals(0.0, stats.getSuccessRate());
+        assertEquals(0.0, stats.getFailureRate());
+        assertEquals(0.0, stats.getAverageTime());
+    }
+
+    @Test
+    public void getQuizStatsNotFound() {
+        assertEquals(HttpStatus.NOT_FOUND, quizController.getQuizStats(999999).getStatusCode());
+    }
+
+    @Test
+    public void getQuizStatsAutoCreatesIfMissing() {
+        Integer quizId = quizController.createQuiz(fixtures.quiz().build()).getBody();
+
+        // Manually delete stats to simulate missing stats
+        QuizStats existingStats = quizStatsRepository.findByQuizId(quizId);
+        if (existingStats != null) {
+            quizStatsRepository.delete(existingStats);
+        }
+
+        // Should auto-create stats when fetching
+        QuizStats stats = quizController.getQuizStats(quizId).getBody();
+        assertNotNull(stats, "QuizStats should be auto-created");
+        assertEquals(0, stats.getTimesTaken());
     }
 }
