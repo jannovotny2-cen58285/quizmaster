@@ -5,6 +5,6 @@ Feature: Create question GUI - Show/hide choice explanations
   Scenario: Default values
     When I start creating a question
     Then I see add answer explanations is unchecked
-    And I do not see answer explanation fields
+    And I see explanation text fields are not visible
     When I check "Add explanation to your answer" checkbox
-    Then explanation fields are visible for answers
+    Then I see explanation fields are visible for answers

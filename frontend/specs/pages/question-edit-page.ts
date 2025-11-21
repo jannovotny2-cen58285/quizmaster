@@ -27,6 +27,12 @@ export class QuestionEditPage {
     setEasyModeChecked = () => this.easyModeLocator().check()
     isEasyModeVisible = () => this.easyModeLocator().isVisible()
 
+    private explanationFieldsCheckboxLocator = () => this.page.locator('#show-explanation')
+    checkShowExplanationFields = () => this.explanationFieldsCheckboxLocator().check()
+
+    private explanationFieldsLocator = () => this.page.locator('input.explanation')
+    countExplanationFields = () => this.explanationFieldsLocator().count()
+
     private answerRowsLocator = () => this.page.locator('.answer-row')
     answerRowCount = () => this.answerRowsLocator().count()
 

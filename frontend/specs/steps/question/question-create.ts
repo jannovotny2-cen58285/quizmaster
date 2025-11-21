@@ -1,8 +1,9 @@
 import type { DataTable } from '@cucumber/cucumber'
 
 import type { TableOf } from '../common.ts'
-import { Given, When } from '../fixture.ts'
+import { Given, When, Then } from '../fixture.ts'
 import { addAnswers, createQuestion, enterQuestion, openCreatePage, saveQuestion, type AnswerRaw } from './ops.ts'
+import { expect } from '@playwright/test'
 
 Given('a question {string}', async function (question: string) {
     await openCreatePage(this)
@@ -50,4 +51,13 @@ Given('saved and bookmarked as {string}', async function (bookmark) {
 
 When('I wait for {int} ms', async (milliseconds: number) => {
     await new Promise(resolve => setTimeout(resolve, milliseconds))
+})
+
+When('I check "Add explanation to your answer" checkbox', async function() {
+    await this.questionEditPage.checkShowExplanationFields()
+})
+
+Then('I see explanation fields are visible for answers', async function(){
+    const countExplanationFields= await this.questionEditPage.countExplanationFields()
+    expect(countExplanationFields).toBe(2)
 })
