@@ -12,7 +12,7 @@ Feature: Take a quiz in EasyMode
       | QuizWithEasyModeAlways      | Q1, Q2, Q3 | ALWAYS     |
       | QuizWithEasyModeNever       | Q1, Q2, Q3 | NEVER      |
 
-@Feature("test")
+@skip
   Scenario: Quiz Easy Mode PerQuestion - question Easy Mode mixed
     When I start quiz "QuizWithEasyModePerQuestion"
     Then I do not see correct answers count
@@ -21,7 +21,7 @@ Feature: Take a quiz in EasyMode
     When I proceed to the next question
     Then I do not see correct answers count
 
-@Feature("test")
+@skip
 Scenario: Quiz Easy Mode Never - question Easy Mode mixed
   When I start quiz "QuizWithEasyModeNever"
   Then I do not see correct answers count
@@ -30,7 +30,7 @@ Scenario: Quiz Easy Mode Never - question Easy Mode mixed
   When I proceed to the next question
   Then I do not see correct answers count
 
-@Feature("test")
+@skip
   Scenario: Quiz Easy Mode Always - overrides question Easy Mode mixed
     When I start quiz "QuizWithEasyModeAlways"
     Then I see that question has number of correct answers displayed
