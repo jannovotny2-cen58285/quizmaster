@@ -2,7 +2,7 @@ import type { AnswerIdxs } from 'model/question'
 import type { Quiz } from 'model/quiz.ts'
 import { QuestionForm as StandaloneQuestionForm } from '../question-take/index.ts'
 import { ProgressBar } from './components/progress-bar.tsx'
-import { EvaluateButton, NextButton, BackButton, SkipButton, BookmarkButton } from './components/buttons.tsx'
+import { EvaluateButton, NextButton, BackButton, BookmarkButton } from './components/buttons.tsx'
 
 import { BookmarkList } from './components/bookmark-list.tsx'
 import { TimeLimit } from './time-limit/with-time-limit.tsx'

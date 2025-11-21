@@ -5,7 +5,6 @@ export class QuestionPage {
 
     backButtonLocator = () => this.page.locator('button#back')
     nextButtonLocator = () => this.page.locator('button#next')
-    skipButtonLocator = () => this.page.locator('button#skip')
     evaluateButtonLocator = () => this.page.locator('button#evaluate')
     evaluateModalButtonLocator = () => this.page.locator('dialog #evaluate')
 
@@ -21,7 +20,6 @@ export class QuestionPage {
     bookmark = () => this.bookmarkQuestionButtonLocator().click()
     unBookmark = (title: string) => this.unBookmarkQuestionButtonLocator(title).click()
     next = () => this.nextButtonLocator().click()
-    skip = () => this.skipButtonLocator().click()
     evaluate = () => this.evaluateButtonLocator().click()
 
     isCurrentQuestionBookmarked = async () =>

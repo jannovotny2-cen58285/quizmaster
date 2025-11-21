@@ -17,12 +17,6 @@ export const BackButton = ({ onClick }: WithOnClick) => (
     </Button>
 )
 
-export const SkipButton = ({ onClick }: WithOnClick) => (
-    <Button id="skip" onClick={onClick}>
-        Skip
-    </Button>
-)
-
 export const StartButton = ({ onClick }: WithOnClick) => (
     <Button id="start" type="button" onClick={onClick}>
         Start
