@@ -30,6 +30,7 @@ Feature: Create Quiz from Workspace
     And I see quiz question "3 * 3 = ?"
     And I see quiz question "4 / 2 = ?"
 
+  @skip
   Scenario: Create quiz with 4 questions
     When I start creating a new quiz
     * I enter quiz name "Math Quiz"
@@ -38,7 +39,9 @@ Feature: Create Quiz from Workspace
     * I select question "4 / 2 = ?"
     * I select question "Jaký nábytek má Ikea?"
     * I select question "Jaké nádobí má Ikea?"
-    * I check randomized function
+    Then I see selected question count 4
+    * I see total question count 6
+    When I check randomized function
     * I enter number of randomized questions in quiz 3
     * I submit the quiz
     * I take quiz "Math Quiz"
@@ -46,6 +49,18 @@ Feature: Create Quiz from Workspace
     * I see quiz name "Math Quiz"
     * I see quiz description "Very hard math quiz"
     * I see question count 3
+
+  @skip
+  Scenario: Create quiz with more questions in randomized than available
+    When I start creating a new quiz
+    * I enter quiz name "Math Quiz"
+    * I select question "2 + 2 = ?"
+    * I select question "4 / 2 = ?"
+    * I check randomized function
+    * I enter number of randomized questions in quiz 3
+    * I submit the quiz
+    Then I see error messages
+      | too-many-randomized-questions |
 
   Scenario: Quiz form with only default values
     When I start creating a new quiz

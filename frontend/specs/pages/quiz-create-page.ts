@@ -42,4 +42,6 @@ export class QuizCreatePage {
     clearScore = () => this.passScoreInput().fill('')
     hasAnyError = () => this.page.locator('.alert.error').isVisible()
     enterFilterString = (filter: string) => this.page.locator('#question-filter').fill(filter)
+    selectedQuestionCountForQuiz = () => this.page.locator('#selected-question-count-for-quiz').textContent()
+    totalQuestionCountForQuiz = () => this.page.locator('#total-question-count-for-quiz').textContent()
 }

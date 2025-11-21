@@ -1,7 +1,8 @@
 import type { DataTable } from '@cucumber/cucumber'
-import { Given } from '../fixture.ts'
+import { Given, Then } from '../fixture.ts'
 import { type QuizmasterWorld, type Quiz, type QuizMode, type Question, parseKey } from '../world'
 import { createQuestion } from '../question/ops.ts'
+import { expect } from '@playwright/test'
 
 const postQuiz = async (world: QuizmasterWorld, bookmark: string, quiz: Quiz) => {
     const questionIds = quiz.questionIds
@@ -97,4 +98,14 @@ Given('quizes', async function (data: DataTable) {
     for (const row of data.hashes()) {
         await postQuiz(this, row.bookmark, await toQuiz(this, row))
     }
+})
+
+Then('I see selected question count {int}', async function (expectedCount: number) {
+    const actualCount = await this.quizCreatePage.selectedQuestionCountForQuiz()
+    expect(Number.parseInt(actualCount || '0')).toBe(expectedCount)
+})
+
+Then('I see total question count {int}', async function (expectedCount: number) {
+    const actualCount = await this.quizCreatePage.totalQuestionCountForQuiz()
+    expect(Number.parseInt(actualCount || '0')).toBe(expectedCount)
 })
