@@ -9,7 +9,7 @@ import { Field, Form, NumberInput, SubmitButton, TextArea, TextInput } from 'pag
 import { QuestionSelect } from './components/question-select.tsx'
 import { ErrorMessage, createValidator } from 'pages/components/forms/validations.tsx'
 import { validateQuizForm, errorMessage } from './validations.ts'
-import type { QuizMode } from 'model/quiz.ts'
+import type { QuizMode, EasyMode } from 'model/quiz.ts'
 
 export type QuizCreateFormData = QuizCreateRequest
 
@@ -30,6 +30,7 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
     const [checkRandomize, setCheckRandomize] = useState(false)
     const [filteredQuestions, setFilteredQuestions] = useState<readonly QuestionListItem[]>(questions)
     const [feedbackMode, setFeedbackMode] = useState<QuizMode>('EXAM')
+    const [easyMode, setEasyMode] = useState<EasyMode>('PERQUESTION')
 
     const validator = createValidator(
         () => validateQuizForm({ title, description, timeLimit, passScore, selectedIds, finalCount }),
@@ -41,11 +42,12 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
         description,
         questionIds: Array.from(selectedIds),
         mode: feedbackMode,
+        easyMode,
         passScore,
         timeLimit,
-        workspaceGuid: searchParams.get('workspaceguid') || '',
+        workspaceGuid: searchParams.get('workspaceguid') || null,
         finalCount,
-        questionList: searchParams.get('listguid') || '',
+        questionList: searchParams.get('listguid') || null,
     })
 
     useEffect(() => {
@@ -95,6 +97,43 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
                     />
                     <label htmlFor="learn-mode" style={{ marginTop: '5px' }}>
                         LEARN
+                    </label>
+                </span>
+            </Field>
+            <Field label="Easy mode">
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <input
+                        type="radio"
+                        name="easyMode"
+                        id="easy-always"
+                        value="ALWAYS"
+                        checked={easyMode === 'ALWAYS'}
+                        onChange={e => setEasyMode(e.target.value as EasyMode)}
+                    />
+                    <label htmlFor="easy-always" style={{ marginTop: '5px' }}>
+                        ALWAYS
+                    </label>
+                    <input
+                        type="radio"
+                        name="easyMode"
+                        id="easy-never"
+                        value="NEVER"
+                        checked={easyMode === 'NEVER'}
+                        onChange={e => setEasyMode(e.target.value as EasyMode)}
+                    />
+                    <label htmlFor="easy-never" style={{ marginTop: '5px' }}>
+                        NEVER
+                    </label>
+                    <input
+                        type="radio"
+                        name="easyMode"
+                        id="easy-perquestion"
+                        value="PERQUESTION"
+                        checked={easyMode === 'PERQUESTION'}
+                        onChange={e => setEasyMode(e.target.value as EasyMode)}
+                    />
+                    <label htmlFor="easy-perquestion" style={{ marginTop: '5px' }}>
+                        PERQUESTION
                     </label>
                 </span>
             </Field>

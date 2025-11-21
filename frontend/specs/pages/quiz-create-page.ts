@@ -13,6 +13,12 @@ export class QuizCreatePage {
         const radio = this.page.locator(modeElementId)
         await radio.check()
     }
+    selectEasyMode = async (mode: 'always' | 'never' | 'perquestion') => {
+        const modeElementId =
+            mode === 'always' ? '#easy-always' : mode === 'never' ? '#easy-never' : '#easy-perquestion'
+        const radio = this.page.locator(modeElementId)
+        await radio.check()
+    }
 
     feedbackModeElement = () => {
         return this.page.locator('#feedback-mode')
