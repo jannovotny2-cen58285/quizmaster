@@ -1,12 +1,9 @@
 package cz.scrumdojo.quizmaster;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import cz.scrumdojo.quizmaster.TestFixtures;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import cz.scrumdojo.quizmaster.question.*;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.util.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
