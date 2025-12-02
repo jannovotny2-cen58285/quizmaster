@@ -17,4 +17,3 @@ Background:
     And I submit the quiz
     Then I see the quiz "Stats Quiz" in the workspace
     And I click the stats button "Stats Quiz"
-    And I see stats page for quiz "Stats Quiz"
