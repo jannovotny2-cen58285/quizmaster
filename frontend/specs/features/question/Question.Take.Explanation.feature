@@ -6,6 +6,7 @@ Feature: Take a single question
     - for the whole question
 
     Given a question "What is capital of Italy?"
+    And I check show explanations checkbox
     * with answers:
       | Rome     | * | Rome is the capital of Italy              |
       | Naples   |   | Naples is the capital of Campania region  |
@@ -18,13 +19,13 @@ Feature: Take a single question
     # Then I see the answer explanation "Naples is the capital of Campania region"
     * I see the question explanation
 
-
   Scenario: Multiple choice question explanations
     Explanation is displayed after answering the question
     - for all answers individually, selected or not
     - for the whole question
 
     Given a question "Which of these countries are in Europe?"
+    And I check show explanations checkbox
     * with answers:
       | Italy   | * | Located on the Apennine Peninsula, which is part of the European continent. |
       | France  | * | One of the founders of the European Union.                                  |

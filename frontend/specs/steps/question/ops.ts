@@ -99,6 +99,7 @@ export const createQuestion = async (
 ) => {
     await openCreatePage(world)
     await enterQuestion(world, question)
+    await world.questionEditPage.checkShowExplanation()
     await addAnswers(world, answerRawTable)
     if (explanation) {
         await enterQuestionExplanation(world, explanation)

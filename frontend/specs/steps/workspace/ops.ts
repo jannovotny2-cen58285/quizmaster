@@ -20,6 +20,7 @@ export const createQuestionInList = async (
     await world.workspacePage.createNewQuestion()
     world.questionWip = emptyQuestion()
     await enterQuestion(world, question)
+    await world.questionEditPage.checkShowExplanation()
     await addAnswers(world, answerRawTable)
     world.questionBookmarks[question] = world.questionWip
     await world.questionEditPage.submit()

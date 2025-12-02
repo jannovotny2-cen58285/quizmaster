@@ -21,13 +21,14 @@ export interface QuestionFormState {
     readonly easyMode: boolean
     readonly questionExplanation: string
     readonly workspaceGuid: string
+    readonly showExplanations: boolean
 }
 
 export const useQuestionFormState = (question?: Question) => {
     const [questionText, setQuestionText] = useState<string>(question?.question || '')
     const [isMultipleChoice, setIsMultipleChoice] = useState((question?.correctAnswers?.length || 0) > 1 || false)
     const [easyMode, setEasyMode] = useState(question?.easyMode || false)
-
+    const [showExplanations, setShowExplanations] = useState(false)
     const [answers, setAnswers] = useState<readonly string[]>(question?.answers || ['', ''])
     const [explanations, setExplanations] = useState<readonly string[]>(question?.explanations || ['', ''])
     const [correctAnswers, setCorrectAnswers] = useState<readonly number[]>(question?.correctAnswers || [])
@@ -79,13 +80,14 @@ export const useQuestionFormState = (question?: Question) => {
         isMultipleChoice,
         easyMode,
         workspaceGuid,
-
+        showExplanations,
         setQuestionText,
         addAnswer,
         setQuestionExplanation,
         toggleMultipleChoice,
         setEasyMode,
         setWorkspaceGuid,
+        setShowExplanations,
     }
 }
 

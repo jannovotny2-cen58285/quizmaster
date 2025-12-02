@@ -17,6 +17,11 @@ export class QuestionEditPage {
     showAnswerExplanations = () => this.showAnswerExplanationLocator().check()
     hideAnswerExplanations = () => this.showAnswerExplanationLocator().uncheck()
 
+    private showExplanationLocator = () => this.page.locator('#show-explanation')
+    showExplanation = () => this.showExplanationLocator().isChecked()
+    checkShowExplanation = () => this.showExplanationLocator().check()
+    uncheckShowExplanation = () => this.showExplanationLocator().uncheck()
+
     private multipleChoiceLocator = () => this.page.locator('#is-multiple-choice')
     isMultipleChoice = () => this.multipleChoiceLocator().isChecked()
     setMultipleChoice = () => this.multipleChoiceLocator().check()

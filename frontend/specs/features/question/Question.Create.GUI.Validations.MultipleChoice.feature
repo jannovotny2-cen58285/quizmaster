@@ -6,6 +6,7 @@ Feature: Create question GUI
 
   Background:
     Given I start creating a question
+    And I check show explanations checkbox
     * I enter question "What are cities of Czech Republic?"
     * with answers:
       | Brno     |  | No Brno |

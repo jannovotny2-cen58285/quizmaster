@@ -2,6 +2,7 @@ Feature: Take a multiple choice question with partial score
 
   Background:
     Given a question "Which of the following are planets?"
+    And I check show explanations checkbox
     * with answers:
       | Mars    | * |
       | Pluto   |   |

@@ -22,6 +22,7 @@ Feature: Workspace - where workspace and quiz list are displayed
       | 2 + 2 = ? | 4 (*), 5 |
       | 3 * 3 = ? | 9 (*), 6 |
     When I edit question "2 + 2 = ?" from the list
+    And I check show explanations checkbox
     Then I see question edit page
     And I see "2 + 2 = ?" in the question field
 

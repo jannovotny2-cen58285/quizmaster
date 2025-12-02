@@ -12,9 +12,11 @@ Feature: Edit question GUI
       | Berlin |   | Germany |
     * with explanation "Czechia is a country in Europe. Czechs love beer."
     * saved and bookmarked as "Czechia"
+    And I check show explanations checkbox
 
   Scenario: Empty question form
     Given I enter question ""
+    And I check show explanations checkbox
     * I enter answer 1 text "", incorrect, with explanation ""
     * I enter question explanation ""
     When I attempt to save the question

@@ -12,9 +12,11 @@ Feature: Edit question GUI
       | Prague   | * | Yes     |
       | Berlin   |   | Germany |
     * saved and bookmarked as "Czechia"
+    And I check show explanations checkbox
 
   Scenario: Empty question form
     Given I enter question ""
+    And I check show explanations checkbox
     * I enter answer 1 text "", incorrect, with explanation ""
     * I enter answer 3 text "", incorrect, with explanation ""
     * I enter question explanation ""

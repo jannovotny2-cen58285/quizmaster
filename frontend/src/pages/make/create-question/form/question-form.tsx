@@ -41,6 +41,8 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
                 )}
             </Row>
             <AnswersEdit
+                setShowExplanations={state.setShowExplanations}
+                showExplanations={state.showExplanations}
                 answerStates={state.answerStates}
                 isMultipleChoice={state.isMultipleChoice}
                 addAnswer={state.addAnswer}

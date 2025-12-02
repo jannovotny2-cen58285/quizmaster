@@ -7,6 +7,7 @@ import { expect } from '@playwright/test'
 
 Given('a question {string}', async function (question: string) {
     await openCreatePage(this)
+    await this.questionEditPage.checkShowExplanation()
     await enterQuestion(this, question)
 })
 
@@ -55,6 +56,10 @@ When('I wait for {int} ms', async (milliseconds: number) => {
 
 When('I check "Add explanation to your answer" checkbox', async function () {
     await this.questionEditPage.checkShowExplanationFields()
+})
+
+When('I check "Show explanation" checkbox', async function () {
+    await this.questionEditPage.checkShowExplanation()
 })
 
 Then('I see explanation fields are visible for answers', async function () {

@@ -4,6 +4,7 @@ Feature: Create question GUI - Single/multiple choice
 
   Background:
     Given I start creating a question
+    And I check show explanations checkbox
 
   Scenario: Default is single choice
     Then I see multiple choice is unchecked

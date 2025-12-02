@@ -14,6 +14,7 @@ Feature: Create question GUI
 
   Scenario: Empty question text
     Given I start creating a question
+    And I check show explanations checkbox
     * I enter answer 1 text "4" and mark it as correct
     * I enter answer 2 text "5"
     When I attempt to save the question
@@ -33,6 +34,7 @@ Feature: Create question GUI
 
   Scenario: Add an empty answer
     Given I start creating a question
+    And I check show explanations checkbox
     * I enter question "What is 2 + 2?"
     * I enter answer 1 text "4" and mark it as correct
     * I enter answer 2 text "5"
@@ -45,6 +47,7 @@ Feature: Create question GUI
     Either all or no answer explanations are required
 
     Given I start creating a question
+    And I check show explanations checkbox
     * I enter question "What is 2 + 2?"
     * I enter answer 1 text "4" and mark it as correct
     * I enter answer 1 explanation "4 is the answer"
@@ -57,6 +60,7 @@ Feature: Create question GUI
     Either all or no answer explanations are required
 
     Given I start creating a question
+    And I check show explanations checkbox
     * I enter question "What is 2 + 2?"
     * I enter answer 1 text "4" and mark it as correct
     * I enter answer 1 explanation "4 is the answer"
@@ -90,6 +94,7 @@ Feature: Create question GUI
 
   Scenario: Empty question text error message disappears after adding question text
     Given I start creating a question
+    And I check show explanations checkbox
     * I enter answer 1 text "4" and mark it as correct
     * I enter answer 2 text "5"
     * I attempt to save the question
