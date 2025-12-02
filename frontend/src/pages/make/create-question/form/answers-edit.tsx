@@ -1,17 +1,17 @@
-import { Button, Field, TextInput, Row, CheckField } from "pages/components";
-import type { AnswerState } from "./question-form-state.ts";
-import { ErrorMessage } from "pages/components/forms/validations.tsx";
+import { Button, Field, TextInput, Row, CheckField } from 'pages/components'
+import type { AnswerState } from './question-form-state.ts'
+import { ErrorMessage } from 'pages/components/forms/validations.tsx'
 
 interface AnswerRowProps {
-    readonly state: AnswerState;
-    readonly isMultipleChoice: boolean;
-    readonly showExplanations: boolean;
+    readonly state: AnswerState
+    readonly isMultipleChoice: boolean
+    readonly showExplanations: boolean
 }
 
 export const AnswerRow = ({ state, isMultipleChoice, showExplanations }: AnswerRowProps) => (
     <div className="answer-row">
         <input
-            type={isMultipleChoice ? "checkbox" : "radio"}
+            type={isMultipleChoice ? 'checkbox' : 'radio'}
             checked={state.isCorrect}
             onChange={state.toggleCorrect}
         />
@@ -27,14 +27,14 @@ export const AnswerRow = ({ state, isMultipleChoice, showExplanations }: AnswerR
             )}
         </div>
     </div>
-);
+)
 
 interface AnswersProps {
-    readonly answerStates: readonly AnswerState[];
-    readonly isMultipleChoice: boolean;
-    readonly addAnswer: () => void;
-    readonly showExplanations: boolean;
-    readonly setShowExplanations: (show: boolean | ((show: boolean) => boolean)) => void;
+    readonly answerStates: readonly AnswerState[]
+    readonly isMultipleChoice: boolean
+    readonly addAnswer: () => void
+    readonly showExplanations: boolean
+    readonly setShowExplanations: (show: boolean | ((show: boolean) => boolean)) => void
 }
 
 export const AnswersEdit = ({
@@ -44,7 +44,7 @@ export const AnswersEdit = ({
     showExplanations,
     setShowExplanations,
 }: AnswersProps) => {
-    const handleToggleExplanations = () => setShowExplanations((showExplanations) => !showExplanations);
+    const handleToggleExplanations = () => setShowExplanations(showExplanations => !showExplanations)
 
     return (
         <Field label="Enter your answers" required>
@@ -54,7 +54,7 @@ export const AnswersEdit = ({
                 onToggle={handleToggleExplanations}
                 checked={showExplanations}
             />
-            {answerStates.map((state) => (
+            {answerStates.map(state => (
                 <AnswerRow state={state} isMultipleChoice={isMultipleChoice} showExplanations={showExplanations} />
             ))}
             <Row>
@@ -67,5 +67,5 @@ export const AnswersEdit = ({
             <ErrorMessage errorCode="empty-answer-explanation" />
             <ErrorMessage errorCode="few-correct-answers" />
         </Field>
-    );
-};
+    )
+}
