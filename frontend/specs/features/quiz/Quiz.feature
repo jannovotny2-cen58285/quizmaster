@@ -152,3 +152,18 @@ Scenario: Submit button is visible as inactive when no answer is checked
     Then I see the submit button as active
     When I uncheck answer "Elephant"
     Then I see the submit button as inactive
+
+@skip
+  Scenario: When I click next button answer is submitted
+    Given questions
+      | bookmark | question                            | answers                                            |
+      | Nose     | Which animal has long nose?         | Elephant (*), Anteater (*), Swordfish (*), Bulldog |
+      | France   | What is capital of France?          | Marseille, Lyon, Paris (*), Toulouse               |
+
+    Given I start quiz "-3"
+    Then I see question "Nose"
+    When I check answer "Elephant"
+    And I click the next button
+    Then I see question "France"
+    When I click the back button
+    Then I see answer "Elephant" checked
