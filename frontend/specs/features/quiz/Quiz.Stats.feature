@@ -1,4 +1,3 @@
-@skip
 Feature: Show stats
 
 Background:
