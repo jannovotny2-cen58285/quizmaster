@@ -33,7 +33,7 @@ export class QuestionEditPage {
     private explanationFieldsLocator = () => this.page.locator('input.explanation')
     countExplanationFields = () => this.explanationFieldsLocator().count()
 
-    private answerRowsLocator = () => this.page.locator('.answer-row')
+    answerRowsLocator = () => this.page.locator('.answer-row')
     answerRowCount = () => this.answerRowsLocator().count()
 
     private answerRowLocator = (index: number) => this.page.locator('.answer-row').nth(index)
@@ -80,4 +80,8 @@ export class QuestionEditPage {
     private errorsLocator = () => this.page.locator('.alert.error')
     hasError = (error: string) => this.page.getByTestId(error).waitFor({ state: 'visible' })
     errorMessageCount = () => this.errorsLocator().count()
+
+    answerDeleteButtonsLocator = () => this.page.locator('.answer-delete-button')
+
+    answerDeleteButtonLocator = (idx: number) => this.answerDeleteButtonsLocator().nth(idx)
 }

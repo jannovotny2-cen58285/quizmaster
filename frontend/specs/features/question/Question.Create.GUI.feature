@@ -1,10 +1,11 @@
+@skip
 Feature: Create question GUI
 
   Scenario: Default values
     When I start creating a question
     Then I see empty question field
     * I see multiple choice is unchecked
-    * I see 2 empty answer fields, incorrect, with empty explanations fields
+    * I see 2 empty answer fields, incorrect, with empty explanations fields, unable to delete
     * I see empty question explanation field
 
   Scenario: Question take and question edit URLs

@@ -82,12 +82,14 @@ const expectAnswer = async (
 
 const expectEmptyAnswers = (world: QuizmasterWorld, index: number) => expectAnswer(world, index, '', false, '')
 
-Then('I see 2 empty answer fields, incorrect, with empty explanations fields', async function () {
+Then('I see 2 empty answer fields, incorrect, with empty explanations fields, unable to delete', async function () {
     const answerCount = await this.questionEditPage.answerRowCount()
     expect(answerCount).toBe(2)
 
     await expectEmptyAnswers(this, 0)
     await expectEmptyAnswers(this, 1)
+
+    await expectAnswerDeleteBtnsToBeVisibleAndDisabled(this)
 })
 
 Then(/I see answer (\d+) as (correct|incorrect)/, async function (index: number, correctness: string) {
@@ -214,4 +216,43 @@ Then('I see error messages', async function (table: DataTable) {
 
 Then('I see no error messages', async function () {
     await expectErrorCount(this, 0)
+})
+
+const expectAnswerDeleteBtnsToBeVisibleAndDisabled = async (world: QuizmasterWorld, expectedBtnCount: number = 2, expectDisabled: boolean = true) => {
+    const trashIconButtons = world.questionEditPage.answerDeleteButtonsLocator()
+    const btnCount = await trashIconButtons.count();
+
+    expect(btnCount).toBe(expectedBtnCount)
+    for(let i = 0; i < btnCount; i++) {
+        let trashIconBtn = trashIconButtons.nth(i);
+        expect(trashIconBtn).toBeVisible()
+        if(expectDisabled) {
+            expect(trashIconBtn).toBeDisabled()
+        } else {
+            expect(trashIconBtn).toBeEnabled()
+        }
+    }
+}
+
+Then('I delete answer {int}', async function (answerNumber: number) {
+    let answerDeleteButtonLocator = this.questionEditPage.answerDeleteButtonLocator(answerNumber -1);
+
+    answerDeleteButtonLocator.click()
+})
+
+Then('I do not see answer {string}', async function (answer: string) {
+    const answerRowsLocator = this.questionEditPage.answerRowsLocator();
+
+    const answerCount = await answerRowsLocator.count()
+    for(let i = 0; i < answerCount; i++) {
+        expect(await this.questionEditPage.answerText(i)).not.toBe(answer)
+    }
+})
+
+Then('I see {int} trash icon buttons enabled', async function (buttonCount: number) {
+    await expectAnswerDeleteBtnsToBeVisibleAndDisabled(this, buttonCount, false)
+})
+
+Then('I see {int} trash icon buttons disabled', async function (buttonCount: number) {
+    await expectAnswerDeleteBtnsToBeVisibleAndDisabled(this, buttonCount, true)
 })
