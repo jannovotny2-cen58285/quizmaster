@@ -48,7 +48,7 @@ export const AnswersEdit = ({
     addAnswer,
     showExplanations,
     setShowExplanations,
-    removeAnswer
+    removeAnswer,
 }: AnswersProps) => {
     const handleToggleExplanations = () => setShowExplanations(showExplanations => !showExplanations)
 
