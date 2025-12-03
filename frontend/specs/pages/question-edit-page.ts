@@ -87,6 +87,5 @@ export class QuestionEditPage {
     errorMessageCount = () => this.errorsLocator().count()
 
     answerDeleteButtonsLocator = () => this.page.locator('.answer-delete-button')
-
     answerDeleteButtonLocator = (idx: number) => this.answerDeleteButtonsLocator().nth(idx)
 }

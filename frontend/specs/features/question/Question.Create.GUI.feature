@@ -1,4 +1,3 @@
-@skip
 Feature: Create question GUI
 
   Background:

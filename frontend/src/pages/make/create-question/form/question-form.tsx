@@ -46,6 +46,7 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
                 answerStates={state.answerStates}
                 isMultipleChoice={state.isMultipleChoice}
                 addAnswer={state.addAnswer}
+                removeAnswer={state.removeAnswer}
             />
             <Field label="Question explanation">
                 <TextArea

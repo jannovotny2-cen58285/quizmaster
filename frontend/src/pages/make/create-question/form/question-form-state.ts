@@ -63,6 +63,17 @@ export const useQuestionFormState = (question?: Question) => {
         setExplanations([...explanations, ''])
     }
 
+    const removeAnswer = (idx: number) => {
+        setAnswers([...answers.filter((_, i) => i !== idx)])
+        setExplanations([...explanations.filter((_, i) => i !== idx)])
+
+        const sortedCorrectAnswers = [...correctAnswers]
+            .sort((a, b) => a - b)
+            .filter(item => item !== idx)
+            .map(item => (item >= idx ? item - 1 : item))
+        setCorrectAnswers(sortedCorrectAnswers)
+    }
+
     const answerStates: readonly AnswerState[] = answers.map((answer, index) => ({
         answer,
         explanation: explanations[index] || '',
@@ -85,6 +96,7 @@ export const useQuestionFormState = (question?: Question) => {
         showExplanations,
         setQuestionText,
         addAnswer,
+        removeAnswer,
         setQuestionExplanation,
         toggleMultipleChoice,
         setEasyMode,

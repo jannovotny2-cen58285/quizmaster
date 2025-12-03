@@ -125,8 +125,10 @@ Then(
 
 Then(/^I see the answers fields$/, async function (data: TableOf<AnswerRaw>) {
     const answers = data.raw()
-    let i = 0
 
+    expect(await this.questionEditPage.answerRowCount()).toBe(answers.length)
+
+    let i = 0
     for (const [answer, star, explanation] of answers) {
         await expectAnswer(this, i++, answer, star === '*', explanation || '')
     }
@@ -243,9 +245,10 @@ const expectAnswerDeleteBtnsToBeVisibleAndDisabled = async (
     expectDisabled = true,
 ) => {
     const trashIconButtons = world.questionEditPage.answerDeleteButtonsLocator()
+
+    await expect(trashIconButtons).toHaveCount(expectedBtnCount)
     const btnCount = await trashIconButtons.count()
 
-    expect(btnCount).toBe(expectedBtnCount)
     for (let i = 0; i < btnCount; i++) {
         const trashIconBtn = trashIconButtons.nth(i)
         expect(trashIconBtn).toBeVisible()
@@ -260,22 +263,13 @@ const expectAnswerDeleteBtnsToBeVisibleAndDisabled = async (
 Then('I delete answer {int}', async function (answerNumber: number) {
     const answerDeleteButtonLocator = this.questionEditPage.answerDeleteButtonLocator(answerNumber - 1)
 
-    answerDeleteButtonLocator.click()
+    await answerDeleteButtonLocator.click()
 })
 
-Then('I do not see answer {string}', async function (answer: string) {
-    const answerRowsLocator = this.questionEditPage.answerRowsLocator()
-
-    const answerCount = await answerRowsLocator.count()
-    for (let i = 0; i < answerCount; i++) {
-        expect(await this.questionEditPage.answerText(i)).not.toBe(answer)
-    }
-})
-
-Then('I see {int} trash icon buttons enabled', async function (buttonCount: number) {
+Then('I see {int} delete buttons enabled', async function (buttonCount: number) {
     await expectAnswerDeleteBtnsToBeVisibleAndDisabled(this, buttonCount, false)
 })
 
-Then('I see {int} trash icon buttons disabled', async function (buttonCount: number) {
+Then('I see {int} delete buttons disabled', async function (buttonCount: number) {
     await expectAnswerDeleteBtnsToBeVisibleAndDisabled(this, buttonCount, true)
 })
