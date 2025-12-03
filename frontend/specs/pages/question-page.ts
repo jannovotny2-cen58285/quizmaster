@@ -8,6 +8,8 @@ export class QuestionPage {
     evaluateButtonLocator = () => this.page.locator('button#evaluate')
     evaluateModalButtonLocator = () => this.page.locator('dialog #evaluate')
 
+    submitButtonLocator = () => this.page.locator('input.submit-btn')
+
     private bookmarkQuestionButtonLocator = () => this.page.locator('[data-testid="bookmark-toggle"]')
     private unBookmarkQuestionButtonLocator = (title: string) =>
         this.page.locator(`[data-testid="delete-bookmark-${title}"]`)
@@ -21,7 +23,7 @@ export class QuestionPage {
     unBookmark = (title: string) => this.unBookmarkQuestionButtonLocator(title).click()
     next = () => this.nextButtonLocator().click()
     evaluate = () => this.evaluateButtonLocator().click()
-
+    submit = () => this.submitButtonLocator().click()
     isCurrentQuestionBookmarked = async () =>
         (await this.bookmarkQuestionButtonLocator().getAttribute('data-bookmarked')) === 'true'
 

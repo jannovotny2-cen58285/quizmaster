@@ -42,3 +42,15 @@ export const updated = <T>(answers: readonly T[], questionIdx: number, answerIdx
     newAnswers[questionIdx] = answerIdxs
     return newAnswers
 }
+
+export const getRandomRunId = (): number => Math.floor(Math.random() * 1000000000)
+export const setQuizRunId = (runId: number) => sessionStorage.setItem('quizRunId', runId.toString())
+export const getQuizRunId = (): number => {
+    if (sessionStorage.getItem('quizRunId')) {
+        return Number.parseInt(sessionStorage.getItem('quizRunId') ?? '0')
+    }
+
+    const runId = getRandomRunId()
+    setQuizRunId(runId)
+    return runId
+}
