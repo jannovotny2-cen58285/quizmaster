@@ -5,7 +5,7 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "code:tsc": "tsc -b",
+        "code:tsc": "tsc -b && rm -f *.tsbuildinfo",
         "code:lint": "biome lint --fix",
         "code:format": "biome format --write",
         "code": "pnpm code:tsc && pnpm code:lint && pnpm code:format",
