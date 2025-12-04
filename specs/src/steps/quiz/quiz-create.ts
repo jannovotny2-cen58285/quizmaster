@@ -38,7 +38,7 @@ const validateQuizRow = (questionBookmarks: Record<string, Question>, row: Recor
 }
 
 const createDummyQuestion = async (world: QuizmasterWorld, bookmark: string) => {
-    await createQuestion(world, bookmark, '1 + 1 = ?', {
+    await createQuestion(world, bookmark, '1 + 1 = ?', false, {
         raw: () => [
             ['2', '*', ''],
             ['3', '', ''],

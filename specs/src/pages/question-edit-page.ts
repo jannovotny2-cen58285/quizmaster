@@ -29,7 +29,7 @@ export class QuestionEditPage {
 
     private easyModeLocator = () => this.page.locator('#easy-mode')
     isEasyMode = () => this.easyModeLocator().isChecked()
-    setEasyModeChecked = () => this.easyModeLocator().check()
+    setEasyMode = () => this.easyModeLocator().check()
     isEasyModeVisible = () => this.easyModeLocator().isVisible()
 
     private explanationFieldsCheckboxLocator = () => this.page.locator('#show-explanation')

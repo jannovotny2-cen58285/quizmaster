@@ -14,13 +14,14 @@ Given('a question {string}', async function (question: string) {
 Given(
     'a question {string} bookmarked as {string}',
     async function (question: string, bookmark: string, answerRawTable: TableOf<AnswerRaw>) {
-        await createQuestion(this, bookmark, question, answerRawTable)
+        await createQuestion(this, bookmark, question, false, answerRawTable)
     },
 )
 
 Given('questions', async function (data: DataTable) {
-    for (const row of data.rows()) {
-        const [bookmark, question, answers, questionExplanation] = row
+    for (const row of data.hashes()) {
+        const { bookmark, question, answers, easy, explanation } = row
+        const isEasy = easy === 'true'
         const answerRawTable = {
             raw: () =>
                 answers.split(',').map(a => {
@@ -29,7 +30,7 @@ Given('questions', async function (data: DataTable) {
                 }),
         } as TableOf<AnswerRaw>
 
-        await createQuestion(this, bookmark, question, answerRawTable, questionExplanation)
+        await createQuestion(this, bookmark, question, isEasy, answerRawTable, explanation)
     }
 })
 
@@ -43,7 +44,7 @@ Given('with explanation {string}', async function (explanation: string) {
 })
 
 Given('marked as easy mode', async function () {
-    await this.questionEditPage.setEasyModeChecked()
+    await this.questionEditPage.setEasyMode()
 })
 
 Given('saved and bookmarked as {string}', async function (bookmark) {

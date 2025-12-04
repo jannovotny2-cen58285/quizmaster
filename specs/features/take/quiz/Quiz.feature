@@ -115,7 +115,7 @@ Feature: Take a quiz
 
   Scenario: Remembered multiple choices after back button
     Given questions
-      | Bookmark | Question                    | Answers                                            |
+      | bookmark | question                    | answers                                            |
       | Nose     | Which animal has long nose? | Elephant (*), Anteater (*), Swordfish (*), Bulldog |
       | France   | What is capital of France?  | Marseille, Lyon, Paris (*), Toulouse               |
 

@@ -94,6 +94,7 @@ export const createQuestion = async (
     world: QuizmasterWorld,
     bookmark: string,
     question: string,
+    isEasy: boolean,
     answerRawTable: TableOf<AnswerRaw>,
     explanation?: string,
 ) => {
@@ -101,6 +102,9 @@ export const createQuestion = async (
     await enterQuestion(world, question)
     await world.questionEditPage.checkShowExplanation()
     await addAnswers(world, answerRawTable)
+    if (isEasy) {
+        await world.questionEditPage.setEasyMode()
+    }
     if (explanation) {
         await enterQuestionExplanation(world, explanation)
     }
