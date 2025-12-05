@@ -29,9 +29,10 @@ public class Quiz {
     @Enumerated(EnumType.STRING)
     private QuizMode mode;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private EasyMode easyMode = EasyMode.PERQUESTION;
+    @Column(name = "easy_mode", nullable = false)
+    private Difficulty difficulty = Difficulty.KEEP_QUESTION;
 
     private int passScore;
     private Integer timeLimit; // time limit in seconds, null means no limit

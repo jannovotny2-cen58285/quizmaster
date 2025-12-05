@@ -1,12 +1,12 @@
 import { fetchJson, postJson, putJson } from './helpers.ts'
-import type { Quiz, QuizMode, EasyMode } from 'model/quiz.ts'
+import type { Quiz, QuizMode, Difficulty } from 'model/quiz.ts'
 
 export interface QuizCreateRequest {
     readonly title: string
     readonly description: string
     readonly questionIds: readonly number[]
     readonly mode: QuizMode
-    readonly easyMode?: EasyMode
+    readonly difficulty?: Difficulty
     readonly passScore: number
     readonly timeLimit: number
     readonly size?: number

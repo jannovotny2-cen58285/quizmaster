@@ -9,7 +9,7 @@ import {
     QuestionExplanation,
 } from 'pages/take/question-take'
 import { QuestionScore } from './components/question-score'
-import type { QuizMode, EasyMode } from 'model/quiz.ts'
+import type { QuizMode, Difficulty } from 'model/quiz.ts'
 import { Form } from 'pages/components'
 
 export interface QuestionFormProps {
@@ -18,7 +18,7 @@ export interface QuestionFormProps {
     readonly onSubmitted?: (selectedAnswerIdxs: AnswerIdxs) => void
     readonly onAnswerSelected?: (selectedAnswerIdxs: AnswerIdxs) => void
     readonly mode: QuizMode
-    readonly quizEasyMode?: EasyMode
+    readonly quizDifficulty?: Difficulty
 }
 
 export const QuestionForm = (props: QuestionFormProps) => {
@@ -45,10 +45,10 @@ export const QuestionForm = (props: QuestionFormProps) => {
 
     const shouldShowEasyMode =
         state.isMultipleChoice &&
-        (props.quizEasyMode
-            ? props.quizEasyMode === 'ALWAYS'
+        (props.quizDifficulty
+            ? props.quizDifficulty === 'EASY'
                 ? true
-                : props.quizEasyMode === 'NEVER'
+                : props.quizDifficulty === 'HARD'
                   ? false
                   : easyMode
             : easyMode)

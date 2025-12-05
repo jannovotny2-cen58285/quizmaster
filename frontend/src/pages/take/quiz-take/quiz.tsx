@@ -116,7 +116,7 @@ export const QuestionForm = (props: QuestionProps) => {
                 }}
                 onSubmitted={handleAnswerSubmitted}
                 mode={props.quiz.mode}
-                quizEasyMode={props.quiz.easyMode}
+                quizDifficulty={props.quiz.difficulty}
             />
             <div
                 style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '10px', marginBottom: '20px' }}

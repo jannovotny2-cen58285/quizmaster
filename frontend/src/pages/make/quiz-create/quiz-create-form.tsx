@@ -10,7 +10,7 @@ import { Field, Form, NumberInput, Row, SubmitButton, TextArea, TextInput } from
 import { QuestionSelect } from './components/question-select.tsx'
 import { ErrorMessage, createValidator } from 'pages/components/forms/validations.tsx'
 import { validateQuizForm, errorMessage } from './validations.ts'
-import type { QuizMode, EasyMode } from 'model/quiz.ts'
+import type { QuizMode, Difficulty } from 'model/quiz.ts'
 
 export type QuizCreateFormData = QuizCreateRequest
 
@@ -31,7 +31,7 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
     const [checkRandomize, setCheckRandomize] = useState(false)
     const [filteredQuestions, setFilteredQuestions] = useState<readonly QuestionListItem[]>(questions)
     const [feedbackMode, setFeedbackMode] = useState<QuizMode>('EXAM')
-    const [easyMode, setEasyMode] = useState<EasyMode>('PERQUESTION')
+    const [difficulty, setDifficulty] = useState<Difficulty>('KEEP_QUESTION')
 
     const validator = createValidator(
         () => validateQuizForm({ title, description, timeLimit, passScore, selectedIds, finalCount }),
@@ -43,7 +43,7 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
         description,
         questionIds: Array.from(selectedIds),
         mode: feedbackMode,
-        easyMode,
+        difficulty,
         passScore,
         timeLimit,
         workspaceGuid: searchParams.get('workspaceguid') || null,
@@ -102,40 +102,40 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
                     </label>
                 </span>
             </Field>
-            <Field label="Easy mode">
+            <Field label="Difficulty">
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                     <input
                         type="radio"
-                        name="easyMode"
-                        id="easy-always"
-                        value="ALWAYS"
-                        checked={easyMode === 'ALWAYS'}
-                        onChange={e => setEasyMode(e.target.value as EasyMode)}
+                        name="difficulty"
+                        id="difficulty-easy"
+                        value="EASY"
+                        checked={difficulty === 'EASY'}
+                        onChange={e => setDifficulty(e.target.value as Difficulty)}
                     />
-                    <label htmlFor="easy-always" style={{ marginTop: '5px' }}>
-                        ALWAYS
+                    <label htmlFor="difficulty-easy" style={{ marginTop: '5px' }}>
+                        EASY
                     </label>
                     <input
                         type="radio"
-                        name="easyMode"
-                        id="easy-never"
-                        value="NEVER"
-                        checked={easyMode === 'NEVER'}
-                        onChange={e => setEasyMode(e.target.value as EasyMode)}
+                        name="difficulty"
+                        id="difficulty-hard"
+                        value="HARD"
+                        checked={difficulty === 'HARD'}
+                        onChange={e => setDifficulty(e.target.value as Difficulty)}
                     />
-                    <label htmlFor="easy-never" style={{ marginTop: '5px' }}>
-                        NEVER
+                    <label htmlFor="difficulty-hard" style={{ marginTop: '5px' }}>
+                        HARD
                     </label>
                     <input
                         type="radio"
-                        name="easyMode"
-                        id="easy-perquestion"
-                        value="PERQUESTION"
-                        checked={easyMode === 'PERQUESTION'}
-                        onChange={e => setEasyMode(e.target.value as EasyMode)}
+                        name="difficulty"
+                        id="difficulty-keep-question"
+                        value="KEEP_QUESTION"
+                        checked={difficulty === 'KEEP_QUESTION'}
+                        onChange={e => setDifficulty(e.target.value as Difficulty)}
                     />
-                    <label htmlFor="easy-perquestion" style={{ marginTop: '5px' }}>
-                        PERQUESTION
+                    <label htmlFor="difficulty-keep-question" style={{ marginTop: '5px' }}>
+                        KEEP_QUESTION
                     </label>
                 </span>
             </Field>

@@ -56,7 +56,7 @@ public class QuizController {
                 .description(quiz.getDescription())
                 .questions(questions)
                 .mode(quiz.getMode())
-                .easyMode(quiz.getEasyMode())
+                .difficulty(quiz.getDifficulty())
                 .passScore(quiz.getPassScore())
                 .timeLimit(quiz.getTimeLimit())
                 .size(quiz.getSize())

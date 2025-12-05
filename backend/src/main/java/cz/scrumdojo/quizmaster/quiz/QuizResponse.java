@@ -15,7 +15,7 @@ public class QuizResponse {
     private String title;
     private Question[] questions;
     private QuizMode mode;
-    private EasyMode easyMode;
+    private Difficulty difficulty;
     private int passScore;
     private String description;
     private Integer timeLimit;

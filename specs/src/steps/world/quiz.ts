@@ -1,5 +1,5 @@
 export type QuizMode = 'learn' | 'exam' | ''
-export type EasyMode = 'ALWAYS' | 'NEVER' | 'PERQUESTION'
+export type Difficulty = 'EASY' | 'HARD' | 'KEEP_QUESTION'
 
 export interface Quiz {
     title: string
@@ -9,7 +9,7 @@ export interface Quiz {
     passScore: number
     timeLimit: number
     size?: number
-    easyMode?: EasyMode
+    difficulty?: Difficulty
 }
 
 export interface QuizBookmark extends Quiz {

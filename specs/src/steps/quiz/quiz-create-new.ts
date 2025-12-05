@@ -75,9 +75,9 @@ When('I select feedback mode {string}', async function (inputMode: string) {
         await this.quizCreatePage.selectFeedbackMode('learn')
     }
 })
-When('I select easy mode {string}', async function (inputMode: string) {
-    const mode = inputMode.toLowerCase() as 'always' | 'never' | 'perquestion'
-    await this.quizCreatePage.selectEasyMode(mode)
+When('I select difficulty {string}', async function (inputDifficulty: string) {
+    const difficulty = inputDifficulty.toLowerCase() as 'easy' | 'hard' | 'keep_question'
+    await this.quizCreatePage.selectDifficulty(difficulty)
 })
 
 When('I submit the quiz', async function () {

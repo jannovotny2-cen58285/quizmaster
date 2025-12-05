@@ -4,7 +4,7 @@ import {
     type QuizmasterWorld,
     type Quiz,
     type QuizMode,
-    type EasyMode,
+    type Difficulty,
     type Question,
     parseKey,
 } from '../world/index.ts'
@@ -22,7 +22,7 @@ const postQuiz = async (world: QuizmasterWorld, bookmark: string, quiz: Quiz) =>
         passScore: quiz.passScore,
         timeLimit: quiz.timeLimit,
         size: quiz.size,
-        easyMode: quiz.easyMode,
+        difficulty: quiz.difficulty,
     }
 
     const response = await world.page.request.post('/api/quiz', { data: quizPayload })
@@ -53,11 +53,11 @@ const createDummyQuestion = async (world: QuizmasterWorld, bookmark: string) => 
     })
 }
 
-const difficultyToEasyMode = (difficulty: string): EasyMode | undefined => {
-    const mapping: Record<string, EasyMode> = {
-        'Keep Question': 'PERQUESTION',
-        Easy: 'ALWAYS',
-        Hard: 'NEVER',
+const toDifficulty = (difficulty: string): Difficulty | undefined => {
+    const mapping: Record<string, Difficulty> = {
+        'Keep Question': 'KEEP_QUESTION',
+        Easy: 'EASY',
+        Hard: 'HARD',
     }
     return mapping[difficulty]
 }
@@ -92,7 +92,7 @@ const toQuiz = async (world: QuizmasterWorld, row: Record<string, string>): Prom
         passScore: Number.parseInt(row['pass score']) || 50,
         timeLimit: Number.parseInt(row['time limit']) || 120,
         size: Number.parseInt(row.size) || undefined,
-        easyMode: difficultyToEasyMode(row.difficulty),
+        difficulty: toDifficulty(row.difficulty),
     }
 }
 
