@@ -6,7 +6,7 @@ import { useStateSet } from 'helpers'
 import type { QuestionListItem } from 'model/question-list-item.ts'
 import type { QuizCreateRequest } from 'api/quiz.ts'
 
-import { Field, Form, NumberInput, Row, SubmitButton, TextArea, TextInput } from 'pages/components'
+import { Field, Form, NumberInput, RadioSet, Row, SubmitButton, TextArea, TextInput } from 'pages/components'
 import { QuestionSelect } from './components/question-select.tsx'
 import { ErrorMessage, createValidator } from 'pages/components/forms/validations.tsx'
 import { validateQuizForm, errorMessage } from './validations.ts'
@@ -77,67 +77,20 @@ export const QuizCreateForm = ({ questions, onSubmit }: QuizCreateProps) => {
                 </Field>
             </Row>
             <Field label="Feedback mode">
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <input
-                        type="radio"
-                        name="feedbackMode"
-                        id="exam-mode"
-                        value="EXAM"
-                        checked={feedbackMode === 'EXAM'}
-                        onChange={e => setFeedbackMode(e.target.value as QuizMode)}
-                    />
-                    <label htmlFor="exam-mode" style={{ marginTop: '5px' }}>
-                        EXAM
-                    </label>
-                    <input
-                        type="radio"
-                        name="feedbackMode"
-                        id="learn-mode"
-                        value="LEARN"
-                        checked={feedbackMode === 'LEARN'}
-                        onChange={e => setFeedbackMode(e.target.value as QuizMode)}
-                    />
-                    <label htmlFor="learn-mode" style={{ marginTop: '5px' }}>
-                        LEARN
-                    </label>
-                </span>
+                <RadioSet
+                    name="mode"
+                    value={feedbackMode}
+                    onChange={setFeedbackMode}
+                    options={{ EXAM: 'Exam', LEARN: 'Learning' }}
+                />
             </Field>
             <Field label="Difficulty">
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <input
-                        type="radio"
-                        name="difficulty"
-                        id="difficulty-easy"
-                        value="EASY"
-                        checked={difficulty === 'EASY'}
-                        onChange={e => setDifficulty(e.target.value as Difficulty)}
-                    />
-                    <label htmlFor="difficulty-easy" style={{ marginTop: '5px' }}>
-                        EASY
-                    </label>
-                    <input
-                        type="radio"
-                        name="difficulty"
-                        id="difficulty-hard"
-                        value="HARD"
-                        checked={difficulty === 'HARD'}
-                        onChange={e => setDifficulty(e.target.value as Difficulty)}
-                    />
-                    <label htmlFor="difficulty-hard" style={{ marginTop: '5px' }}>
-                        HARD
-                    </label>
-                    <input
-                        type="radio"
-                        name="difficulty"
-                        id="difficulty-keep-question"
-                        value="KEEP_QUESTION"
-                        checked={difficulty === 'KEEP_QUESTION'}
-                        onChange={e => setDifficulty(e.target.value as Difficulty)}
-                    />
-                    <label htmlFor="difficulty-keep-question" style={{ marginTop: '5px' }}>
-                        KEEP_QUESTION
-                    </label>
-                </span>
+                <RadioSet
+                    name="difficulty"
+                    value={difficulty}
+                    onChange={setDifficulty}
+                    options={{ EASY: 'Easy', HARD: 'Hard', KEEP_QUESTION: 'Keep Question' }}
+                />
             </Field>
             <div className="label">Select quiz questions</div>
             <Field label="Filter">

@@ -8,24 +8,17 @@ export class QuizCreatePage {
     getQuestion = (question: string) => this.page.locator('label', { hasText: question })
     selectQuestion = async (question: string) => this.page.locator('label', { hasText: question }).click()
     selectRandomizedFunction = () => this.page.locator('#isRandomized').check()
-    selectFeedbackMode = async (mode: string) => {
-        const modeElementId = mode === 'learn' ? '#learn-mode' : '#exam-mode'
-        const radio = this.page.locator(modeElementId)
-        await radio.check()
+    selectFeedbackMode = async (mode: 'learn' | 'exam') => {
+        const value = mode === 'learn' ? 'LEARN' : 'EXAM'
+        await this.page.locator(`#mode-${value}`).check()
     }
     selectDifficulty = async (difficulty: 'easy' | 'hard' | 'keep_question') => {
-        const elementId =
-            difficulty === 'easy'
-                ? '#difficulty-easy'
-                : difficulty === 'hard'
-                  ? '#difficulty-hard'
-                  : '#difficulty-keep-question'
-        const radio = this.page.locator(elementId)
-        await radio.check()
+        const value = difficulty === 'easy' ? 'EASY' : difficulty === 'hard' ? 'HARD' : 'KEEP_QUESTION'
+        await this.page.locator(`#difficulty-${value}`).check()
     }
 
     feedbackModeElement = () => {
-        return this.page.locator('#feedback-mode')
+        return this.page.locator('#mode')
     }
     private submitLocator = () => this.page.locator('button[type="submit"]')
     submit = () => this.submitLocator().click()
