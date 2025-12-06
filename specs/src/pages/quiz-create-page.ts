@@ -28,10 +28,7 @@ export class QuizCreatePage {
     enterQuizName = (title: string) => this.page.locator('#quiz-title').fill(title)
     enterQuizFinalCount = (finalCount: string) => this.page.locator('#quiz-finalCount').fill(finalCount.toString())
     enterDescription = (description: string) => this.page.locator('#quiz-description').fill(description)
-    private quizUrlLocator = () => this.page.locator('.alert.success a')
-    takeQuiz = () => this.quizUrlLocator().click()
     errorMessageLocator = () => this.page.locator('.alert.error')
-    getFieldByInputId = (inputId: string) => this.page.locator(`label[for="${inputId}"]`)
     hasError = (errorTestId: string) => {
         const result = this.page.getByTestId(errorTestId)
         console.log(result)

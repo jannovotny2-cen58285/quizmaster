@@ -84,10 +84,6 @@ When('I submit the quiz', async function () {
     await this.quizCreatePage.submit()
 })
 
-When('I take the quiz', async function () {
-    await this.quizCreatePage.takeQuiz()
-})
-
 When('I enter pass score {string}', async function (score: string) {
     await this.quizCreatePage.passScoreInput().fill(score)
 })
