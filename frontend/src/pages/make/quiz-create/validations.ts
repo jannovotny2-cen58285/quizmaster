@@ -3,7 +3,7 @@ export const errorMessage = {
     negativeTimeLimit: 'Time limit cannot be negative.',
     timeLimitAboveMax: 'Time limit cannot exceed 21600 seconds (6 hours).',
     scoreAboveMax: 'Pass score cannot exceed 100%.',
-    'few-questions': 'At least one question must be selected.',
+    'few-questions': 'At least two questions must be selected.',
     'too-many-randomized-questions': 'Final question count cannot exceed the number of selected questions.',
 }
 
