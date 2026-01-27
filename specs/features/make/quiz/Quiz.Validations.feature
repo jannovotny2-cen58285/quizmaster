@@ -60,13 +60,10 @@ Feature: Create Quiz from Workspace
     Then I see error messages in quiz form
       | timeLimitAboveMax |
 
-  @skip
-  Scenario: Display no error when timelimit is cleared
+  Scenario: When time limit is cleared, "0" is automatically set
     When I start creating a new quiz
     * I enter quiz name "Math Quiz"
     * I clear time limit
-    * I select question "2 + 2 = ?"
-    * I submit the quiz
     Then I see no error messages in quiz form
     * I see time limit "0" seconds
 
