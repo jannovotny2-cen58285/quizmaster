@@ -39,3 +39,13 @@ Feature: Show stats
     And I see stats table
       | Duration | Score |
       |          |     0 |
+
+@skip
+  Scenario: Duration is calculated correctly
+    Given a quiz "Stats Quiz"
+    And I answer all question in "00:10"
+    When I click the stats button for quiz "Stats Quiz"
+    Then I see stats page for quiz "Stats Quiz"
+    And I see stats table
+      | Duration     |    |
+      | 10 seconds   |    |
