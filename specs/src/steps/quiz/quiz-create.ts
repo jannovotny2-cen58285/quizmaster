@@ -105,6 +105,20 @@ Given(
     },
 )
 
+Given(
+    'an arbitrary quiz {string}',
+    async function (bookmark: string) {
+        const quiz = await toQuiz(this, {
+            bookmark,
+            questions: '2',
+            mode: 'learn',
+            'pass score': '75',
+            timeLimit: '120',
+        })
+
+    await postQuiz(this, bookmark, quiz)
+})
+
 Given('quizes', async function (data: DataTable) {
     for (const row of data.hashes()) {
         await postQuiz(this, row.bookmark, await toQuiz(this, row))
