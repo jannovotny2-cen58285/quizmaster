@@ -6,7 +6,7 @@ Given('numerical question {string} with correct answer {string}', async function
   await this.page.goto('/test-numerical-question');
 });
 
-When('I will take question {string}', async function () {
+When('I take question {string}', async function () {
   // Pro testovací účely zůstáváme na /test-numerical-question, není třeba znovu přecházet
 });
 
