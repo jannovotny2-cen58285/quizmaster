@@ -67,12 +67,9 @@ Feature: Create Quiz from Workspace
     Then I see no error messages in quiz form
     * I see time limit "0" seconds
 
-  @skip
-  Scenario: Display no error when score is cleared
+  Scenario: When pass score is cleared, "0" is automatically set
     When I start creating a new quiz
     * I enter quiz name "Math Quiz"
     * I clear score
-    * I select question "2 + 2 = ?"
-    * I submit the quiz
     Then I see no error messages in quiz form
     * I see pass score "0"
