@@ -20,9 +20,16 @@ export function WorkspaceContainer() {
     useApi(params.id, fetchWorkspaceQuestions, setWorkspaceQuestions)
     useApi(params.id, fetchWorkspaceQuizzes, setWorkspaceQuizzes)
 
-    const onDeleteQuestion = (id: number) => {
-        setWorkspaceQuestions(prevQuestions => prevQuestions.filter(question => question.id !== id))
+    const onDeleteQuestion = (id: string) => {
+        setWorkspaceQuestions(prevQuestions => prevQuestions.filter(question => `${question.id}` !== id))
     }
 
-    return <WorkspaceComponent workspace={workspaceInfo} questions={workspaceQuestions} quizzes={workspaceQuizzes} onDeleteQuestion={onDeleteQuestion}/>
+    return (
+        <WorkspaceComponent
+            workspace={workspaceInfo}
+            questions={workspaceQuestions}
+            quizzes={workspaceQuizzes}
+            onDeleteQuestion={onDeleteQuestion}
+        />
+    )
 }
