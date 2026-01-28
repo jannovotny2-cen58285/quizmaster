@@ -7,7 +7,6 @@ Feature: Edit Quiz in Workspace
       | 3 * 3 = ? | 9 (*), 6 |
       | 4 / 2 = ? | 2 (*), 3 |
 
-  @skip
   Scenario: Edit quiz title and description
     When I navigate to edit quiz "Math Quiz"
     * I enter quiz name "Advanced Math"
