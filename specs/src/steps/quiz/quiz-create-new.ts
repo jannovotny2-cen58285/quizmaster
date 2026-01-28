@@ -41,19 +41,11 @@ When('I see pass score {string}', async function (score: string) {
 })
 
 When('I see quiz question {string}', async function (title: string) {
-    await this.quizCreatePage
-        .getQuestion(title)
-        .first()
-        .isVisible()
-        .then(visible => expect(visible).toEqual(true))
+    await expect(this.quizCreatePage.getQuestion(title).first()).toBeVisible()
 })
 
 When("I don't see quiz questions {string}", async function (title: string) {
-    await this.quizCreatePage
-        .getQuestion(title)
-        .first()
-        .isVisible()
-        .then(visible => expect(visible).toEqual(false))
+    await expect(this.quizCreatePage.getQuestion(title).first()).toBeHidden()
 })
 
 When('I enter quiz description {string}', async function (title: string) {
