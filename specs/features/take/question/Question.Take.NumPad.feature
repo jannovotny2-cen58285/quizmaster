@@ -1,4 +1,4 @@
-@skip
+#@skip
 Feature: Answer question using numeric keyboard
 
   Scenario Outline: Single choice question - numeric key selects an answer
@@ -12,11 +12,11 @@ Feature: Answer question using numeric keyboard
     And saved and bookmarked as "Europe"
 
     When I take question "Europe"
-    And I press the key "<key>"
+    And I press the key <key>
     Then I see feedback "<feedback>"
 
     Examples:
-      | key | <feedback> |
+      | key | feedback   |
       | 1   | Correct!   |
       | 2   | Incorrect! |
       | 3   | Incorrect! |
