@@ -10,7 +10,7 @@ const openQuiz = async (world: QuizmasterWorld, quizId: string) => {
     await world.page.goto(quizUrl)
 }
 
-const startQuiz = async (world: QuizmasterWorld, quizId: string) => {
+export const startQuiz = async (world: QuizmasterWorld, quizId: string) => {
     await openQuiz(world, quizId)
     await world.quizWelcomePage.start()
 }

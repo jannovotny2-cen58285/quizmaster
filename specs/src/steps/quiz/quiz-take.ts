@@ -9,7 +9,7 @@ const answer = async (world: QuizmasterWorld, n: number) => {
     await world.takeQuestionPage.submit()
 }
 
-const answerCorrectly = (world: QuizmasterWorld) => async () => answer(world, 0)
+export const answerCorrectly = (world: QuizmasterWorld) => async () => answer(world, 0)
 const answerIncorrectly = (world: QuizmasterWorld) => async () => answer(world, 1)
 
 const nTimes = async (n: number, fn: () => Promise<void>) => {

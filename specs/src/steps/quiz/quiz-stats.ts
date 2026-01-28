@@ -2,7 +2,7 @@ import type { DataTable } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 
 import { expectTextToBe, type TableOf } from 'steps/common.ts'
-import { Given, Then } from 'steps/fixture.ts'
+import { Given, Then, When } from 'steps/fixture.ts'
 import type { AnswerRaw } from 'steps/question/ops.ts'
 import { createQuestionInList, createWorkspace } from 'steps/workspace/ops.ts'
 
@@ -32,7 +32,7 @@ Given(/a quiz "(.+?)" with questions?/, async function (quizName: string, data: 
     await this.quizCreatePage.submit()
 })
 
-Given(/I take quiz "(.+?)" with answers?/, async function (quizName: string, data: DataTable) {
+Given(/^I take quiz "(.+?)" with answers?$/, async function (quizName: string, data: DataTable) {
     await this.workspacePage.takeQuiz(quizName)
     await this.quizWelcomePage.start()
     const rows = Array.from(data.rows())
@@ -44,6 +44,28 @@ Given(/I take quiz "(.+?)" with answers?/, async function (quizName: string, dat
     await this.questionPage.evaluate()
     await this.workspacePage.goto(this.workspaceCreatePage.workspaceGuid())
 })
+
+When(
+    'I take quiz {string} with answers in {int} seconds',
+    async function (quizName: string, timer: number, data: DataTable) {
+        await this.page.clock.install({ time: new Date() })
+        await this.workspacePage.takeQuiz(quizName)
+        await this.quizWelcomePage.start()
+        const startTime = Date.now()
+        const rows = Array.from(data.rows())
+        for (let i = 0; i < rows.length; i++) {
+            const [, answer] = rows[i]
+            await this.takeQuestionPage.selectAnswer(answer)
+            await this.questionPage.submit()
+        }
+        const endTime = Date.now()
+        const elapsedTime = endTime - startTime
+
+        await this.page.clock.fastForward(timer * 1000 - elapsedTime)
+        await this.questionPage.evaluate()
+        await this.workspacePage.goto(this.workspaceCreatePage.workspaceGuid())
+    },
+)
 
 Then('I see stats page for quiz {string}', async function (quizName: string) {
     const statsPageHeaderElemenLocator = this.quizStatsPage.pageHeadingLocator()

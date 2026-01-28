@@ -105,16 +105,14 @@ Given(
     },
 )
 
-Given(
-    'an arbitrary quiz {string}',
-    async function (bookmark: string) {
-        const quiz = await toQuiz(this, {
-            bookmark,
-            questions: '2',
-            mode: 'learn',
-            'pass score': '75',
-            timeLimit: '120',
-        })
+Given('an arbitrary quiz {string}', async function (bookmark: string) {
+    const quiz = await toQuiz(this, {
+        bookmark,
+        questions: '2',
+        mode: 'learn',
+        'pass score': '75',
+        timeLimit: '120',
+    })
 
     await postQuiz(this, bookmark, quiz)
 })

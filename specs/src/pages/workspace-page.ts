@@ -3,7 +3,7 @@ import type { Page } from '@playwright/test'
 export class WorkspacePage {
     constructor(private page: Page) {}
 
-    goto = (guid: string) => this.page.goto(`/workspace/${guid}`)
+    goto = (guid: string) => this.page.goto(`/workspace/${guid}`, { waitUntil: 'networkidle' })
 
     private workspaceNameLocator = () => this.page.getByTestId('workspace-title')
     workspaceNameValue = () => this.workspaceNameLocator().textContent()
