@@ -129,7 +129,7 @@ export function WorkspaceComponent({ workspace, questions, quizzes, onDeleteQues
             <h3>My quizzes</h3>
             <div>
                 {quizzes.map(quiz => (
-                    <QuizItem key={quiz.id} quiz={quiz} />
+                    <QuizItem key={quiz.id} quiz={quiz} workspaceguid={workspace?.guid} />
                 ))}
             </div>
         </div>

@@ -1,3 +1,6 @@
+// Helper to map Quiz (backend) to QuizCreateFormData (form)
+import type { Quiz } from 'model/quiz.ts'
+
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -7,10 +10,8 @@ import { useWorkspaceGuid } from 'urls.ts'
 
 import type { QuestionListItem } from 'model/question-list-item.ts'
 import { QuizEditForm } from './quiz-edit-form'
-import { fetchQuiz } from 'api/quiz'
-import { tryCatch } from 'helpers'
+import { fetchQuiz, putQuiz, QuizCreateRequest } from 'api/quiz'
 import { Alert, Page } from 'pages/components'
-import type { Quiz } from 'model/quiz'
 
 export const QuizEditPage = () => {
     const workspaceGuid = useWorkspaceGuid()
@@ -37,20 +38,23 @@ export const QuizEditPage = () => {
             .finally(() => setLoading(false))
     }, [quizId])
 
-    const onSubmit = () =>
-        tryCatch(setErrorMessage, async () => {
-            // zatím pouze navigace zpět
-            if (workspaceGuid) {
-                navigate(`/workspace/${workspaceGuid}`)
-            }
+
+    const handleSubmit = (quizData: QuizCreateRequest) => {
+        if (!quizId) {
+            setErrorMessage('Quiz ID is missing in URL.')
+            return
+        }
+        putQuiz(quizData, quizId).then(() => {
+            navigate(`/workspace/${workspaceGuid}`)
         })
+    }
 
     return (
         <Page title="Edit Quiz" id="edit-quiz-page">
             {loading ? (
                 <div>Loading quiz...</div>
             ) : quiz ? (
-                <QuizEditForm questions={workspaceQuestions} quiz={quiz} onSubmit={onSubmit} />
+                <QuizEditForm questions={workspaceQuestions} quiz={quiz} onSubmit={handleSubmit} />
             ) : null}
             {errorMessage && <Alert type="error">{errorMessage}</Alert>}
         </Page>

@@ -6,12 +6,13 @@ import copyClipboardIcon from 'assets/icons/copy-clipboard.svg'
 
 interface Props {
     readonly quiz: QuizListItem
+    workspaceguid: string | null
 }
 
-export const QuizItem: React.FC<Props> = ({ quiz }) => {
+export const QuizItem: React.FC<Props> = ({ quiz, workspaceguid }) => {
     const navigate = useNavigate()
 
-    const onEditQuiz = () => navigate(`/quiz/${quiz.id}/edit`)
+    const onEditQuiz = () => navigate(`/quiz/${quiz.id}/edit?workspaceguid=${workspaceguid}`)
     const onTakeQuiz = () => navigate(`/quiz/${quiz.id}`)
 
     const copyQuizLink = () => navigator.clipboard.writeText(`${window.location.origin}/quiz/${quiz.id}`)
