@@ -35,9 +35,10 @@ export const QuizCreateForm = ({ questions, onSubmit, quiz }: QuizCreateProps) =
     const [filteredQuestions, setFilteredQuestions] = useState<readonly QuestionListItem[]>(questions)
     const [feedbackMode, setFeedbackMode] = useState<QuizMode>('exam')
     const [difficulty, setDifficulty] = useState<Difficulty>('keep-question')
-    // Předvyplnění hodnot při editaci
+    const [isInitialized, setIsInitialized] = useState(false)
+    // Předvyplnění hodnot při editaci pouze při prvním načtení kvízu
     useEffect(() => {
-        if (quiz) {
+        if (quiz && !isInitialized) {
             setTitle(quiz.title || '')
             setDescription(quiz.description || '')
             setTimeLimit(quiz.timeLimit ?? 600)
@@ -52,8 +53,9 @@ export const QuizCreateForm = ({ questions, onSubmit, quiz }: QuizCreateProps) =
                     addSelectedId(q.id)
                 }
             }
+            setIsInitialized(true)
         }
-    }, [quiz, addSelectedId])
+    }, [quiz, addSelectedId, isInitialized])
 
     const validator = createValidator(
         () => validateQuizForm({ title, description, timeLimit, passScore, selectedIds, finalCount }),
