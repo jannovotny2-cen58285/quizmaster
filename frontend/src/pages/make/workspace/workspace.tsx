@@ -12,7 +12,7 @@ interface WorkspaceProps {
     readonly workspace: Workspace
     readonly questions: readonly QuestionListItem[]
     readonly quizzes: readonly QuizListItem[]
-    readonly onDeleteQuestion: (id: number) => void
+    readonly onDeleteQuestion: (id: string) => void
 }
 
 type EditQuestionButtonProps = { id: string; editId: string; onClick: () => void }
@@ -120,7 +120,7 @@ export function WorkspaceComponent({ workspace, questions, quizzes, onDeleteQues
                         onCopyEditQuestion={() => onCopyEditQuestion(q.editId)}
                         onTakeQuestion={() => onTakeQuestion(q.id)}
                         onCopyTakeQuestion={() => onCopyTakeQuestion(q.id)}
-                        onDeleteQuestion={() => onDeleteQuestion(q.id)}
+                        onDeleteQuestion={() => onDeleteQuestion(`${q.id}`)}
                     />
                 ))}
             </div>
