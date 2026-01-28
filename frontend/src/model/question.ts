@@ -4,6 +4,7 @@ export interface Question {
     readonly id: number
     readonly editId: string
     readonly question: string
+    readonly imageUrl?: string
     readonly answers: string[]
     readonly explanations: string[]
     readonly questionExplanation: string
