@@ -44,8 +44,4 @@ public class Question {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Generated(event = EventType.INSERT)
     private String editId;
-
-    @Column(name = "slug", columnDefinition = "varchar(255)")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private String slug;
 }

@@ -9,6 +9,4 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     List<Question> findByWorkspaceGuid(String guid);
 
     Optional<Question> findByEditId(String editId);
-
-    Optional<Question> findBySlug(String slug);
 }
