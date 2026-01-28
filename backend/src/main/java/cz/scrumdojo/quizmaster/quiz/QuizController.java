@@ -72,4 +72,12 @@ public class QuizController {
         return ResponseEntity.ok(output.getId());
     }
 
+    @Transactional
+    @PutMapping("/quiz/{id}")
+    public ResponseEntity<Integer> updateQuiz(@PathVariable Integer id, @RequestBody Quiz quizInput) {
+        quizInput.setId(id);
+        Quiz output = quizRepository.save(quizInput);
+        return ResponseEntity.ok(output.getId());
+    }
+
 }
