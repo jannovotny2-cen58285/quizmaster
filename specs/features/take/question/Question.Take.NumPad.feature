@@ -1,4 +1,3 @@
-#@skip
 Feature: Answer question using numeric keyboard
 
   Scenario Outline: Single choice question - numeric key selects an answer

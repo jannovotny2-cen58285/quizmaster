@@ -44,8 +44,6 @@ When('I press the key {int}', async function (num: number) {
     await this.page.click('body')
 
     this.page.keyboard.press(`Numpad${num}`)
-    await this.takeQuestionPage.selectAnswerNth(num - 1)
-    await this.takeQuestionPage.submit()
 })
 
 When('I uncheck answer {string}', async function (answerList: string) {
