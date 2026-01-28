@@ -5,6 +5,7 @@ import './home.ts'
 import './question/question-create.ts'
 import './question/question-edit-gui.ts'
 import './question/question-take.ts'
+import './question/question-feedback-numerical.ts'
 
 import './workspace/workspace-create.ts'
 import './workspace/workspace.ts'
