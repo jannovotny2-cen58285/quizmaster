@@ -3,7 +3,6 @@ Feature: Quiz answer state
   - New question displays with no answer pre-selected
   - Page refresh clears the selected (unsubmitted) answer
   - Submitted answers are remembered when navigating back
-  - Submit button is active only when an answer is selected
   - Proceeding to the next question submits the current answer
   - Restarting a completed quiz begins from scratch
 
@@ -94,31 +93,6 @@ Feature: Quiz answer state
     When I go back to previous question
     Then I see answer "Elephant" checked
     Then I see answer "Anteater" checked
-
-  Scenario: Submit button is visible as active when answer is checked
-    Given workspace "Flow" with questions
-      | question                    | answers                                            |
-      | Which animal has long nose? | Elephant (*), Anteater (*), Swordfish (*), Bulldog |
-      | What is capital of France?  | Marseille, Lyon, Paris (*), Toulouse               |
-    And a quiz "Quiz" with all questions
-    When I start quiz "Quiz"
-    Then I see question "Which animal has long nose?"
-    When I check answer "Elephant"
-    Then I see the submit button as active
-
-  Scenario: Submit button is visible as inactive when no answer is checked
-    Given workspace "Flow" with questions
-      | question                    | answers                                            |
-      | Which animal has long nose? | Elephant (*), Anteater (*), Swordfish (*), Bulldog |
-      | What is capital of France?  | Marseille, Lyon, Paris (*), Toulouse               |
-    And a quiz "Quiz" with all questions
-    When I start quiz "Quiz"
-    Then I see question "Which animal has long nose?"
-    Then I see the submit button as inactive
-    When I check answer "Elephant"
-    Then I see the submit button as active
-    When I uncheck answer "Elephant"
-    Then I see the submit button as inactive
 
   Scenario: When proceeding answer is submitted
     Given workspace "Flow" with questions

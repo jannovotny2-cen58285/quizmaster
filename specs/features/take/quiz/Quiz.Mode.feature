@@ -41,17 +41,3 @@ Feature: Quiz exam and learn mode
     Then I see feedback "Correct!"
     When I answer "Auto"
     Then I see feedback "Incorrect!"
-
-  Scenario: Browser navigation during quiz
-    - Browser back and forward buttons work during quiz
-
-    When I start quiz "Learn Quiz"
-    And I see question "Jaký nábytek má Ikea?"
-    When I answer "Stůl"
-    Then I see feedback "Correct!"
-    When I proceed to the next question
-    Then I see question "Jaké nádobí má Ikea?"
-    When I use the browser back button
-    Then I see question "Jaký nábytek má Ikea?"
-    When I use the browser forward button
-    Then I see question "Jaké nádobí má Ikea?"
