@@ -19,25 +19,23 @@ When('I enter number of randomized questions in quiz {int}', async function (fin
 })
 
 When('I see empty quiz title', async function () {
-    await this.quizCreatePage.getQuizTitleValue().then(value => expect(value).toBe(''))
+    const value = await this.quizCreatePage.getQuizTitleValue()
+    expect(value).toBe('')
 })
 
 When('I see empty quiz description', async function () {
-    await this.quizCreatePage.getQuizDescriptionValue().then(value => expect(value).toBe(''))
+    const value = await this.quizCreatePage.getQuizDescriptionValue()
+    expect(value).toBe('')
 })
 
 When('I see time limit {string} seconds', async function (timeLimit: string) {
-    await this.quizCreatePage
-        .timeLimitInput()
-        .inputValue()
-        .then(value => expect(value).toBe(timeLimit))
+    const value = await this.quizCreatePage.timeLimitInput().inputValue()
+    expect(value).toBe(timeLimit)
 })
 
 When('I see pass score {string}', async function (score: string) {
-    await this.quizCreatePage
-        .passScoreInput()
-        .inputValue()
-        .then(value => expect(value).toBe(score))
+    const value = await this.quizCreatePage.passScoreInput().inputValue()
+    expect(value).toBe(score)
 })
 
 When('I see quiz question {string}', async function (title: string) {
@@ -106,7 +104,8 @@ Then('I see error messages in quiz form', async function (table: DataTable) {
 })
 
 Then('I see no error messages in quiz form', async function () {
-    await this.quizCreatePage.hasAnyError().then(result => expect(result).toBe(false))
+    const hasError = await this.quizCreatePage.hasAnyError()
+    expect(hasError).toBe(false)
 })
 
 Then("I don't see questions in quiz creation form", () => {
