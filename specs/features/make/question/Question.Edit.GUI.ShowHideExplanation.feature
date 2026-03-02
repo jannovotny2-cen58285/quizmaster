@@ -1,36 +1,36 @@
 Feature: Edit question Show/hide explanation
 
   Scenario: Explanation fields are visible by default
-    Given a question "What is the capital of Kambodia?"
+    Given a question "What is the capital of Cambodia?"
     * with answers:
       | Brno   |   | No Brno |
       | Prague | * | Yes     |
       | Berlin |   | Germany |
-    * saved and bookmarked as "Kambodia"
-    When I start editing question "Kambodia"
+    * saved and bookmarked as "Cambodia"
+    When I start editing question "Cambodia"
     Then I see show explanation checkbox is checked
     And I see explanation fields are visible
 
   Scenario: Explanation fields are hidden when toggling "Show explanation" checkbox
-    Given a question "What is the capital of Kambodia?"
+    Given a question "What is the capital of Cambodia?"
     * with answers:
       | Brno   |   | No Brno |
       | Prague | * | Yes     |
       | Berlin |   | Germany |
-    * saved and bookmarked as "Kambodia"
-    When I start editing question "Kambodia"
+    * saved and bookmarked as "Cambodia"
+    When I start editing question "Cambodia"
     And I uncheck "Show explanation" checkbox
     Then I see show explanation checkbox is unchecked
     And I see explanation fields are not visible
 
   Scenario: Explanation fields are hidden when explanations are empty
-    Given a question "What is the capital of Kambodia?"
+    Given a question "What is the capital of Cambodia?"
     * with answers:
       | Brno   |   | |
       | Prague | * | |
       | Berlin |   | |
-    * saved and bookmarked as "Kambodia"
-    When I start editing question "Kambodia"
+    * saved and bookmarked as "Cambodia"
+    When I start editing question "Cambodia"
     Then I see show explanation checkbox is unchecked
     And I see explanation fields are not visible
 

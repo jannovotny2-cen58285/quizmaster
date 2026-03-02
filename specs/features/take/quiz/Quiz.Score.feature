@@ -23,7 +23,7 @@ Feature: Evaluate quiz score
       | 0       | 4         | 0          | failed |
 
   @skip
-  Scenario: Quiz score in learing mode
+  Scenario: Quiz score in learning mode
     - In learning mode, quiz taker can retake questions
     - Score page shows two separate results:
       - score for the first answers of each question, and,

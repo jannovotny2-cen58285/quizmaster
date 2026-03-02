@@ -21,7 +21,7 @@ Feature: Run timer
       | Quiz A | 02:00 |
       | Quiz B | 01:00 |
 
-  Scenario: Display result table after 1 minutes
+  Scenario: Display result table after 1 minute
     Given I start quiz "Quiz B"
     When I will wait for "01:00"
     And I should see the text "Game over time"
