@@ -1,4 +1,12 @@
 Feature: Create quiz - validations
+  The quiz creation form enforces validation rules:
+  - Title is required
+  - At least two questions must be selected
+  - Pass score must be between 0 and 100
+  - Time limit must be between 0 and 21600 seconds
+  - Randomized question count cannot exceed selected questions
+  Defaults: 600 seconds time limit, 80% pass score. Clearing a numeric
+  field defaults to 0.
 
   Background:
     Given workspace "Quiz Validations" with questions

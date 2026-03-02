@@ -1,4 +1,8 @@
 Feature: Question explanations after answering
+  After answering a question, explanations provide educational context.
+  - Single choice: shows the question-level explanation
+  - Multiple choice: shows individual answer explanations for all answers,
+    plus the question-level explanation
 
   Scenario Outline: Single choice question explanation
     Explanation is displayed after answering the question

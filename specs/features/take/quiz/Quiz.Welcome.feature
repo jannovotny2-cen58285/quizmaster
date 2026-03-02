@@ -1,4 +1,7 @@
 Feature: Quiz Welcome page
+  Before starting a quiz, the welcome page displays key information:
+  quiz name, description, question count, time limit, pass score, and
+  feedback type (exam vs. learn mode).
 
   Scenario Outline: Quiz welcome page
     Given workspace "Welcome" with questions

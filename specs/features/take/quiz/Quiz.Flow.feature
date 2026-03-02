@@ -1,4 +1,10 @@
 Feature: Quiz navigation flow
+  Navigation through quiz questions covers the complete user journey:
+  - Next/Back button visibility and behavior at each position
+  - Answer submission and persistence when navigating between questions
+  - Skipped questions are revisited after the last question
+  - Submit button is active only when an answer is selected
+  - Page refresh clears the current (unsubmitted) selection
 
   Background:
     Given workspace "Flow" with questions

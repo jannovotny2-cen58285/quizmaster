@@ -1,4 +1,6 @@
 Feature: Create workspace
+  A workspace is created by entering a name. After creation, the user
+  is redirected to the empty workspace page ready for adding questions.
 
   Scenario: Create workspace
     Given I start creating a workspace

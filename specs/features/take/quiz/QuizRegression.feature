@@ -1,4 +1,9 @@
 Feature: Quiz answer state after navigation
+  Regression tests verifying clean quiz answer state across navigation events.
+  - New question displays with no answer pre-selected
+  - Page refresh clears the selected answer
+  - Navigating to the next question starts with a clean state
+  - Restarting a completed quiz begins from scratch
 
   Background:
     Given workspace "Regression" with questions

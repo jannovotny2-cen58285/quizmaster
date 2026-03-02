@@ -1,4 +1,7 @@
 Feature: Filter questions when creating a quiz
+  When creating a quiz, the question list can be filtered by typing a keyword.
+  The filter matches against question text (case-insensitive) and narrows
+  the visible questions in real time.
 
   Background:
     Given workspace "Quiz Filter" with questions

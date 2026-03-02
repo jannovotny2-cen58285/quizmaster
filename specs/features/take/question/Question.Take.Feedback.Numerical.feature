@@ -1,4 +1,7 @@
 Feature: Take a numerical question
+  Numerical questions accept a typed number as the answer instead of selecting
+  from choices. The user sees a number input field and receives correct/incorrect
+  feedback based on the entered value.
 
   Background:
     Given numerical question "How many regions does Czechia have?" with correct answer "14"

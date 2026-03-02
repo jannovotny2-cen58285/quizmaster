@@ -1,4 +1,10 @@
 Feature: Question answer feedback
+  After submitting an answer, the quiz taker receives feedback indicating
+  whether their answer is correct or incorrect.
+  - Single choice: overall Correct!/Incorrect! feedback
+  - Multiple choice: overall feedback (all correct must be selected, no
+    incorrect selected) plus per-answer color coding (green for correct,
+    red for selected-incorrect, neutral for unselected-incorrect)
 
   Background:
     Given questions

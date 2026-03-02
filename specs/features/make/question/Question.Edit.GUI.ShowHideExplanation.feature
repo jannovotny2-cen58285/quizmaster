@@ -1,4 +1,9 @@
 Feature: Edit question Show/hide explanation
+  When editing a question, the explanation checkbox reflects whether the
+  question has existing explanations.
+  - Explanations present: checkbox is checked and fields are visible by default
+  - No explanations: checkbox is unchecked and fields are hidden
+  - Toggling the checkbox shows or hides the explanation fields
 
   Scenario: Explanation fields are visible by default
     Given a question "What is the capital of Cambodia?"

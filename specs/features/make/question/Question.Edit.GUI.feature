@@ -1,4 +1,8 @@
 Feature: Edit question GUI
+  The question edit form loads with all fields prepopulated from the existing
+  question. All fields can be modified — question text, answers, correctness,
+  explanations — and changes persist after page refresh. The question type
+  can also be changed (e.g., single to multiple choice).
 
   Background:
     Given a question "What is the capital of Czech Republic?"

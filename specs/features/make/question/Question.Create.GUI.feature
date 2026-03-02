@@ -1,4 +1,8 @@
 Feature: Create question GUI
+  The question creation form has sensible defaults: empty question text,
+  two empty answer fields, single choice mode, and no explanations.
+  After successful submission, the user receives both a take-question URL
+  (for sharing with quiz takers) and an edit-question URL (with UUID editId).
 
   Background:
     When I start creating a question

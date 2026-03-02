@@ -1,4 +1,8 @@
 Feature: Quiz exam and learn mode
+  Quizzes support two modes that control when feedback is shown:
+  - Exam mode: submitting an answer immediately advances to the next question
+  - Learn mode: shows feedback after each answer; user must manually proceed
+    to the next question, and can retake the current question
 
   Background:
     Given workspace "Modes" with questions

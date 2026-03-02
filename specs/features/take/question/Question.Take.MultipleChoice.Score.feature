@@ -1,4 +1,8 @@
 Feature: Take a multiple choice question with partial score
+  Partial scoring for multiple choice questions rewards partially correct answers.
+  - All correct answers selected: 1 point
+  - One error (wrong selected or correct missing): 0.5 points
+  - More than one error: 0 points
 
   Background:
     Given a question "Which of the following are planets?"

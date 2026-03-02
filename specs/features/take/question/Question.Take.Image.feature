@@ -1,4 +1,7 @@
 Feature: Displaying an image for a question when answering
+  Questions can display an accompanying image to the quiz taker. An image is
+  shown when the question text contains an emoji; otherwise, no image is displayed.
+
   Scenario: User sees the question image when answering
 
    Given a question "Which animal is on the picture? 😺"

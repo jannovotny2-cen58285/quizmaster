@@ -1,4 +1,7 @@
 Feature: Run timer
+  Quizzes with a time limit display a countdown timer. When time expires,
+  a "Game over" dialog appears and the quiz is automatically evaluated
+  with whatever answers have been submitted so far.
 
   Background:
     Given workspace "Timer" with questions

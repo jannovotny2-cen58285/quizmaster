@@ -1,4 +1,10 @@
 Feature: Workspace - where workspace and quiz list are displayed
+  The workspace page is the central hub for managing questions and quizzes.
+  From here, a quiz maker can:
+  - Take, edit, or delete individual questions
+  - Copy shareable take-question and edit-question URLs
+  - View updated question text after edits
+  Questions used in a quiz cannot be deleted.
 
   Scenario: Take question in a workspace
     Given workspace "Workspace" with questions

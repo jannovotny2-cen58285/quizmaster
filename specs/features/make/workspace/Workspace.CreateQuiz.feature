@@ -1,4 +1,6 @@
 Feature: Display created quiz in workspace
+  After creating a quiz from the workspace, the new quiz appears
+  in the workspace's quiz list alongside existing quizzes.
 
   Background:
     Given workspace "Quiz Workspace" with questions

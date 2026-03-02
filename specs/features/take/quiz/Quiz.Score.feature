@@ -1,4 +1,7 @@
 Feature: Evaluate quiz score
+  After completing all quiz questions, the score page displays:
+  - Overall result: number correct, percentage, pass/fail against the pass score
+  - Each question with its answer options, the user's selection, and explanations
 
   Scenario Outline: Quiz score
     Given workspace "Score" with questions

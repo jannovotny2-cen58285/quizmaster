@@ -1,4 +1,6 @@
 Feature: Answer question using numeric keyboard
+  Quiz takers can answer single choice questions by pressing numeric keys (1-5)
+  on the keyboard, matching the answer's position in the list.
 
   Scenario Outline: Single choice question - numeric key selects an answer
     Given a question "Which country is in Europe?"

@@ -1,4 +1,7 @@
 Feature: Quiz question pool size
+  The quiz question pool can be limited using the "size" (finalCount) setting.
+  When set, a random subset of questions is selected from the full pool.
+  The welcome page and scoring reflect the actual number of questions served.
 
   Background:
     Given workspace "Quiz Length" with questions

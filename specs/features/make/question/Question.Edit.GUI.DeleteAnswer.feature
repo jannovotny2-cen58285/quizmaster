@@ -1,4 +1,6 @@
 Feature: Edit question GUI - delete answer
+  Answers can be deleted from a prepopulated edit form, reducing the total
+  number of answers while preserving the remaining fields.
 
   Scenario: Delete one of the prepopulated form fields
     Given a question "What is the capital of Czech Republic?"

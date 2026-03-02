@@ -1,4 +1,7 @@
 Feature: Edit Quiz in Workspace
+  An existing quiz's title and description can be edited from the workspace.
+  After saving, the updated information is reflected in both the workspace
+  quiz list and the quiz welcome page.
 
   Background:
     Given workspace "Edit Quiz" with questions

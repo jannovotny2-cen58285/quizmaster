@@ -1,4 +1,9 @@
 Feature: Take a quiz with partial score
+  Partial scoring applies to multiple choice questions within a quiz.
+  - All correct answers: 1 point
+  - One error: 0.5 points
+  - More than one error: 0 points
+  The quiz pass/fail result is determined by the total score against the pass score.
 
   Background:
     Given workspace "Partial Score" with questions

@@ -1,4 +1,7 @@
 Feature: Show stats
+  After completing a quiz, statistics are available showing results per attempt.
+  The stats page displays a table with duration and score percentage. An empty
+  stats page is shown when no attempts have been recorded yet.
 
   Scenario: Show empty stats page for quiz
     - Shows empty stats page for brand new created quiz.

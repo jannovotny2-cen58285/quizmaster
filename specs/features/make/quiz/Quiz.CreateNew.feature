@@ -1,4 +1,8 @@
 Feature: Create Quiz from Workspace
+  A quiz is created from the workspace by selecting questions, entering a
+  name and description, and optionally enabling randomized question selection
+  (finalCount) to limit how many questions are served from the pool.
+  The created quiz appears in the workspace's quiz list.
 
   Background:
     Given workspace "Quiz Creation" with questions

@@ -1,4 +1,7 @@
 Feature: Bookmark questions during a quiz
+  During a quiz, users can bookmark questions to revisit later.
+  - Bookmarked questions appear as links in the quiz navigation
+  - Bookmarks can be removed by clicking the bookmark again or deleting from the list
 
   Background:
     Given workspace "Bookmarks" with questions

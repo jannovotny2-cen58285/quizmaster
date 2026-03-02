@@ -1,4 +1,9 @@
 Feature: Take a question in EasyMode
+  Easy Mode reveals the number of correct answers for a multiple choice question,
+  helping the quiz taker narrow down their selection.
+  - Multiple choice + Easy Mode ON: displays count of correct answers
+  - Multiple choice + Easy Mode OFF: no count displayed
+  - Single choice: Easy Mode is not applicable (always one correct answer)
 
   Scenario: Multiple choice question - Easy Mode ON - correct answers is 3
     Given a question "Which of these countries are in Europe?"

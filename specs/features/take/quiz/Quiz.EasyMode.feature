@@ -1,4 +1,9 @@
 Feature: Quiz Difficulty
+  Quiz-level difficulty setting overrides individual question difficulty.
+  - Default: keeps each question's own difficulty setting
+  - Easy: forces all questions to show correct answer count
+  - Hard: hides correct answer count for all questions
+  Note: Single choice questions never show the count since they always have one answer.
 
   Scenario Outline: Quiz Difficulty
     Quiz difficulty can override individual questions difficulty.
