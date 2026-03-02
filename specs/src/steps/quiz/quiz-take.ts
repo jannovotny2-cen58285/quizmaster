@@ -37,20 +37,20 @@ When('I answer {int} questions incorrectly', async function (incorrect: number) 
 })
 
 When('I progress through the questions', async function () {
-    const quiz = this.quizBookmarks[this.activeQuizBookmark]
-    const questionIds = quiz.questionIds
-
-    // Build reverse lookup: question ID -> bookmark
-    const idToBookmark: Record<number, string> = {}
+    // Build reverse lookup: question text -> bookmark
+    const textToBookmark: Record<string, string> = {}
     for (const [bookmark, question] of Object.entries(this.questionBookmarks)) {
-        const id = Number.parseInt(question.url.split('/').pop() || '0')
-        idToBookmark[id] = bookmark
+        textToBookmark[question.question] = bookmark
     }
 
+    const questionCount = Object.keys(textToBookmark).length
+
     // Progress through each question
-    for (const questionId of questionIds) {
-        const bookmark = idToBookmark[questionId]
+    for (let i = 0; i < questionCount; i++) {
         await this.takeQuestionPage.waitForLoaded()
+
+        const questionText = (await this.takeQuestionPage.questionText()) || ''
+        const bookmark = textToBookmark[questionText] || questionText
 
         // Check if correct answers count is visible and record it
         const countLocator = this.takeQuestionPage.correctAnswersCountLocator()

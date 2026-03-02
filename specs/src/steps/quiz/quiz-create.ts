@@ -2,50 +2,7 @@ import type { DataTable } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 
 import { Given, Then } from 'steps/fixture.ts'
-import { type QuizmasterWorld, type Quiz, type QuizMode, type Difficulty, type Question, parseKey } from 'steps/world'
-import { createQuestion } from 'steps/question/ops.ts'
-
-const postQuiz = async (world: QuizmasterWorld, bookmark: string, quiz: Quiz) => {
-    const questionIds = quiz.questionIds
-
-    const quizPayload = {
-        title: quiz.title,
-        description: quiz.description,
-        questionIds,
-        mode: quiz.mode,
-        passScore: quiz.passScore,
-        timeLimit: quiz.timeLimit,
-        size: quiz.size,
-        difficulty: quiz.difficulty,
-    }
-
-    const response = await world.page.request.post('/api/quiz', { data: quizPayload })
-    const quizId = await response.json()
-    const quizUrl = `/quiz/${quizId}`
-
-    world.quizBookmarks[bookmark] = { url: quizUrl, ...quiz }
-    world.activeQuizBookmark = bookmark
-}
-
-const validateQuizRow = (questionBookmarks: Record<string, Question>, row: Record<string, string>) => {
-    const hasBookmark = row.bookmark !== ''
-    const hasValidMode = !row.mode || row.mode === 'exam' || row.mode === 'learn'
-
-    const hasValidQuestions =
-        !Number.isNaN(Number.parseInt(row.questions)) ||
-        parseKey(row.questions).every(bookmark => questionBookmarks[bookmark] !== undefined)
-
-    return hasBookmark && hasValidMode && hasValidQuestions
-}
-
-const createDummyQuestion = async (world: QuizmasterWorld, bookmark: string) => {
-    await createQuestion(world, bookmark, '1 + 1 = ?', false, {
-        raw: () => [
-            ['2', '*', ''],
-            ['3', '', ''],
-        ],
-    })
-}
+import { type QuizmasterWorld, type QuizMode, type Difficulty, parseKey, emptyQuizBookmark } from 'steps/world'
 
 const toDifficulty = (difficulty: string): Difficulty | undefined => {
     const mapping: Record<string, Difficulty> = {
@@ -56,72 +13,73 @@ const toDifficulty = (difficulty: string): Difficulty | undefined => {
     return mapping[difficulty]
 }
 
-const createDummyQuestions = async (world: QuizmasterWorld, quizBookmark: string, count: number) => {
-    const questionBookmarks = Array.from({ length: count }, (_, i) => `${quizBookmark} ${i}`)
+const createQuizViaUI = async (
+    world: QuizmasterWorld,
+    quizName: string,
+    questionBookmarks: string[],
+    properties?: DataTable,
+) => {
+    await world.workspacePage.createNewQuiz()
+    await world.quizCreatePage.enterQuizName(quizName)
 
     for (const bookmark of questionBookmarks) {
-        await createDummyQuestion(world, bookmark)
+        const question = world.questionBookmarks[bookmark]
+        if (!question) throw new Error(`Question bookmark "${bookmark}" not found`)
+        await world.quizCreatePage.selectQuestion(question.question)
     }
 
-    return questionBookmarks
-}
+    if (properties) {
+        const props = Object.fromEntries(properties.raw())
 
-const toQuiz = async (world: QuizmasterWorld, row: Record<string, string>): Promise<Quiz> => {
-    if (!validateQuizRow(world.questionBookmarks, row))
-        throw new Error(`Invalid quiz row: ${JSON.stringify(row, null, 2)}`)
+        if (props.description) {
+            await world.quizCreatePage.enterDescription(props.description)
+        }
 
-    const dummyQuestions = Number.parseInt(row.questions)
+        if (props.mode) {
+            await world.quizCreatePage.selectFeedbackMode(props.mode as QuizMode)
+        }
 
-    const questionBookmarks = Number.isNaN(dummyQuestions)
-        ? parseKey(row.questions)
-        : await createDummyQuestions(world, row.bookmark, dummyQuestions)
+        if (props['pass score']) {
+            await world.quizCreatePage.passScoreInput().fill(props['pass score'])
+        }
 
-    return {
-        title: row.title || row.bookmark,
-        description: row.description || row.bookmark,
-        questionIds: questionBookmarks
-            .map(bookmark => world.questionBookmarks[bookmark])
-            .map(question => Number.parseInt(question.url.split('/').pop() || '0')),
-        mode: (row.mode || 'exam') as QuizMode,
-        passScore: Number.parseInt(row['pass score']) || 50,
-        timeLimit: Number.parseInt(row['time limit']) || 120,
-        size: Number.parseInt(row.size) || undefined,
-        difficulty: toDifficulty(row.difficulty),
+        if (props['time limit']) {
+            await world.quizCreatePage.timeLimitInput().fill(props['time limit'])
+        }
+
+        if (props.difficulty) {
+            const difficulty = toDifficulty(props.difficulty)
+            if (difficulty) await world.quizCreatePage.selectDifficulty(difficulty)
+        }
+
+        if (props.size) {
+            await world.quizCreatePage.selectRandomizedFunction()
+            await world.quizCreatePage.enterQuizFinalCount(props.size)
+        }
     }
+
+    await world.quizCreatePage.submit()
+
+    // Store quiz bookmark so 'I start quiz "X"' can find it
+    await world.workspacePage.takeQuiz(quizName)
+    const quizUrl = new URL(world.page.url()).pathname
+    world.quizBookmarks[quizName] = { ...emptyQuizBookmark(), url: quizUrl, title: quizName }
+    world.activeQuizBookmark = quizName
+    await world.workspacePage.goto(world.workspaceCreatePage.workspaceGuid())
 }
+
+Given('a quiz {string} with all questions', async function (quizName: string, properties?: DataTable) {
+    const allBookmarks = Object.keys(this.questionBookmarks)
+    await createQuizViaUI(this, quizName, allBookmarks, properties)
+})
 
 Given(
-    /a quiz "([^"]+)" with (\d+) questions, (exam|learn) mode and (\d+)% pass score/,
-    async function (bookmark: string, questions: number, mode: QuizMode, passScore: number) {
-        const quiz = await toQuiz(this, {
-            bookmark,
-            questions: questions.toString(),
-            mode,
-            'pass score': passScore.toString(),
-            timeLimit: '120',
-        })
-
-        await postQuiz(this, bookmark, quiz)
+    'a quiz {string} with questions {string}',
+    async function (quizName: string, bookmarkList: string, properties?: DataTable) {
+        const bookmarks = parseKey(bookmarkList)
+        await createQuizViaUI(this, quizName, bookmarks, properties)
     },
 )
-
-Given('an arbitrary quiz {string}', async function (bookmark: string) {
-    const quiz = await toQuiz(this, {
-        bookmark,
-        questions: '2',
-        mode: 'learn',
-        'pass score': '75',
-        timeLimit: '120',
-    })
-
-    await postQuiz(this, bookmark, quiz)
-})
-
-Given('quizes', async function (data: DataTable) {
-    for (const row of data.hashes()) {
-        await postQuiz(this, row.bookmark, await toQuiz(this, row))
-    }
-})
 
 Then('I see selected question count {int}', async function (expectedCount: number) {
     const actualCount = await this.quizCreatePage.selectedQuestionCountForQuiz()

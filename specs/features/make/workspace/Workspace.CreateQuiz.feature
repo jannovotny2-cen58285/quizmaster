@@ -1,7 +1,7 @@
 Feature: Create Quiz from Workspace
 
   Background:
-    Given a workspace with questions
+    Given workspace "Quiz Workspace" with questions
       | question  | answers  |
       | 2 + 2 = ? | 4 (*), 5 |
       | 3 * 3 = ? | 9 (*), 6 |

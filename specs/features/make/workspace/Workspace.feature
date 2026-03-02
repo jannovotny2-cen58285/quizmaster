@@ -1,7 +1,7 @@
 Feature: Workspace - where workspace and quiz list are displayed
 
   Scenario: Take question in a workspace
-    Given a workspace with questions
+    Given workspace "Workspace" with questions
       | question  | answers  |
       | 2 + 2 = ? | 4 (*), 5 |
       | 3 * 3 = ? | 9 (*), 6 |
@@ -9,14 +9,14 @@ Feature: Workspace - where workspace and quiz list are displayed
     Then I see the question and the answers
 
   Scenario: Delete question in a workspace
-    Given a workspace with questions
+    Given workspace "Workspace" with questions
       | question  | answers  |
       | 2 + 2 = ? | 4 (*), 5 |
     When I delete question "2 + 2 = ?" from the list
     Then I see an empty workspace
 
   Scenario: Do not show delete button for question used in a quiz
-    Given a workspace with questions
+    Given workspace "Workspace" with questions
       | question                       | answers            |
       | Jaký nábytek má Ikea?          | Stůl (*), Auto     |
       | Jaké nádobí má Ikea?           | Talíř (*), Kolo    |
@@ -30,7 +30,7 @@ Feature: Workspace - where workspace and quiz list are displayed
     Then I cannot see delete button for question "Jaký nábytek má Ikea?"
 
   Scenario: Copy a take question URL
-    Given a workspace with question
+    Given workspace "Workspace" with questions
       | question  | answers  |
       | 2 + 2 = ? | 4 (*), 5 |
     When I copy the take question URL "2 + 2 = ?" from the list
@@ -38,7 +38,7 @@ Feature: Workspace - where workspace and quiz list are displayed
     Then I see the question and the answers
 
   Scenario: Edit question in a workspace
-    Given a workspace with questions
+    Given workspace "Workspace" with questions
       | question  | answers  |
       | 2 + 2 = ? | 4 (*), 5 |
       | 3 * 3 = ? | 9 (*), 6 |
@@ -48,7 +48,7 @@ Feature: Workspace - where workspace and quiz list are displayed
     And I see "2 + 2 = ?" in the question field
 
   Scenario: Copy an edit question URL
-    Given a workspace with question
+    Given workspace "Workspace" with questions
       | question  | answers  |
       | 2 + 2 = ? | 4 (*), 5 |
     When I copy the edit question URL "2 + 2 = ?" from the list
@@ -56,7 +56,7 @@ Feature: Workspace - where workspace and quiz list are displayed
     Then I see question edit page
 
   Scenario: Show edited question in a workspace
-    Given a workspace with questions
+    Given workspace "Workspace" with questions
       | question  | answers  |
       | 2 + 2 = ? | 4 (*), 5 |
       | 3 * 3 = ? | 9 (*), 6 |

@@ -7,7 +7,13 @@ Feature: Quiz progress bar
     - In exam mode, next question is shown after answering the current question
     - Progress bar shows the current page of the quiz
 
-    Given a quiz "Exam" with 3 questions, exam mode and 85% pass score
+    Given workspace "Progress Exam" with questions
+      | question  | answers  |
+      | 1 + 1 = ? | 2 (*), 3 |
+      | 2 + 2 = ? | 4 (*), 5 |
+      | 3 + 3 = ? | 6 (*), 7 |
+    And a quiz "Exam" with all questions
+      | pass score | 85 |
 
     When I start the quiz
     Then progress shows 1 of 3
@@ -23,7 +29,14 @@ Feature: Quiz progress bar
     - In learning mode, progress bar updates after navigating to the next question
     - Progress bar updates after navigating to the next question
 
-    Given a quiz "Learn" with 3 questions, learn mode and 85% pass score
+    Given workspace "Progress Learn" with questions
+      | question  | answers  |
+      | 1 + 1 = ? | 2 (*), 3 |
+      | 2 + 2 = ? | 4 (*), 5 |
+      | 3 + 3 = ? | 6 (*), 7 |
+    And a quiz "Learn" with all questions
+      | mode       | learn |
+      | pass score | 85    |
 
     When I start the quiz
     Then progress shows 1 of 3

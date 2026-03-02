@@ -1,13 +1,12 @@
 Feature: Take a quiz with partial score
 
   Background:
-    Given questions
+    Given workspace "Partial Score" with questions
       | bookmark | question                                              | answers                                      | explanation |
       | Planets  | Given a question "Which of the following are planets? | Mars (*), Pluto, Titan, Venus (*), Earth (*) | Planets     |
       | Sky      | What is the standard colour of sky?                   | Red, Blue (*), Green, Black                  | Rayleigh    |
-    Given quizes
-      | bookmark | title  | description   | questions    | mode | pass score | time limit |
-      | -1       | Quiz A | Description A | Planets, Sky | exam | 75         | 120        |
+    And a quiz "Quiz" with all questions
+      | pass score | 75 |
 
   Scenario Outline: Quiz with multiple choice question with partial score
     Quiz is scored as follows:

@@ -1,50 +1,8 @@
 import type { DataTable } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 
-import { expectTextToBe, type TableOf } from 'steps/common.ts'
+import { expectTextToBe } from 'steps/common.ts'
 import { Given, Then, When } from 'steps/fixture.ts'
-import type { AnswerRaw } from 'steps/question/ops.ts'
-import { type QuizMode, emptyQuizBookmark } from 'steps/world/quiz.ts'
-import { createQuestionInList, createWorkspace } from 'steps/workspace/ops.ts'
-
-Given(
-    /a quiz "(.+?)"(?: in (exam|learn) mode)? with questions?/,
-    async function (quizName: string, mode: QuizMode | undefined, data: DataTable) {
-        await createWorkspace(this, 'My List')
-
-        for (const row of data.rows()) {
-            const [question, answers] = row
-            const answerRawTable = {
-                raw: () =>
-                    answers.split(',').map(a => {
-                        const [answer, correct] = a.trim().split(' ')
-                        return [answer, correct === '(*)' ? '*' : '', '']
-                    }),
-            } as TableOf<AnswerRaw>
-
-            await createQuestionInList(this, question, answerRawTable)
-        }
-
-        await this.workspacePage.createNewQuiz()
-        await this.quizCreatePage.enterQuizName(quizName)
-
-        if (mode) {
-            await this.quizCreatePage.selectFeedbackMode(mode)
-        }
-
-        for (const [question] of data.rows()) {
-            await this.quizCreatePage.selectQuestion(question)
-        }
-
-        await this.quizCreatePage.submit()
-
-        // Store quiz bookmark so 'I start quiz "X"' can find it
-        await this.workspacePage.takeQuiz(quizName)
-        const quizUrl = new URL(this.page.url()).pathname
-        this.quizBookmarks[quizName] = { ...emptyQuizBookmark(), url: quizUrl, title: quizName }
-        await this.workspacePage.goto(this.workspaceCreatePage.workspaceGuid())
-    },
-)
 
 Given(/^I take quiz "(.+?)" with answers?$/, async function (quizName: string, data: DataTable) {
     await this.workspacePage.takeQuiz(quizName)

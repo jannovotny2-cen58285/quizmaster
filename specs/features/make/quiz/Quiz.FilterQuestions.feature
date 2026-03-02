@@ -1,11 +1,11 @@
 Feature: Create Quiz from Workspace
 
   Background:
-    Given a workspace with questions
+    Given workspace "Quiz Filter" with questions
       | question                       | answers            |
-      |                      2 + 2 = ? |           4 (*), 5 |
-      |                      3 * 3 = ? |           9 (*), 6 |
-      |                      4 / 2 = ? |           2 (*), 3 |
+      | 2 + 2 = ?                      | 4 (*), 5           |
+      | 3 * 3 = ?                      | 9 (*), 6           |
+      | 4 / 2 = ?                      | 2 (*), 3           |
       | Jaký nábytek má Ikea?          | Stůl (*), Auto     |
       | Jaké nádobí má Ikea?           | Talíř (*), Kolo    |
       | Jaký venkovní Nábytek má Ikea? | Židle (*), Triangl |

@@ -1,27 +1,28 @@
 Feature: Run timer
 
   Background:
-    Given questions
-      | bookmark  | question                                              | answers                   |
-      | Planet    | Which planet is known as the Red Planet?              | Mars (*), Venus           |
-      | Australia | What's the capital city of Australia?                 | Sydney, Canberra (*)      |
-
-    Given quizes
-      | bookmark | title  | description   | questions        | mode  | pass score | time limit  |
-      | -1       | Quiz A | Description A | Planet,Australia | exam  | 85         | 120         |
-      | -2       | Quiz B | Description B | Planet,Australia | exam  | 85         | 60          |
+    Given workspace "Timer" with questions
+      | bookmark  | question                                 | answers              |
+      | Planet    | Which planet is known as the Red Planet? | Mars (*), Venus      |
+      | Australia | What's the capital city of Australia?     | Sydney, Canberra (*) |
+    And a quiz "Quiz A" with questions "Planet, Australia"
+      | pass score | 85  |
+      | time limit | 120 |
+    And a quiz "Quiz B" with questions "Planet, Australia"
+      | pass score | 85 |
+      | time limit | 60 |
 
   Scenario Outline: Display countdown timer
-    Given I start quiz "<bookmark>"
+    Given I start quiz "<quiz>"
     Then I should see the countdown timer "<time>"
 
     Examples:
-      | bookmark  | time  |
-      | -1        | 02:00  |
-      | -2        | 01:00  |
+      | quiz   | time  |
+      | Quiz A | 02:00 |
+      | Quiz B | 01:00 |
 
   Scenario: Display result table after 1 minutes
-    Given I start quiz "-2"
+    Given I start quiz "Quiz B"
     When I will wait for "01:00"
     And I should see the text "Game over time"
     Then I see the "Game over" dialog
@@ -29,7 +30,7 @@ Feature: Run timer
     Then I should see the results table
 
   Scenario: Display score 0 when no answers were given
-    Given I start quiz "-1"
+    Given I start quiz "Quiz A"
     When I will wait for "02:00"
     And I should see the text "Game over time"
     Then I see the "Game over" dialog
@@ -38,7 +39,7 @@ Feature: Run timer
     Then I see the result 0 correct out of 2, 0%, failed, required passScore 85%
 
   Scenario: Display score 1/2 when answered one correctly and timed out
-    Given I start quiz "-1"
+    Given I start quiz "Quiz A"
     When I answer "Mars"
     Then I will wait for "02:00"
     And I should see the text "Game over time"

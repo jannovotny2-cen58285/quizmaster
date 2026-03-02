@@ -1,10 +1,11 @@
 Feature: Take a quiz
 
   Background:
-    Given a quiz "Quiz" with questions
+    Given workspace "Flow" with questions
       | question                    | answers                                            |
       | Which animal has long nose? | Elephant (*), Anteater (*), Swordfish (*), Bulldog |
       | What is capital of France?  | Marseille, Lyon, Paris (*), Toulouse               |
+    And a quiz "Quiz" with all questions
 
   Scenario: Quiz question is not answered and the next button is clicked
     When I start quiz "Quiz"
@@ -136,11 +137,12 @@ Feature: Take a quiz
 
   @skip
   Scenario: When going back answer is submitted
-    Given a quiz "Three Questions" with questions
+    Given workspace "Flow 3Q" with questions
       | question                       | answers                                            |
       | Which animal has long nose?    | Elephant (*), Anteater (*), Swordfish (*), Bulldog |
       | What is capital of France?     | Marseille, Lyon, Paris (*), Toulouse               |
       | What is capital of Madagascar? | Antananarivo (*), Nairobi, Cairo, Dakar            |
+    And a quiz "Three Questions" with all questions
     When I start quiz "Three Questions"
     Then I see question "Which animal has long nose?"
     And I skip the question

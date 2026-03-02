@@ -1,10 +1,22 @@
 Feature: Quiz Welcome page
 
   Scenario Outline: Quiz welcome page
-    Given quizes
-      | bookmark | title  | description   | questions | mode  | pass score | time limit |
-      | A        | Quiz A | Description A | 3         | exam  | 66         | 120        |
-      | B        | Quiz B | Description B | 4         | learn | 75         | 60         |
+    Given workspace "Welcome" with questions
+      | bookmark | question  | answers    |
+      | Q1       | 1 + 1 = ? | 2 (*), 3  |
+      | Q2       | 2 + 2 = ? | 4 (*), 5  |
+      | Q3       | 3 + 3 = ? | 6 (*), 7  |
+      | Q4       | 4 + 4 = ? | 8 (*), 9  |
+    And a quiz "Quiz A" with questions "Q1, Q2, Q3"
+      | description | Description A |
+      | mode        | exam          |
+      | pass score  | 66            |
+      | time limit  | 120           |
+    And a quiz "Quiz B" with questions "Q1, Q2, Q3, Q4"
+      | description | Description B |
+      | mode        | learn         |
+      | pass score  | 75            |
+      | time limit  | 60            |
     When I open quiz "<quiz>"
     Then I see the welcome page
     * I see quiz name "<name>"
@@ -15,6 +27,6 @@ Feature: Quiz Welcome page
     * I see feedback type "<mode>"
 
     Examples:
-      | quiz | name   | description   | count | score | mode                | time limit |
-      | A    | Quiz A | Description A | 3     | 66    | Feedback at the end | 120        |
-      | B    | Quiz B | Description B | 4     | 75    | Continuous feedback | 60         |
+      | quiz   | name   | description   | count | score | mode                | time limit |
+      | Quiz A | Quiz A | Description A | 3     | 66    | Feedback at the end | 120        |
+      | Quiz B | Quiz B | Description B | 4     | 75    | Continuous feedback | 60         |

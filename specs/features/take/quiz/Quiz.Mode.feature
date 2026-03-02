@@ -1,14 +1,14 @@
 Feature: Quiz exam and learn mode
 
   Background:
-    Given a quiz "Exam Quiz" in exam mode with questions
-      | question              | answers            |
-      | Jaký nábytek má Ikea? | Stůl (*), Auto     |
-      | Jaké nádobí má Ikea?  | Talíř (*), Kolo    |
-    And a quiz "Learn Quiz" in learn mode with questions
-      | question              | answers            |
-      | Jaký nábytek má Ikea? | Stůl (*), Auto     |
-      | Jaké nádobí má Ikea?  | Talíř (*), Kolo    |
+    Given workspace "Modes" with questions
+      | question              | answers         |
+      | Jaký nábytek má Ikea? | Stůl (*), Auto  |
+      | Jaké nádobí má Ikea?  | Talíř (*), Kolo |
+    And a quiz "Exam Quiz" with all questions
+      | mode | exam |
+    And a quiz "Learn Quiz" with all questions
+      | mode | learn |
 
   Scenario: Exam mode
     - Submitting an answer proceeds directly to the next question

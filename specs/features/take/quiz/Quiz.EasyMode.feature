@@ -8,14 +8,13 @@ Feature: Quiz Difficulty
 
     Note: Single choice questions never show the correct answers count, they're already easy.
 
-    Given questions
+    Given workspace "Difficulty" with questions
       | bookmark | easy  | question           | answers                         |
       | Single   |       | Capital of France? | Paris (*), Nice                 |
       | Easy     | true  | Food?              | Pork (*), Fish (*), Shoe        |
       | Hard     | false | Animal?            | Dog (*), Cat (*), Bird (*), Car |
-    And quizes
-      | bookmark | questions          | difficulty   |
-      | Quiz     | Single, Easy, Hard | <difficulty> |
+    And a quiz "Quiz" with questions "Single, Easy, Hard"
+      | difficulty | <difficulty> |
     When I start quiz "Quiz"
     And I progress through the questions
     Then I see the correct answers count

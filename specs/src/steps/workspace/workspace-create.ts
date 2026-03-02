@@ -4,26 +4,30 @@ import { expect } from '@playwright/test'
 import type { TableOf } from 'steps/common.ts'
 import { Given, When, Then } from 'steps/fixture.ts'
 import type { AnswerRaw } from 'steps/question/ops.ts'
-import { createQuestionInList, createWorkspace, openCreateWorkspacePage } from 'steps/workspace/ops.ts'
+import { createQuestionInWorkspace, createWorkspace, openCreateWorkspacePage } from 'steps/workspace/ops.ts'
+
+const parseAnswers = (answers: string) =>
+    ({
+        raw: () =>
+            answers.split(',').map(a => {
+                const [answer, correct] = a.trim().split(' ')
+                return [answer, correct === '(*)' ? '*' : '', '']
+            }),
+    }) as TableOf<AnswerRaw>
 
 Given('I start creating a workspace', async function () {
     await openCreateWorkspacePage(this)
 })
 
-Given(/a workspace with questions?/, async function (data: DataTable) {
-    await createWorkspace(this, 'My List')
+Given('workspace {string} with questions', async function (name: string, data: DataTable) {
+    await createWorkspace(this, name)
 
-    for (const row of data.rows()) {
-        const [question, answers] = row
-        const answerRawTable = {
-            raw: () =>
-                answers.split(',').map(a => {
-                    const [answer, correct] = a.trim().split(' ')
-                    return [answer, correct === '(*)' ? '*' : '', '']
-                }),
-        } as TableOf<AnswerRaw>
+    for (const row of data.hashes()) {
+        const bookmark = row.bookmark || row.question
+        const answerRawTable = parseAnswers(row.answers)
+        const isEasy = row.easy === 'true'
 
-        await createQuestionInList(this, question, answerRawTable)
+        await createQuestionInWorkspace(this, bookmark, row.question, answerRawTable, isEasy, row.explanation)
     }
 })
 

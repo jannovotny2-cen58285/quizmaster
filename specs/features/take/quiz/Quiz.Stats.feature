@@ -3,18 +3,20 @@ Feature: Show stats
   Scenario: Show empty stats page for quiz
     - Shows empty stats page for brand new created quiz.
 
-    Given a quiz "Quiz" with questions
+    Given workspace "Stats Empty" with questions
       | question              | answers         |
       | Jaký nábytek má Ikea? | Stůl (*), Auto  |
       | Jaké nádobí má Ikea?  | Talíř (*), Kolo |
+    And a quiz "Quiz" with all questions
     When I open stats for quiz "Quiz"
     And I see stats page for quiz "Quiz"
 
   Scenario: Show stats page for successfully answered quiz
-    Given a quiz "Stats Quiz" with questions
+    Given workspace "Stats Success" with questions
       | question              | answers         |
       | Jaký nábytek má Ikea? | Stůl (*), Auto  |
       | Jaké nádobí má Ikea?  | Talíř (*), Kolo |
+    And a quiz "Stats Quiz" with all questions
     And I take quiz "Stats Quiz" with answers
       | question              | answers |
       | Jaký nábytek má Ikea? | Stůl    |
@@ -26,10 +28,11 @@ Feature: Show stats
       |          |   100 |
 
   Scenario: Show stats page for unsuccessfully answered quiz
-    Given a quiz "Stats Quiz" with questions
+    Given workspace "Stats Failure" with questions
       | question              | answers         |
       | Jaký nábytek má Ikea? | Stůl (*), Auto  |
       | Jaké nádobí má Ikea?  | Talíř (*), Kolo |
+    And a quiz "Stats Quiz" with all questions
     And I take quiz "Stats Quiz" with answers
       | question              | answers |
       | Jaký nábytek má Ikea? | Auto    |
@@ -41,10 +44,11 @@ Feature: Show stats
       |          |     0 |
 
   Scenario: Duration is calculated correctly
-    Given  a quiz "Stats Quiz" with questions
+    Given workspace "Stats Duration" with questions
       | question              | answers         |
       | Jaký nábytek má Ikea? | Stůl (*), Auto  |
       | Jaké nádobí má Ikea?  | Talíř (*), Kolo |
+    And a quiz "Stats Quiz" with all questions
     When I take quiz "Stats Quiz" with answers in 10 seconds
       | question              | answers |
       | Jaký nábytek má Ikea? | Stůl    |
