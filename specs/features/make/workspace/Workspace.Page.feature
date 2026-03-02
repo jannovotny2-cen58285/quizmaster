@@ -33,13 +33,13 @@ Feature: Workspace page management
     And I select question "Jaké nádobí má Ikea?"
     And I submit the quiz
     Then I see the quiz "Math Quiz" in the workspace
-    Then I cannot see delete button for question "Jaký nábytek má Ikea?"
+    Then I cannot delete question "Jaký nábytek má Ikea?"
 
   Scenario: Copy a take question URL
     Given workspace "Workspace" with questions
       | question  | answers  |
       | 2 + 2 = ? | 4 (*), 5 |
-    When I copy the take question URL "2 + 2 = ?" from the list
+    When I copy the take URL for question "2 + 2 = ?"
     And I follow the copied URL
     Then I see the question and the answers
 
@@ -49,15 +49,15 @@ Feature: Workspace page management
       | 2 + 2 = ? | 4 (*), 5 |
       | 3 * 3 = ? | 9 (*), 6 |
     When I edit question "2 + 2 = ?" from the list
-    And I check show explanations checkbox
+    And I enable explanations
     Then I see question edit page
-    And I see "2 + 2 = ?" in the question field
+    And I see question text "2 + 2 = ?"
 
   Scenario: Copy an edit question URL
     Given workspace "Workspace" with questions
       | question  | answers  |
       | 2 + 2 = ? | 4 (*), 5 |
-    When I copy the edit question URL "2 + 2 = ?" from the list
+    When I copy the edit URL for question "2 + 2 = ?"
     And I follow the copied URL
     Then I see question edit page
 

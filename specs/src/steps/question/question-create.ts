@@ -66,14 +66,6 @@ When('I check "Add explanation to your answer" checkbox', async function () {
     await this.questionEditPage.checkShowExplanationFields()
 })
 
-When('I check "Show explanation" checkbox', async function () {
-    await this.questionEditPage.checkShowExplanation()
-})
-
-When('I uncheck "Show explanation" checkbox', async function () {
-    await this.questionEditPage.uncheckShowExplanation()
-})
-
 Then('I see explanation fields are visible for answers', async function () {
     const countExplanationFields = await this.questionEditPage.countExplanationFields()
     expect(countExplanationFields).toBe(2)

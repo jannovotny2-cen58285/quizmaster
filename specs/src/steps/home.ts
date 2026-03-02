@@ -7,12 +7,12 @@ Given('I am on the home page', async function (this: QuizmasterWorld) {
     await this.homePage.waitForLoaded()
 })
 
-Then('I should see a link to create a new question', async function (this: QuizmasterWorld) {
+Then('I can create a new question', async function (this: QuizmasterWorld) {
     const hasLink = await this.homePage.hasCreateQuestionLink()
     expect(hasLink).toBeTruthy()
 })
 
-Then('I should see a link to create a new workspace', async function (this: QuizmasterWorld) {
+Then('I can create a new workspace', async function (this: QuizmasterWorld) {
     const hasLink = await this.homePage.hasCreateWorkspaceLink()
     expect(hasLink).toBeTruthy()
 })

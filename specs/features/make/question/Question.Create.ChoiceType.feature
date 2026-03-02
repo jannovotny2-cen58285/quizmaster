@@ -6,10 +6,10 @@ Feature: Create question - single/multiple choice
 
   Background:
     Given I start creating a question
-    And I check show explanations checkbox
+    And I enable explanations
 
   Scenario: Default is single choice
-    Then I see multiple choice is unchecked
+    Then the question is single choice
 
   Scenario: Single choice: Mark correct answer
     * I enter answers
@@ -89,9 +89,9 @@ Feature: Create question - single/multiple choice
 
   Scenario: Easy Mode: Verify that Easy mode is visible only for Multiple Choice
     # default case (Single choice)
-    Then I see multiple choice is unchecked
-    And I see easy mode is not visible
+    Then the question is single choice
+    And easy mode is not available
 
     When I mark the question as multiple choice
-    Then I see easy mode is visible
-    And I see easy mode is unchecked
+    Then easy mode is available
+    And easy mode is off

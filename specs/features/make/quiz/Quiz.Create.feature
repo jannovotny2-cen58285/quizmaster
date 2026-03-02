@@ -41,8 +41,8 @@ Feature: Create Quiz from Workspace
     * I select question "Jaké nádobí má Ikea?"
     Then I see selected question count 4
     * I see total question count 6
-    When I check randomized function
-    * I enter number of randomized questions in quiz 3
+    When I enable question randomization
+    * I set randomized question count to 3
     * I submit the quiz
     * I take quiz "Math Quiz"
     Then I see the welcome page

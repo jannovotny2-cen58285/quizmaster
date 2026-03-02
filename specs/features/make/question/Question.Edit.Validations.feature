@@ -13,9 +13,9 @@ Feature: Edit question - validations
       | Berlin |   | Germany |
     * with explanation "Czechia is a country in Europe. Czechs love beer."
     * saved and bookmarked as "Czechia"
-    And I check show explanations checkbox
+    And I enable explanations
     Given I enter question ""
-    And I check show explanations checkbox
+    And I enable explanations
     * I enter answer 1 text "", incorrect, with explanation ""
     * I enter question explanation ""
     When I attempt to submit the question
@@ -32,9 +32,9 @@ Feature: Edit question - validations
       | Prague   | * | Yes     |
       | Berlin   |   | Germany |
     * saved and bookmarked as "Czechia"
-    And I check show explanations checkbox
+    And I enable explanations
     Given I enter question ""
-    And I check show explanations checkbox
+    And I enable explanations
     * I enter answer 1 text "", incorrect, with explanation ""
     * I enter answer 3 text "", incorrect, with explanation ""
     * I enter question explanation ""

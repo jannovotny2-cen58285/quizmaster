@@ -40,7 +40,7 @@ When('I delete question {string} from the list', async function (question: strin
     await this.workspacePage.deleteQuestion(question)
 })
 
-Then('I cannot see delete button for question {string}', async function (question: string) {
+Then('I cannot delete question {string}', async function (question: string) {
     expect(await this.workspacePage.hasDeleteButton(question)).toBe(false)
 })
 
@@ -49,7 +49,7 @@ When('I edit question {string} from the list', async function (question: string)
     await this.workspacePage.editQuestion(question)
 })
 
-Then(/I copy the (take|edit) question URL "(.+)" from the list/, async function (page: string, question: string) {
+Then(/I copy the (take|edit) URL for question "(.+)"/, async function (page: string, question: string) {
     this.activeQuestionBookmark = question
 
     if (page === 'take') await this.workspacePage.copyTakeQuestion(question)

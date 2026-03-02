@@ -28,8 +28,12 @@ Given('I start editing question {string}', async function (bookmark: string) {
     await openEditPage(this, bookmark)
 })
 
-When('I check show explanations checkbox', async function () {
+When('I enable explanations', async function () {
     await this.questionEditPage.checkShowExplanation()
+})
+
+When('I disable explanations', async function () {
+    await this.questionEditPage.uncheckShowExplanation()
 })
 
 // Title assertions
@@ -40,12 +44,12 @@ Then('I see question edit page', async function () {
 
 // Field assertions
 
-Then('I see empty question field', async function () {
+Then('I see empty question text', async function () {
     const question = await this.questionEditPage.questionValue()
     expect(question).toBe('')
 })
 
-Then('I see {string} in the question field', async function (question: string) {
+Then('I see question text {string}', async function (question: string) {
     const questionValue = await this.questionEditPage.questionValue()
     expect(questionValue).toBe(question)
 })
@@ -55,34 +59,34 @@ Then(/I see add answer explanations is (unchecked|checked)/, async function (val
     expect(answerExplanationsShown).toBe(value === 'checked')
 })
 
-Then(/I see show explanation checkbox is (checked|unchecked)/, async function (value: string) {
+Then(/I see explanations are (enabled|disabled)/, async function (value: string) {
     const showExplanation = await this.questionEditPage.showExplanation()
-    expect(showExplanation).toBe(value === 'checked')
+    expect(showExplanation).toBe(value === 'enabled')
 })
 
-Then(/I see multiple choice is (unchecked|checked)/, async function (value: string) {
+Then(/the question is (single|multiple) choice/, async function (value: string) {
     const isMultipleChoice = await this.questionEditPage.isMultipleChoice()
-    expect(isMultipleChoice).toBe(value === 'checked')
+    expect(isMultipleChoice).toBe(value === 'multiple')
 })
 
-Then(/I see easy mode is (unchecked|checked)/, async function (value: string) {
+Then(/easy mode is (on|off)/, async function (value: string) {
     const isEasyMode = await this.questionEditPage.isEasyMode()
-    expect(isEasyMode).toBe(value === 'checked')
+    expect(isEasyMode).toBe(value === 'on')
 })
 
-Then(/I see easy mode is (visible|not visible)/, async function (value: string) {
+Then(/easy mode is (available|not available)/, async function (value: string) {
     const isEasyModeVisible = await this.questionEditPage.isEasyModeVisible()
-    expect(isEasyModeVisible).toBe(value === 'visible')
+    expect(isEasyModeVisible).toBe(value === 'available')
 })
 
-Then(/I see explanation fields are (visible|not visible)/, async function (value: string) {
+Then('I see explanation fields', async function () {
     const explanationFieldsCount = await this.questionEditPage.countExplanationFields()
+    expect(explanationFieldsCount).toBeGreaterThan(0)
+})
 
-    if (value === 'visible') {
-        expect(explanationFieldsCount).toBeGreaterThan(0)
-    } else {
-        expect(explanationFieldsCount).toBe(0)
-    }
+Then('I do not see explanation fields', async function () {
+    const explanationFieldsCount = await this.questionEditPage.countExplanationFields()
+    expect(explanationFieldsCount).toBe(0)
 })
 
 const expectAnswer = async (
@@ -101,7 +105,7 @@ const expectAnswer = async (
 
 const expectEmptyAnswers = (world: QuizmasterWorld, index: number) => expectAnswer(world, index, '', false, '')
 
-Then('I see 2 empty answer fields, incorrect, with empty explanations fields, unable to delete', async function () {
+Then('I see 2 default empty answers', async function () {
     const answerCount = await this.questionEditPage.answerRowCount()
     expect(answerCount).toBe(2)
 
@@ -134,12 +138,12 @@ Then('I see the answers fields', async function (data: TableOf<AnswerRaw>) {
     }
 })
 
-Then('I see empty question explanation field', async function () {
+Then('I see empty question explanation', async function () {
     const explanation = await this.questionEditPage.questionExplanation()
     expect(explanation).toBe('')
 })
 
-Then('I see {string} in the question explanation field', async function (explanation: string) {
+Then('I see question explanation {string}', async function (explanation: string) {
     const explanationValue = await this.questionEditPage.questionExplanation()
     expect(explanationValue).toBe(explanation)
 })
@@ -185,7 +189,7 @@ Given('I enter answers', async function (answerRawTable: TableOf<AnswerRaw>) {
     await addAnswers(this, answerRawTable)
 })
 
-When('I add an additional answer', async function () {
+When('I add another answer', async function () {
     await this.questionEditPage.addAdditionalAnswer()
 })
 
@@ -266,7 +270,7 @@ Then('I delete answer {int}', async function (answerNumber: number) {
     await answerDeleteButtonLocator.click()
 })
 
-Then('I see {int} delete buttons enabled', async function (buttonCount: number) {
+Then('I can delete {int} answers', async function (buttonCount: number) {
     await expectAnswerDeleteBtnsToBeVisibleAndDisabled(this, buttonCount, false)
 })
 

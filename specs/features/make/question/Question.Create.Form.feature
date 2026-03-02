@@ -7,11 +7,11 @@ Feature: Create question form
 
   Scenario: Default values
     Given I start creating a question
-    * I check show explanations checkbox
-    Then I see empty question field
-    * I see multiple choice is unchecked
-    * I see 2 empty answer fields, incorrect, with empty explanations fields, unable to delete
-    * I see empty question explanation field
+    * I enable explanations
+    Then I see empty question text
+    * the question is single choice
+    * I see 2 default empty answers
+    * I see empty question explanation
 
   Scenario: Question take and question edit URLs
     Successfully created question has two URLs:
@@ -19,7 +19,7 @@ Feature: Create question form
     - private edit URL (with UUID editId) for future edits
 
     Given I start creating a question
-    * I check show explanations checkbox
+    * I enable explanations
     * I enter question "2 + 2 = ?"
     * I enter answers
       | 4 | * |
@@ -31,7 +31,7 @@ Feature: Create question form
 
   Scenario: Delete second answer out of three
     Given I start creating a question
-    * I check show explanations checkbox
+    * I enable explanations
     * I enter answers
       | AA | * |
       | BB |   |
@@ -43,11 +43,11 @@ Feature: Create question form
 
   Scenario: Explanation fields are hidden by default
     When I start creating a question
-    Then I see show explanation checkbox is unchecked
-    And I see explanation fields are not visible
+    Then I see explanations are disabled
+    And I do not see explanation fields
 
-  Scenario: Explanation fields are visible when toggling "Show explanation" checkbox
+  Scenario: Explanation fields are visible when enabling explanations
     When I start creating a question
-    And I check "Show explanation" checkbox
-    Then I see show explanation checkbox is checked
-    And I see explanation fields are visible
+    And I enable explanations
+    Then I see explanations are enabled
+    And I see explanation fields

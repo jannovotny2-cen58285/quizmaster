@@ -6,7 +6,7 @@ Feature: Take a question with partial score
 
   Background:
     Given a question "Which of the following are planets?"
-    And I check show explanations checkbox
+    And I enable explanations
     * with answers:
       | Mars    | * |
       | Pluto   |   |

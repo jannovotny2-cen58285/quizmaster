@@ -14,7 +14,7 @@ When('I enter quiz name {string}', async function (title: string) {
     await this.quizCreatePage.enterQuizName(title)
 })
 
-When('I enter number of randomized questions in quiz {int}', async function (finalCount: string) {
+When('I set randomized question count to {int}', async function (finalCount: string) {
     await this.quizCreatePage.enterQuizFinalCount(finalCount)
 })
 
@@ -54,7 +54,7 @@ When('I select question {string}', async function (question: string) {
     await this.quizCreatePage.selectQuestion(question)
 })
 
-When('I check randomized function', async function () {
+When('I enable question randomization', async function () {
     await this.quizCreatePage.selectRandomizedFunction()
 })
 

@@ -30,8 +30,8 @@ Feature: Create quiz - validations
     * I enter quiz name "Math Quiz"
     * I select question "2 + 2 = ?"
     * I select question "4 / 2 = ?"
-    * I check randomized function
-    * I enter number of randomized questions in quiz 3
+    * I enable question randomization
+    * I set randomized question count to 3
     * I submit the quiz
     Then I see error messages in quiz form
       | too-many-randomized-questions |
