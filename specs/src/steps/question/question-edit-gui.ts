@@ -123,7 +123,7 @@ Then(
     },
 )
 
-Then(/^I see the answers fields$/, async function (data: TableOf<AnswerRaw>) {
+Then('I see the answers fields', async function (data: TableOf<AnswerRaw>) {
     const answers = data.raw()
 
     expect(await this.questionEditPage.answerRowCount()).toBe(answers.length)

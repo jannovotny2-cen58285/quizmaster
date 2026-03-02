@@ -32,7 +32,7 @@ Then(
     },
 )
 
-Then(/^I see the correct number of questions (\d+)/, async function (expectedTotalQuestions: number) {
+Then('I see the correct number of questions {int}', async function (expectedTotalQuestions: number) {
     const totalQuestions = await this.quizScorePage.totalQuestions()
     expect(totalQuestions).toBe(expectedTotalQuestions)
 })
@@ -55,7 +55,7 @@ Then(
     },
 )
 
-Then(/^I don't see the original results/, async function () {
+Then("I don't see the original results", async function () {
     const firstCorrectAnswers = await this.quizScorePage.firstCorrectAnswersPresent()
     expect(firstCorrectAnswers).toBe(false)
 

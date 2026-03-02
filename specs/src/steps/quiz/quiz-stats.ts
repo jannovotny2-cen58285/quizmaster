@@ -4,7 +4,7 @@ import { expect } from '@playwright/test'
 import { expectTextToBe } from 'steps/common.ts'
 import { Given, Then, When } from 'steps/fixture.ts'
 
-Given(/^I take quiz "(.+?)" with answers?$/, async function (quizName: string, data: DataTable) {
+Given('I take quiz {string} with answer(s)', async function (quizName: string, data: DataTable) {
     await this.workspacePage.takeQuiz(quizName)
     await this.quizWelcomePage.start()
     const rows = Array.from(data.rows())
