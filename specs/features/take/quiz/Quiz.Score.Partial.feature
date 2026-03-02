@@ -18,7 +18,7 @@ Feature: Take a quiz with partial score
     When I start the quiz
     And I answer "<answer>"
     And I answer "Blue"
-    And I click the evaluate button
+    And I evaluate the quiz
     Then I see the result <correct> correct out of 2, <percentage>%, <result>, required passScore 75%
 
     Examples:

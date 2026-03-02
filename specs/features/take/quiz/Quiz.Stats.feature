@@ -7,7 +7,7 @@ Feature: Show stats
       | question              | answers         |
       | Jaký nábytek má Ikea? | Stůl (*), Auto  |
       | Jaké nádobí má Ikea?  | Talíř (*), Kolo |
-    When I click the stats button for quiz "Quiz"
+    When I open stats for quiz "Quiz"
     And I see stats page for quiz "Quiz"
 
   Scenario: Show stats page for successfully answered quiz
@@ -19,7 +19,7 @@ Feature: Show stats
       | question              | answers |
       | Jaký nábytek má Ikea? | Stůl    |
       | Jaké nádobí má Ikea?  | Talíř   |
-    When I click the stats button for quiz "Stats Quiz"
+    When I open stats for quiz "Stats Quiz"
     Then I see stats page for quiz "Stats Quiz"
     And I see stats table
       | Duration | Score |
@@ -34,7 +34,7 @@ Feature: Show stats
       | question              | answers |
       | Jaký nábytek má Ikea? | Auto    |
       | Jaké nádobí má Ikea?  | Kolo    |
-    When I click the stats button for quiz "Stats Quiz"
+    When I open stats for quiz "Stats Quiz"
     Then I see stats page for quiz "Stats Quiz"
     And I see stats table
       | Duration | Score |
@@ -49,7 +49,7 @@ Feature: Show stats
       | question              | answers |
       | Jaký nábytek má Ikea? | Stůl    |
       | Jaké nádobí má Ikea?  | Kolo    |
-    And I click the stats button for quiz "Stats Quiz"
+    And I open stats for quiz "Stats Quiz"
     Then I see stats page for quiz "Stats Quiz"
     And I see stats table
       | Duration      |    |

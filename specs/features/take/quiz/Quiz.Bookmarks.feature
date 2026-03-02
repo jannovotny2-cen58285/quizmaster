@@ -20,7 +20,7 @@ Feature: Bookmark questions during a quiz
     Then I see bookmarked question "Planet"
     Then I see bookmark link "Planet"
 
-    When I click the next button
+    When I skip the question
     Then I see bookmark link "Planet"
 
     When I click bookmark "Planet"

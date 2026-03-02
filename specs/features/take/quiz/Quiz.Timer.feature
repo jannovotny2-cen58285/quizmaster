@@ -24,16 +24,16 @@ Feature: Run timer
     Given I start quiz "-2"
     When I will wait for "01:00"
     And I should see the text "Game over time"
-    Then I should see the dialog evaluate button
-    And I click on the dialog evaluate button
+    Then I see the "Game over" dialog
+    And I confirm the "Game over" dialog
     Then I should see the results table
 
   Scenario: Display score 0 when no answers were given
     Given I start quiz "-1"
     When I will wait for "02:00"
     And I should see the text "Game over time"
-    Then I should see the dialog evaluate button
-    And I click on the dialog evaluate button
+    Then I see the "Game over" dialog
+    And I confirm the "Game over" dialog
     Then I should see the results table
     Then I see the result 0 correct out of 2, 0%, failed, required passScore 85%
 
@@ -42,7 +42,7 @@ Feature: Run timer
     When I answer "Mars"
     Then I will wait for "02:00"
     And I should see the text "Game over time"
-    Then I should see the dialog evaluate button
-    And I click on the dialog evaluate button
+    Then I see the "Game over" dialog
+    And I confirm the "Game over" dialog
     Then I should see the results table
     Then I see the result 1 correct out of 2, 50%, failed, required passScore 85%

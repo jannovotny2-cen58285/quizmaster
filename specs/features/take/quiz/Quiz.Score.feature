@@ -47,7 +47,7 @@ Feature: Evaluate quiz score
     Given I start quiz "-1"
     When I answer "Blue"
     * I answer "Marseille"
-    * I click the evaluate button
+    * I evaluate the quiz
     Then I see the question "<question>"
 
     Examples:
@@ -59,19 +59,19 @@ Feature: Evaluate quiz score
     Given I start quiz "-1"
     When I answer "Blue"
     * I answer "Marseille"
-    * I click the evaluate button
+    * I evaluate the quiz
     Then I see all options for question "Sky"
 
   Scenario: Show question explanation of question on score page
     Given I start quiz "-1"
     When I answer "Blue"
     * I answer "Marseille"
-    * I click the evaluate button
+    * I evaluate the quiz
     Then I see question explanation "Rayleigh" for question "Sky"
 
   Scenario: Show user select
     Given I start quiz "-1"
     When I answer "Blue"
     * I answer "Marseille"
-    * I click the evaluate button
+    * I evaluate the quiz
     Then I see user select "Blue" for question "Sky"

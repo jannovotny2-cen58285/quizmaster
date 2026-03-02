@@ -64,6 +64,6 @@ Then('I take quiz {string}', async function (quiz: string) {
     await this.workspacePage.takeQuiz(quiz)
 })
 
-Then('I click the stats button for quiz {string}', async function (quizName: string) {
+When('I open stats for quiz {string}', async function (quizName: string) {
     await this.workspacePage.statsQuiz(quizName)
 })
