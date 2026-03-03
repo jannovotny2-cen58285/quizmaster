@@ -3,7 +3,7 @@ import { expect } from '@playwright/test'
 
 import { expectTextToBe } from 'steps/common.ts'
 import { Then, When } from 'steps/fixture.ts'
-import { expectQuestion } from 'steps/question/expects.ts'
+import { expectColorFeedback, expectQuestion } from 'steps/question/expects.ts'
 
 When('I take question {string}', async function (bookmark: string) {
     await this.page.goto(this.questionBookmarks[bookmark].url)
@@ -78,22 +78,8 @@ Then('I see the {string} question for the quiz', async function (questionName: s
     expect(await this.takeQuestionPage.questionText()).toBe(questionName)
 })
 
-const answerRowClass: { [key in string]: string } = {
-    '🟩': 'correctly-selected',
-    '🟥': 'incorrect',
-    '◼️': 'correctly-not-selected',
-}
-
-const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' })
-
 Then('I see individual color feedback per answer:', async function (dataTable: DataTable) {
-    for (const { answer, color } of dataTable.hashes()) {
-        const graphemes = Array.from(segmenter.segment(color), s => s.segment)
-        const className = answerRowClass[graphemes[0]]
-
-        const answerRow = this.takeQuestionPage.answerRowLocator(answer)
-        await expect(answerRow).toHaveClass(new RegExp(className))
-    }
+    await expectColorFeedback(this.takeQuestionPage, dataTable.hashes())
 })
 
 Then('I see that question has number of correct answers displayed', async function () {

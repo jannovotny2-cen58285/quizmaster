@@ -60,3 +60,21 @@ export const expectErrorMessages = async (page: QuestionEditPage, expectedErrors
         await page.hasError(error)
     }
 }
+
+const answerRowClass: { [key in string]: string } = {
+    '🟩': 'correctly-selected',
+    '🟥': 'incorrect',
+    '◼️': 'correctly-not-selected',
+}
+
+const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' })
+
+export const expectColorFeedback = async (takeQuestionPage: TakeQuestionPage, rows: Record<string, string>[]) => {
+    for (const { answer, color } of rows) {
+        const graphemes = Array.from(segmenter.segment(color), s => s.segment)
+        const className = answerRowClass[graphemes[0]]
+
+        const answerRow = takeQuestionPage.answerRowLocator(answer)
+        await expect(answerRow).toHaveClass(new RegExp(className))
+    }
+}
