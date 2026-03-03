@@ -26,12 +26,12 @@ public class QuizService {
     }
 
     private QuizResponse toQuizResponse(Quiz quiz) {
-        List<Question> questions = loadQuestions(quiz);
+        List<Question> questions = new ArrayList<>(loadQuestions(quiz));
 
         Integer randomCount = quiz.getRandomQuestionCount();
         if (randomCount != null && randomCount > 0 && !questions.isEmpty()) {
             Collections.shuffle(questions);
-            questions = new ArrayList<>(questions.subList(0, Math.min(randomCount, questions.size())));
+            questions = questions.subList(0, Math.min(randomCount, questions.size()));
         }
 
         return QuizResponse.builder()

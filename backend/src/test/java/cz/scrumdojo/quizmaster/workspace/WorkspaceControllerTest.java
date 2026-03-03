@@ -36,7 +36,7 @@ public class WorkspaceControllerTest {
         Workspace workspace = fixtures.save(fixtures.workspace());
         Question question1 = fixtures.save(fixtures.questionIn(workspace));
         Question question2 = fixtures.save(fixtures.questionIn(workspace));
-        Quiz quiz = fixtures.quiz(question2).build();
+        Quiz quiz = fixtures.quiz(question2).workspaceGuid(workspace.getGuid()).build();
         fixtures.save(quiz);
 
         List<QuestionListItem> result = workspaceController.getWorkspaceQuestions(workspace.getGuid());
