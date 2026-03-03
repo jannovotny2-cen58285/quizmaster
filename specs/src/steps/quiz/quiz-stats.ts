@@ -28,7 +28,6 @@ Then('I see summary stats table', async function (data: DataTable) {
     await expectSummaryStatsTable(this.quizStatsPage, data)
 })
 
-
 Then('I see attempt stats table', async function (data: DataTable) {
     await expectAttemptStatsTable(this.quizStatsPage, data)
 })
