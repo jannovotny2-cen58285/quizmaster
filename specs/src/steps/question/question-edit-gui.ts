@@ -18,7 +18,13 @@ import {
     saveQuestion,
     submitQuestion,
 } from 'steps/question/ops.ts'
-import type { QuizmasterWorld } from 'steps/world'
+import {
+    expectAnswer,
+    expectDeleteButtonsState,
+    expectEmptyAnswers,
+    expectErrorCount,
+    expectErrorMessages,
+} from 'steps/question/expects.ts'
 
 Given('I start creating a question', async function () {
     await openCreatePage(this)
@@ -89,30 +95,14 @@ Then('I do not see explanation fields', async function () {
     expect(explanationFieldsCount).toBe(0)
 })
 
-const expectAnswer = async (
-    world: QuizmasterWorld,
-    index: number,
-    answer: string,
-    isCorrect: boolean,
-    explanation: string,
-) => {
-    const editPage = world.questionEditPage
-
-    expect(await editPage.answerText(index)).toBe(answer)
-    expect(await editPage.isAnswerCorrect(index)).toBe(isCorrect)
-    expect(await editPage.answerExplanation(index)).toBe(explanation)
-}
-
-const expectEmptyAnswers = (world: QuizmasterWorld, index: number) => expectAnswer(world, index, '', false, '')
-
 Then('I see 2 default empty answers', async function () {
     const answerCount = await this.questionEditPage.answerRowCount()
     expect(answerCount).toBe(2)
 
-    await expectEmptyAnswers(this, 0)
-    await expectEmptyAnswers(this, 1)
+    await expectEmptyAnswers(this.questionEditPage, 0)
+    await expectEmptyAnswers(this.questionEditPage, 1)
 
-    await expectAnswerDeleteBtnsToBeVisibleAndDisabled(this)
+    await expectDeleteButtonsState(this.questionEditPage)
 })
 
 Then(/I see answer (\d+) as (correct|incorrect)/, async function (index: number, correctness: string) {
@@ -123,7 +113,7 @@ Then(/I see answer (\d+) as (correct|incorrect)/, async function (index: number,
 Then(
     /I see answer (\d+) text "([^"]*)", (correct|incorrect), with explanation "([^"]*)"/,
     async function (index: number, answer: string, correctness: string, explanation: string) {
-        await expectAnswer(this, index - 1, answer, correctness === 'correct', explanation)
+        await expectAnswer(this.questionEditPage, index - 1, answer, correctness === 'correct', explanation)
     },
 )
 
@@ -134,7 +124,7 @@ Then('I see the answers fields', async function (data: TableOf<AnswerRaw>) {
 
     let i = 0
     for (const [answer, star, explanation] of answers) {
-        await expectAnswer(this, i++, answer, star === '*', explanation || '')
+        await expectAnswer(this.questionEditPage, i++, answer, star === '*', explanation || '')
     }
 })
 
@@ -223,57 +213,24 @@ Then('I see question-take URL and question-edit URL', async function () {
 
 // Error messages assertions
 
-const expectErrorCount = async (world: QuizmasterWorld, n: number) => {
-    await world.page.waitForTimeout(100)
-    const errorCount = await world.questionEditPage.errorMessageCount()
-    expect(errorCount).toBe(n)
-}
-
 Then('I see error messages', async function (table: DataTable) {
-    const expectedErrors = table.raw().map(row => row[0])
+    const expectedErrors: string[] = table.raw().map(row => row[0])
 
-    await expectErrorCount(this, expectedErrors.length)
-
-    for (const error of expectedErrors) {
-        await this.questionEditPage.hasError(error)
-    }
+    await expectErrorMessages(this.questionEditPage, expectedErrors)
 })
 
 Then('I see no error messages', async function () {
-    await expectErrorCount(this, 0)
+    await expectErrorCount(this.questionEditPage, 0)
 })
 
-const expectAnswerDeleteBtnsToBeVisibleAndDisabled = async (
-    world: QuizmasterWorld,
-    expectedBtnCount = 2,
-    expectDisabled = true,
-) => {
-    const trashIconButtons = world.questionEditPage.answerDeleteButtonsLocator()
-
-    await expect(trashIconButtons).toHaveCount(expectedBtnCount)
-    const btnCount = await trashIconButtons.count()
-
-    for (let i = 0; i < btnCount; i++) {
-        const trashIconBtn = trashIconButtons.nth(i)
-        expect(trashIconBtn).toBeVisible()
-        if (expectDisabled) {
-            expect(trashIconBtn).toBeDisabled()
-        } else {
-            expect(trashIconBtn).toBeEnabled()
-        }
-    }
-}
-
 Then('I delete answer {int}', async function (answerNumber: number) {
-    const answerDeleteButtonLocator = this.questionEditPage.answerDeleteButtonLocator(answerNumber - 1)
-
-    await answerDeleteButtonLocator.click()
+    await this.questionEditPage.deleteAnswer(answerNumber - 1)
 })
 
 Then('I can delete {int} answers', async function (buttonCount: number) {
-    await expectAnswerDeleteBtnsToBeVisibleAndDisabled(this, buttonCount, false)
+    await expectDeleteButtonsState(this.questionEditPage, buttonCount, false)
 })
 
 Then('I see {int} delete buttons disabled', async function (buttonCount: number) {
-    await expectAnswerDeleteBtnsToBeVisibleAndDisabled(this, buttonCount, true)
+    await expectDeleteButtonsState(this.questionEditPage, buttonCount, true)
 })
