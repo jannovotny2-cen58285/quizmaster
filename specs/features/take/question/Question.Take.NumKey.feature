@@ -25,6 +25,7 @@ Background:
 Scenario Outline: Multiple choice question - numeric key selects an answer
     When I take question "Multiple"
     And I press the key <key>
+    And I press enter to submit
     Then I see feedback "<feedback>"
     Examples:
       | key | feedback   |

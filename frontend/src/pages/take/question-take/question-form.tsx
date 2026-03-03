@@ -34,6 +34,14 @@ export const QuestionForm = (props: QuestionFormProps) => {
 
     React.useEffect(() => {
         const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Enter') {
+                if (state.selectedAnswerIdxs.length > 0) {
+                    state.submit()
+                    props.onSubmitted?.(state.selectedAnswerIdxs)
+                }
+                return
+            }
+
             const isNumpadDigit = /^Numpad[0-9]$/.test(e.code)
             const isTopRowDigit = /^Digit[0-9]$/.test(e.code)
 
@@ -43,8 +51,10 @@ export const QuestionForm = (props: QuestionFormProps) => {
             if (idx < 0 || idx >= answers.length) return
 
             state.onSelectedAnswerChange(idx, true)
-            state.submit()
-            props.onSubmitted?.([idx])
+            if (!state.isMultipleChoice) {
+                state.submit()
+                props.onSubmitted?.([idx])
+            }
         }
 
         window.addEventListener('keydown', onKeyDown)

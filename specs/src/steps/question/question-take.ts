@@ -41,6 +41,11 @@ When(/^I press the key ([0-9](?:,[0-9])*)$/, async function (keysInput: string) 
     }
 })
 
+When('I press enter to submit', async function () {
+    await this.page.click('body')
+    await this.page.keyboard.press('Enter')
+})
+
 When('I uncheck answer {string}', async function (answerList: string) {
     const answers = this.parseAnswers(answerList)
     for (const answer of answers) {
