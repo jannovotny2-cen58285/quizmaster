@@ -12,6 +12,5 @@ public class Workspace {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String guid;
 
-    @Column(name = "title", columnDefinition = "text[]")
     private String title;
 }
