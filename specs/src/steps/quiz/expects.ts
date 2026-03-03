@@ -73,8 +73,8 @@ export const expectAnswersChecked = async (takeQuestionPage: TakeQuestionPage, a
 }
 
 export const expectStatsTable = async (quizStatsPage: QuizStatsPage, data: DataTable) => {
-     const statsTableBodyRowsLocator = quizStatsPage.attemptStatsTableBodyRowsLocator()
-     const actualRowCount = await statsTableBodyRowsLocator.count()
+    const statsTableBodyRowsLocator = quizStatsPage.attemptStatsTableBodyRowsLocator()
+    const actualRowCount = await statsTableBodyRowsLocator.count()
 
     const expectedRows = data.rows().filter(row => row.some(cell => cell.trim() !== ''))
 

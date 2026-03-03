@@ -15,4 +15,3 @@ export class QuizStatsPage {
     public attemptStatsTableBodyRowsLocator = () => this.attemptStatsTableLocator().locator('tbody tr')
     public summaryStatsTableBodyRowsLocator = () => this.summaryStatsTableLocator().locator('tbody tr')
 }
-
