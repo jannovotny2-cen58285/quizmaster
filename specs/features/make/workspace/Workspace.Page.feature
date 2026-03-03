@@ -49,7 +49,6 @@ Feature: Workspace page management
       | 2 + 2 = ? | 4 (*), 5 |
       | 3 * 3 = ? | 9 (*), 6 |
     When I edit question "2 + 2 = ?" from the list
-    And I enable explanations
     Then I see question edit page
     And I see question text "2 + 2 = ?"
 

@@ -16,7 +16,6 @@ Feature: Create question - validations
 
   Scenario: Empty question text
     Given I start creating a question
-    And I enable explanations
     * I enter answer 1 text "4" and mark it as correct
     * I enter answer 2 text "5"
     When I attempt to submit the question
@@ -36,7 +35,6 @@ Feature: Create question - validations
 
   Scenario: Add an empty answer
     Given I start creating a question
-    And I enable explanations
     * I enter question "What is 2 + 2?"
     * I enter answer 1 text "4" and mark it as correct
     * I enter answer 2 text "5"
@@ -49,8 +47,8 @@ Feature: Create question - validations
     Either all or no answer explanations are required
 
     Given I start creating a question
-    And I enable explanations
     * I enter question "What is 2 + 2?"
+    * I enable explanations
     * I enter answer 1 text "4" and mark it as correct
     * I enter answer 1 explanation "4 is the answer"
     * I enter answer 2 text "5"
@@ -62,8 +60,8 @@ Feature: Create question - validations
     Either all or no answer explanations are required
 
     Given I start creating a question
-    And I enable explanations
     * I enter question "What is 2 + 2?"
+    * I enable explanations
     * I enter answer 1 text "4" and mark it as correct
     * I enter answer 1 explanation "4 is the answer"
     * I enter answer 2 text "5"
@@ -96,7 +94,7 @@ Feature: Create question - validations
 
   Scenario: Empty question text error message disappears after adding question text
     Given I start creating a question
-    And I enable explanations
+    * I enable explanations
     * I enter answer 1 text "4" and mark it as correct
     * I enter answer 2 text "5"
     * I attempt to submit the question
@@ -106,26 +104,24 @@ Feature: Create question - validations
 
   Scenario: Create multiple choice question without correct answer
     Given I start creating a question
-    * I enable explanations
     * I enter question "What are cities of Czech Republic?"
     * with answers:
-      | Brno     |  | No Brno |
-      | Brussels |  | Yes     |
-      | Prague   |  | Yes     |
-      | Berlin   |  | Germany |
+      | Brno     |  |
+      | Brussels |  |
+      | Prague   |  |
+      | Berlin   |  |
     When I attempt to submit the question
     Then I see error messages
       | no-correct-answer |
 
   Scenario: Create multiple choice question with one correct answer
     Given I start creating a question
-    * I enable explanations
     * I enter question "What are cities of Czech Republic?"
     * with answers:
-      | Brno     |  | No Brno |
-      | Brussels |  | Yes     |
-      | Prague   |  | Yes     |
-      | Berlin   |  | Germany |
+      | Brno     |  |
+      | Brussels |  |
+      | Prague   |  |
+      | Berlin   |  |
     * I mark answer 2 as correct
     When I mark the question as multiple choice
     And I attempt to submit the question
@@ -134,13 +130,12 @@ Feature: Create question - validations
 
   Scenario: Create multiple choice question with all correct answers
     Given I start creating a question
-    * I enable explanations
     * I enter question "What are cities of Czech Republic?"
     * with answers:
-      | Brno     |  | No Brno |
-      | Brussels |  | Yes     |
-      | Prague   |  | Yes     |
-      | Berlin   |  | Germany |
+      | Brno     |  |
+      | Brussels |  |
+      | Prague   |  |
+      | Berlin   |  |
     * I mark answer 2 as correct
     * I mark answer 3 as correct
     * I mark answer 4 as correct

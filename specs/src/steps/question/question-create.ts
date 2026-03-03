@@ -13,7 +13,6 @@ import {
 
 Given('a question {string}', async function (question: string) {
     await openCreatePage(this)
-    await this.questionEditPage.checkShowExplanation()
     await enterQuestion(this, question)
 })
 
@@ -32,7 +31,7 @@ Given('questions', async function (data: DataTable) {
             raw: () =>
                 answers.split(',').map(a => {
                     const [answer, correct] = a.trim().split(' ')
-                    return [answer, correct === '(*)' ? '*' : '', '']
+                    return [answer, correct === '(*)' ? '*' : '', undefined]
                 }),
         } as TableOf<AnswerRaw>
 
@@ -41,10 +40,12 @@ Given('questions', async function (data: DataTable) {
 })
 
 Given('with answers:', async function (answerRawTable: TableOf<AnswerRaw>) {
+    await this.questionEditPage.enableExplanations()
     await addAnswers(this, answerRawTable)
 })
 
 Given('with explanation {string}', async function (explanation: string) {
+    await this.questionEditPage.enableExplanations()
     await this.questionEditPage.enterQuestionExplanation(explanation)
     this.questionWip.explanation = explanation
 })

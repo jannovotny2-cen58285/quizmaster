@@ -35,11 +35,11 @@ Given('I start editing question {string}', async function (bookmark: string) {
 })
 
 When('I enable explanations', async function () {
-    await this.questionEditPage.checkShowExplanation()
+    await this.questionEditPage.enableExplanations()
 })
 
 When('I disable explanations', async function () {
-    await this.questionEditPage.uncheckShowExplanation()
+    await this.questionEditPage.disableExplanations()
 })
 
 // Title assertions
@@ -60,13 +60,8 @@ Then('I see question text {string}', async function (question: string) {
     expect(questionValue).toBe(question)
 })
 
-Then(/I see add answer explanations is (unchecked|checked)/, async function (value: string) {
-    const answerExplanationsShown = await this.questionEditPage.answerExplanationsVisible()
-    expect(answerExplanationsShown).toBe(value === 'checked')
-})
-
 Then(/I see explanations are (enabled|disabled)/, async function (value: string) {
-    const showExplanation = await this.questionEditPage.showExplanation()
+    const showExplanation = await this.questionEditPage.explanationsEnabled()
     expect(showExplanation).toBe(value === 'enabled')
 })
 
@@ -124,7 +119,7 @@ Then('I see the answers fields', async function (data: TableOf<AnswerRaw>) {
 
     let i = 0
     for (const [answer, star, explanation] of answers) {
-        await expectAnswer(this.questionEditPage, i++, answer, star === '*', explanation || '')
+        await expectAnswer(this.questionEditPage, i++, answer, star === '*', explanation)
     }
 })
 
@@ -165,7 +160,7 @@ When('I enter answer {int} explanation {string}', async function (index: number,
 })
 
 When('I enter answer {int} text {string} and mark it as correct', async function (index: number, answer: string) {
-    await enterAnswer(this, index - 1, answer, true, '')
+    await enterAnswer(this, index - 1, answer, true, undefined)
 })
 
 When(

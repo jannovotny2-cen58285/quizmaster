@@ -1,10 +1,10 @@
 export interface Answer {
     answer: string
     isCorrect: boolean
-    explanation: string
+    explanation: string | undefined
 }
 
-export const emptyAnswer = (): Answer => ({ answer: '', isCorrect: false, explanation: '' })
+export const emptyAnswer = (): Answer => ({ answer: '', isCorrect: false, explanation: undefined })
 
 export interface Question {
     url: string

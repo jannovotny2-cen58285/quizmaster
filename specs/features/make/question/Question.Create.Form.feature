@@ -19,7 +19,6 @@ Feature: Create question form
     - private edit URL (with UUID editId) for future edits
 
     Given I start creating a question
-    * I enable explanations
     * I enter question "2 + 2 = ?"
     * I enter answers
       | 4 | * |
@@ -31,7 +30,6 @@ Feature: Create question form
 
   Scenario: Delete second answer out of three
     Given I start creating a question
-    * I enable explanations
     * I enter answers
       | AA | * |
       | BB |   |

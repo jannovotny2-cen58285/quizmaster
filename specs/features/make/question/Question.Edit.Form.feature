@@ -12,7 +12,6 @@ Feature: Edit question form
         | Berlin |   | Germany |
       * with explanation "Czechia is a country in Europe. Czechs love beer."
       * saved and bookmarked as "Czechia"
-    When I enable explanations
     Then I see question text "What is the capital of Czech Republic?"
       * the question is single choice
       * I see the answers fields
@@ -23,27 +22,24 @@ Feature: Edit question form
 
   Scenario: Edit all fields
     Given a question "What is the capital of Czech Republic?"
-    And I enable explanations
       * with answers:
         | Brno   |   | No Brno |
         | Prague | * | Yes     |
         | Berlin |   | Germany |
       * with explanation "Czechia is a country in Europe. Czechs love beer."
       * saved and bookmarked as "Czechia"
-      * I enter question "What is the capital of Slovakia?"
-    When I enable explanations
+    When I enter question "What is the capital of Slovakia?"
       * I enter answer 1 text "It's Brno", incorrect, with explanation "No, it's not Brno"
       * I enter answer 2 text "It's Prague"
       * I enter answer 2 explanation "No, it's not Prague"
       * I enter answer 3 text "It's Bratislava", correct, with explanation "Yes!"
       * I enter question explanation "Slovakia is a country in Europe. Slovaks love borovička."
 
-    When I submit the question
-      * I refresh the page
+    And I submit the question
+    And I refresh the page
 
     Then I see question text "What is the capital of Slovakia?"
       * the question is single choice
-      * I enable explanations
       * I see the answers fields
         | It's Brno       |   | No, it's not Brno   |
         | It's Prague     |   | No, it's not Prague |
@@ -52,7 +48,6 @@ Feature: Edit question form
 
   Scenario: Change single choice to multiple choice
     Given a question "What is the capital of Czech Republic?"
-    And I enable explanations
       * with answers:
         | Brno   |   | No Brno |
         | Prague | * | Yes     |
@@ -108,9 +103,9 @@ Feature: Edit question form
   Scenario: Explanation fields are hidden when explanations are empty
     Given a question "What is the capital of Cambodia?"
     * with answers:
-      | Brno   |   | |
-      | Prague | * | |
-      | Berlin |   | |
+      | Brno   |   |
+      | Prague | * |
+      | Berlin |   |
     * saved and bookmarked as "Cambodia"
     When I start editing question "Cambodia"
     Then I see explanations are disabled

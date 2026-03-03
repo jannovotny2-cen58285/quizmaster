@@ -10,7 +10,6 @@ Feature: Question explanations after answering
     - for the whole question
 
     Given a question "What is capital of Italy?"
-    And I enable explanations
     * with answers:
       | Rome     | * | Rome is the capital of Italy              |
       | Naples   |   | Naples is the capital of Campania region  |
@@ -29,7 +28,6 @@ Feature: Question explanations after answering
     - for the whole question
 
     Given a question "Which of these countries are in Europe?"
-    And I enable explanations
     * with answers:
       | Italy   | * | Located on the Apennine Peninsula, which is part of the European continent. |
       | France  | * | One of the founders of the European Union.                                  |

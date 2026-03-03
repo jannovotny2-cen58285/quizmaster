@@ -11,7 +11,7 @@ const parseAnswers = (answers: string) =>
         raw: () =>
             answers.split(',').map(a => {
                 const [answer, correct] = a.trim().split(' ')
-                return [answer, correct === '(*)' ? '*' : '', '']
+                return [answer, correct === '(*)' ? '*' : '', undefined]
             }),
     }) as TableOf<AnswerRaw>
 

@@ -6,7 +6,6 @@ Feature: Create question - single/multiple choice
 
   Background:
     Given I start creating a question
-    And I enable explanations
 
   Scenario: Default is single choice
     Then the question is single choice

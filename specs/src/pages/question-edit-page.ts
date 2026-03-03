@@ -12,15 +12,10 @@ export class QuestionEditPage {
     enterQuestion = (question: string) => this.questionLocator().fill(question)
     questionValue = () => this.questionLocator().inputValue()
 
-    private showAnswerExplanationLocator = () => this.page.locator('#show-answer-explanations')
-    answerExplanationsVisible = () => this.showAnswerExplanationLocator().isChecked()
-    showAnswerExplanations = () => this.showAnswerExplanationLocator().check()
-    hideAnswerExplanations = () => this.showAnswerExplanationLocator().uncheck()
-
     private showExplanationLocator = () => this.page.locator('#show-explanation')
-    showExplanation = () => this.showExplanationLocator().isChecked()
-    checkShowExplanation = () => this.showExplanationLocator().check()
-    uncheckShowExplanation = () => this.showExplanationLocator().uncheck()
+    explanationsEnabled = () => this.showExplanationLocator().isChecked()
+    enableExplanations = () => this.showExplanationLocator().check()
+    disableExplanations = () => this.showExplanationLocator().uncheck()
 
     private multipleChoiceLocator = () => this.page.locator('#is-multiple-choice')
     isMultipleChoice = () => this.multipleChoiceLocator().isChecked()
@@ -31,9 +26,6 @@ export class QuestionEditPage {
     isEasyMode = () => this.easyModeLocator().isChecked()
     setEasyMode = () => this.easyModeLocator().check()
     isEasyModeVisible = () => this.easyModeLocator().isVisible()
-
-    private explanationFieldsCheckboxLocator = () => this.page.locator('#show-explanation')
-    checkShowExplanationFields = () => this.explanationFieldsCheckboxLocator().check()
 
     private explanationFieldsLocator = () => this.page.locator('input.explanation')
     countExplanationFields = () => this.explanationFieldsLocator().count()
@@ -57,10 +49,10 @@ export class QuestionEditPage {
     enterAnswerExplanation = (index: number, explanation: string) =>
         this.answerExplanationLocator(index).fill(explanation)
 
-    enterAnswer = async (index: number, value: string, correct: boolean, explanation: string) => {
+    enterAnswer = async (index: number, value: string, correct: boolean, explanation: string | undefined) => {
         await this.enterAnswerText(index, value)
         await this.setAnswerCorrectness(index, correct)
-        await this.enterAnswerExplanation(index, explanation)
+        if (explanation !== undefined) await this.enterAnswerExplanation(index, explanation)
     }
 
     private addAnswerButtonLocator = () => this.page.locator('button#add-answer')
@@ -82,7 +74,7 @@ export class QuestionEditPage {
     private questionEditUrlLocator = () => this.page.locator('#question-edit-link')
     questionEditUrl = () => this.questionEditUrlLocator().textContent()
 
-    private errorsLocator = () => this.page.locator('.alert.error')
+    errorsLocator = () => this.page.locator('.alert.error')
     hasError = (error: string) => this.page.getByTestId(error).waitFor({ state: 'visible' })
     errorMessageCount = () => this.errorsLocator().count()
 

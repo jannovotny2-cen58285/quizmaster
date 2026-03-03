@@ -22,11 +22,13 @@ export const expectAnswer = async (
     index: number,
     answer: string,
     isCorrect: boolean,
-    explanation: string,
+    explanation: string | undefined,
 ) => {
     expect(await page.answerText(index)).toBe(answer)
     expect(await page.isAnswerCorrect(index)).toBe(isCorrect)
-    expect(await page.answerExplanation(index)).toBe(explanation)
+    if (explanation !== undefined) {
+        expect(await page.answerExplanation(index)).toBe(explanation)
+    }
 }
 
 export const expectEmptyAnswers = (page: QuestionEditPage, index: number) => expectAnswer(page, index, '', false, '')

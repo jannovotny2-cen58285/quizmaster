@@ -13,35 +13,31 @@ Feature: Edit question - validations
       | Berlin |   | Germany |
     * with explanation "Czechia is a country in Europe. Czechs love beer."
     * saved and bookmarked as "Czechia"
-    And I enable explanations
     Given I enter question ""
-    And I enable explanations
     * I enter answer 1 text "", incorrect, with explanation ""
     * I enter question explanation ""
     When I attempt to submit the question
     Then I see error messages
-      | empty-question    |
-      | empty-answer |
+      | empty-question           |
+      | empty-answer             |
       | empty-answer-explanation |
 
   Scenario: Empty multiple choice question form
     Given a question "What are cities of Czech Republic?"
     * with answers:
       | Brno     | * | No Brno |
-      | Brussels |  | Yes     |
+      | Brussels |   | Yes     |
       | Prague   | * | Yes     |
       | Berlin   |   | Germany |
     * saved and bookmarked as "Czechia"
-    And I enable explanations
     Given I enter question ""
-    And I enable explanations
     * I enter answer 1 text "", incorrect, with explanation ""
     * I enter answer 3 text "", incorrect, with explanation ""
     * I enter question explanation ""
     When I attempt to submit the question
     Then I see error messages
-      | empty-question    |
-      | empty-answer |
-      | no-correct-answer |
+      | empty-question           |
+      | empty-answer             |
+      | no-correct-answer        |
       | empty-answer-explanation |
-      | few-correct-answers |
+      | few-correct-answers      |

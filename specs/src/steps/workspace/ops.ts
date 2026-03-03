@@ -23,7 +23,6 @@ export const createQuestionInWorkspace = async (
     await world.workspacePage.createNewQuestion()
     world.questionWip = emptyQuestion()
     await enterQuestion(world, question)
-    await world.questionEditPage.checkShowExplanation()
     await addAnswers(world, answerRawTable)
     if (isEasy) {
         await world.questionEditPage.setEasyMode()

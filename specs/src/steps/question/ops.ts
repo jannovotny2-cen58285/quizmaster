@@ -1,7 +1,7 @@
 import type { TableOf } from 'steps/common.ts'
 import { type Answer, emptyAnswer, emptyQuestion, type QuizmasterWorld } from 'steps/world'
 
-export type AnswerRaw = [string, '*' | '', string]
+export type AnswerRaw = [string, '*' | '', string | undefined]
 
 // if change this value, also change in frontend/src/pages/create-question/create-question.tsx
 const NUM_ANSWERS = 2
@@ -47,7 +47,7 @@ export const enterAnswer = async (
     index: number,
     answer: string,
     isCorrect: boolean,
-    explanation: string,
+    explanation: string | undefined,
 ) => {
     await world.questionEditPage.enterAnswer(index, answer, isCorrect, explanation)
     world.questionWip.answers[index] = { answer, isCorrect, explanation }
@@ -86,7 +86,7 @@ export const addAnswers = async (world: QuizmasterWorld, answerRawTable: TableOf
         if (i >= NUM_ANSWERS) await editPage.addAdditionalAnswer()
         const [answer, correct, explanation] = raw[i]
         const isCorrect = correct === '*'
-        await enterAnswer(world, i, answer, isCorrect, explanation || '')
+        await enterAnswer(world, i, answer, isCorrect, explanation)
     }
 }
 
@@ -108,7 +108,6 @@ export const createQuestion = async (
 ) => {
     await openCreatePage(world)
     await enterQuestion(world, question)
-    await world.questionEditPage.checkShowExplanation()
     await addAnswers(world, answerRawTable)
     if (isEasy) {
         await world.questionEditPage.setEasyMode()
