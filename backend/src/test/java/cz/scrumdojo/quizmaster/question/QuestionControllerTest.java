@@ -31,7 +31,7 @@ public class QuestionControllerTest {
         assertArrayEquals(request.answers(), result.getAnswers());
         assertArrayEquals(request.correctAnswers(), result.getCorrectAnswers());
         assertArrayEquals(request.explanations(), result.getExplanations());
-        assertEquals(request.isEasyMode(), result.isEasyMode());
+        assertEquals(request.easyMode(), result.isEasyMode());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class QuestionControllerTest {
         assertArrayEquals(updateRequest.answers(), result.getAnswers());
         assertArrayEquals(updateRequest.correctAnswers(), result.getCorrectAnswers());
         assertArrayEquals(updateRequest.explanations(), result.getExplanations());
-        assertEquals(updateRequest.isEasyMode(), result.isEasyMode());
+        assertEquals(updateRequest.easyMode(), result.isEasyMode());
     }
 
     @Test

@@ -6,7 +6,7 @@ public record QuestionRequest(
     int[] correctAnswers,
     String[] explanations,
     String questionExplanation,
-    boolean isEasyMode,
+    boolean easyMode,
     String workspaceGuid
 ) {
     public Question toEntity() {
@@ -16,7 +16,7 @@ public record QuestionRequest(
             .correctAnswers(correctAnswers)
             .explanations(explanations)
             .questionExplanation(questionExplanation)
-            .isEasyMode(isEasyMode)
+            .isEasyMode(easyMode)
             .workspaceGuid(workspaceGuid)
             .build();
     }
