@@ -71,3 +71,12 @@ Feature: Create Quiz from Workspace
       |       2 |             2 + 2 = ? |                      4 / 2 = ? |       3 * 3 = ? | Jaký nábytek má Ikea? |
       | Ikea    | Jaký nábytek má Ikea? | Jaké nádobí má Ikea?           |       2 + 2 = ? |             3 * 3 = ? |
       | nábytek | Jaký nábytek má Ikea? | Jaký venkovní Nábytek má Ikea? |       2 + 2 = ? |             4 / 2 = ? |
+
+@skip
+Scenario: Test backButton
+  Given workspace "Testworkspace"
+  And page "Quiz Creation"
+  When I start creating a new quiz
+  And I see the quiz creation page
+  And I go back to the workspace "Testworkspace"
+  Then I see the workspace "Testworkspace"
