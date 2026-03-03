@@ -1,4 +1,6 @@
-import type { QuizmasterWorld } from 'steps/world'
+import type { DataTable } from '@cucumber/cucumber'
+
+import { type Difficulty, type QuizMode, type QuizmasterWorld, emptyQuizBookmark } from 'steps/world'
 
 export const openQuiz = async (world: QuizmasterWorld, quizId: string) => {
     const quizUrl = world.quizBookmarks[quizId]?.url || `/quiz/${quizId}`
@@ -20,4 +22,68 @@ export const answerIncorrectly = async (world: QuizmasterWorld) => answerNth(wor
 
 export const repeatAsync = async (n: number, fn: () => Promise<void>) => {
     for (let i = 0; i < n; i++) await fn()
+}
+
+const toDifficulty = (difficulty: string): Difficulty | undefined => {
+    const mapping: Record<string, Difficulty> = {
+        'Keep Question': 'keep-question',
+        Easy: 'easy',
+        Hard: 'hard',
+    }
+    return mapping[difficulty]
+}
+
+export const createQuizViaUI = async (
+    world: QuizmasterWorld,
+    quizName: string,
+    questionBookmarks: string[],
+    properties?: DataTable,
+) => {
+    await world.workspacePage.createNewQuiz()
+    await world.quizCreatePage.enterQuizName(quizName)
+
+    for (const bookmark of questionBookmarks) {
+        const question = world.questionBookmarks[bookmark]
+        if (!question) throw new Error(`Question bookmark "${bookmark}" not found`)
+        await world.quizCreatePage.selectQuestion(question.question)
+    }
+
+    if (properties) {
+        const props = Object.fromEntries(properties.raw())
+
+        if (props.description) {
+            await world.quizCreatePage.enterDescription(props.description)
+        }
+
+        if (props.mode) {
+            await world.quizCreatePage.selectFeedbackMode(props.mode as QuizMode)
+        }
+
+        if (props['pass score']) {
+            await world.quizCreatePage.passScoreInput().fill(props['pass score'])
+        }
+
+        if (props['time limit']) {
+            await world.quizCreatePage.timeLimitInput().fill(props['time limit'])
+        }
+
+        if (props.difficulty) {
+            const difficulty = toDifficulty(props.difficulty)
+            if (difficulty) await world.quizCreatePage.selectDifficulty(difficulty)
+        }
+
+        if (props.size) {
+            await world.quizCreatePage.selectRandomizedFunction()
+            await world.quizCreatePage.enterQuizFinalCount(props.size)
+        }
+    }
+
+    await world.quizCreatePage.submit()
+
+    // Store quiz bookmark so 'I start quiz "X"' can find it
+    await world.workspacePage.takeQuiz(quizName)
+    const quizUrl = new URL(world.page.url()).pathname
+    world.quizBookmarks[quizName] = { ...emptyQuizBookmark(), url: quizUrl, title: quizName }
+    world.activeQuizBookmark = quizName
+    await world.workspacePage.goto(world.workspaceCreatePage.workspaceGuid())
 }
