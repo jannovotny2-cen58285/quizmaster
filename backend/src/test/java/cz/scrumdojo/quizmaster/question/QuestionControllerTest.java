@@ -21,7 +21,8 @@ public class QuestionControllerTest {
     @Test
     public void saveAndGetQuestion() {
         var question = fixtures.question().build();
-        var response = questionController.saveQuestion(question);
+        var response = questionController.saveQuestion(question).getBody();
+        assertNotNull(response);
         assertNotNull(response.getId());
 
         Question result = questionController.getQuestion(response.getId()).getBody();
@@ -76,7 +77,8 @@ public class QuestionControllerTest {
     @Test
     public void saveQuestion() {
         var question = fixtures.question().build();
-        var response = questionController.saveQuestion(question);
+        var response = questionController.saveQuestion(question).getBody();
+        assertNotNull(response);
 
         assertNotNull(response.getId());
         assertNotNull(response.getEditId());

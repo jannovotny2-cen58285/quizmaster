@@ -40,19 +40,19 @@ public class QuestionController {
 
     @Transactional
     @PostMapping
-    public QuestionCreateResponse saveQuestion(@RequestBody Question question) {
+    public ResponseEntity<QuestionCreateResponse> saveQuestion(@RequestBody Question question) {
         var createdQuestion = questionRepository.save(question);
-        return new QuestionCreateResponse(createdQuestion.getId(), createdQuestion.getEditId());
+        return ResponseEntity.ok(new QuestionCreateResponse(createdQuestion.getId(), createdQuestion.getEditId()));
     }
 
     @Transactional
     @PatchMapping("/{editId}")
-    public Integer updateQuestion(@RequestBody Question question, @PathVariable String editId) {
+    public ResponseEntity<QuestionCreateResponse> updateQuestion(@RequestBody Question question, @PathVariable String editId) {
         var existingQuestion = questionRepository.findByEditId(editId)
             .orElseThrow(() -> new IllegalArgumentException("Question not found with editId: " + editId));
         question.setId(existingQuestion.getId());
         question.setEditId(editId);
         questionRepository.save(question);
-        return existingQuestion.getId();
+        return ResponseEntity.ok(new QuestionCreateResponse(existingQuestion.getId(), editId));
     }
 }

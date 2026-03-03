@@ -26,4 +26,4 @@ export const saveQuestion = async (question: QuestionApiData) =>
     await postJson<QuestionApiData, QuestionCreateResponse>('/api/question', question)
 
 export const updateQuestion = async (question: QuestionApiData, editId: string) =>
-    await patchJson<QuestionApiData, number>(`/api/question/${editId}`, question)
+    await patchJson<QuestionApiData, QuestionCreateResponse>(`/api/question/${editId}`, question)
