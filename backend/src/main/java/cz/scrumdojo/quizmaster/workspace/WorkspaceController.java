@@ -4,13 +4,13 @@ import cz.scrumdojo.quizmaster.question.Question;
 import cz.scrumdojo.quizmaster.question.QuestionRepository;
 import cz.scrumdojo.quizmaster.quiz.Quiz;
 import cz.scrumdojo.quizmaster.quiz.QuizRepository;
+import cz.scrumdojo.quizmaster.ResponseHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/workspaces")
@@ -34,7 +34,7 @@ public class WorkspaceController {
     @Transactional(readOnly = true)
     @GetMapping("/{guid}")
     public ResponseEntity<Workspace> getWorkspace(@PathVariable String guid) {
-        return response(workspaceRepository.findById(guid));
+        return ResponseHelper.okOrNotFound(workspaceRepository.findById(guid));
     }
 
     @Transactional
@@ -65,11 +65,5 @@ public class WorkspaceController {
                 .title(quiz.getTitle())
                 .build())
             .toList();
-    }
-
-    private <T> ResponseEntity<T> response(Optional<T> entity) {
-        return entity
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
     }
 }

@@ -1,12 +1,11 @@
 package cz.scrumdojo.quizmaster.question;
 
+import cz.scrumdojo.quizmaster.ResponseHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -23,7 +22,7 @@ public class QuestionController {
     @Transactional(readOnly = true)
     @GetMapping("/question/{id}")
     public ResponseEntity<Question> getQuestion(@PathVariable Integer id) {
-        return response(findQuestion(id));
+        return ResponseHelper.okOrNotFound(questionRepository.findById(id));
     }
 
     @Transactional
@@ -36,7 +35,7 @@ public class QuestionController {
     @Transactional(readOnly = true)
     @GetMapping("/question/{editId}/edit")
     public ResponseEntity<Question> getQuestionByEditId(@PathVariable String editId) {
-        return response(questionRepository.findByEditId(editId));
+        return ResponseHelper.okOrNotFound(questionRepository.findByEditId(editId));
     }
 
     @Transactional
@@ -55,15 +54,5 @@ public class QuestionController {
         question.setEditId(editId);
         questionRepository.save(question);
         return existingQuestion.getId();
-    }
-
-    private Optional<Question> findQuestion(Integer id) {
-        return questionRepository.findById(id);
-    }
-
-    private <T> ResponseEntity<T> response(Optional<T> entity) {
-        return entity
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
     }
 }
