@@ -25,7 +25,7 @@ public class QuizController {
         this.quizRepository = quizRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @GetMapping("/quiz/{id}")
     public ResponseEntity<QuizResponse> getQuiz(@PathVariable Integer id) {
         Quiz quiz = quizRepository.findById(id).orElse(null);

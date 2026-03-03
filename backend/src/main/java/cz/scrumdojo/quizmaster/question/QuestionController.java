@@ -20,7 +20,7 @@ public class QuestionController {
         this.questionRepository = questionRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @GetMapping("/question/{id}")
     public ResponseEntity<Question> getQuestion(@PathVariable Integer id) {
         return response(findQuestion(id));
@@ -33,7 +33,7 @@ public class QuestionController {
         return ResponseEntity.noContent().build();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @GetMapping("/question/{editId}/edit")
     public ResponseEntity<Question> getQuestionByEditId(@PathVariable String editId) {
         return response(questionRepository.findByEditId(editId));

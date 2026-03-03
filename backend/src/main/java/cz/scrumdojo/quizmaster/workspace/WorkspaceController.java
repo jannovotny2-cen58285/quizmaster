@@ -31,7 +31,7 @@ public class WorkspaceController {
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     @GetMapping("/{guid}")
     public ResponseEntity<Workspace> getWorkspace(@PathVariable String guid) {
         return response(workspaceRepository.findById(guid));
@@ -44,7 +44,7 @@ public class WorkspaceController {
         return new WorkspaceCreateResponse(createdWorkspace.getGuid());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @GetMapping("/{guid}/questions")
     public List<QuestionListItem> getWorkspaceQuestions(@PathVariable String guid) {
         List<Question> questions = questionRepository.findByWorkspaceGuid(guid);
@@ -54,7 +54,7 @@ public class WorkspaceController {
             .toList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @GetMapping("/{guid}/quizzes")
     public List<QuizListItem> getWorkspaceQuizzes(@PathVariable String guid) {
         List<Quiz> quizzes = quizRepository.findByWorkspaceGuid(guid);
