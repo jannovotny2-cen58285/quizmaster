@@ -19,5 +19,5 @@ public class QuizResponse {
     private int passScore;
     private String description;
     private Integer timeLimit;
-    private Integer size;
+    private Integer randomQuestionCount;
 }

@@ -8,7 +8,7 @@ export interface Quiz {
     mode: QuizMode
     passScore: number
     timeLimit: number
-    size?: number
+    randomQuestionCount?: number
     difficulty?: Difficulty
 }
 

@@ -15,7 +15,7 @@ export interface QuizFormState {
     readonly timeLimit: number
     readonly passScore: number
     readonly selectedIds: ReadonlySet<number>
-    readonly finalCount: number
+    readonly randomQuestionCount: number
 }
 
 export function validateQuizForm(state: QuizFormState): Set<ErrorCode> {
@@ -26,7 +26,8 @@ export function validateQuizForm(state: QuizFormState): Set<ErrorCode> {
     if (state.timeLimit > 21600) errors.add('time-limit-above-max')
     if (state.passScore > 100) errors.add('score-above-max')
     if (state.selectedIds.size < 2) errors.add('few-questions')
-    if (state.finalCount > 0 && state.finalCount > state.selectedIds.size) errors.add('too-many-randomized-questions')
+    if (state.randomQuestionCount > 0 && state.randomQuestionCount > state.selectedIds.size)
+        errors.add('too-many-randomized-questions')
 
     return errors
 }

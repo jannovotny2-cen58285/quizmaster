@@ -27,7 +27,7 @@ export const QuizCreateForm = ({ questions, onSubmit, quiz }: QuizCreateProps) =
     const [description, setDescription] = useState<string>('')
     const [selectedIds, toggleSelectedId, addSelectedId] = useStateSet<number>()
     const [timeLimit, setTimeLimit] = useState<number>(600)
-    const [finalCount, setFinalCount] = useState<number>(0)
+    const [randomQuestionCount, setRandomQuestionCount] = useState<number>(0)
     const [passScore, setPassScore] = useState<number>(80)
     const [filter, setFilter] = useState<string>('')
     const [searchParams] = useSearchParams()
@@ -42,11 +42,11 @@ export const QuizCreateForm = ({ questions, onSubmit, quiz }: QuizCreateProps) =
             setTitle(quiz.title || '')
             setDescription(quiz.description || '')
             setTimeLimit(quiz.timeLimit ?? 600)
-            setFinalCount(quiz.size ?? 0)
+            setRandomQuestionCount(quiz.randomQuestionCount ?? 0)
             setPassScore(quiz.passScore ?? 80)
             setFeedbackMode(quiz.mode || 'exam')
             setDifficulty(quiz.difficulty || 'keep-question')
-            setCheckRandomize(!!quiz.size)
+            setCheckRandomize(!!quiz.randomQuestionCount)
             // Nastavit vybrané otázky
             if (quiz.questions) {
                 for (const q of quiz.questions) {
@@ -58,7 +58,7 @@ export const QuizCreateForm = ({ questions, onSubmit, quiz }: QuizCreateProps) =
     }, [quiz, addSelectedId, isInitialized])
 
     const validator = createValidator(
-        () => validateQuizForm({ title, description, timeLimit, passScore, selectedIds, finalCount }),
+        () => validateQuizForm({ title, description, timeLimit, passScore, selectedIds, randomQuestionCount }),
         errorMessage,
     )
 
@@ -71,7 +71,7 @@ export const QuizCreateForm = ({ questions, onSubmit, quiz }: QuizCreateProps) =
         passScore,
         timeLimit,
         workspaceGuid: searchParams.get('workspaceguid') || null,
-        finalCount,
+        randomQuestionCount,
     })
 
     useEffect(() => {
@@ -158,7 +158,11 @@ export const QuizCreateForm = ({ questions, onSubmit, quiz }: QuizCreateProps) =
             {checkRandomize && (
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                     <div style={{ width: '150px', paddingLeft: '25px' }}>
-                        <NumberInput id="quiz-finalCount" value={finalCount} onChange={setFinalCount} />
+                        <NumberInput
+                            id="quiz-randomQuestionCount"
+                            value={randomQuestionCount}
+                            onChange={setRandomQuestionCount}
+                        />
                     </div>
                     random questions
                 </span>

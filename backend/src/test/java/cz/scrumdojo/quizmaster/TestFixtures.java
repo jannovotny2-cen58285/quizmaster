@@ -77,8 +77,7 @@ public class TestFixtures {
             .difficulty(Difficulty.KEEP_QUESTION)
             .passScore(85)
             .questionIds(questionIds)
-            .size(questions.length)
-            .finalCount(1);
+            .randomQuestionCount(1);
     }
 
     public Quiz.QuizBuilder quizIn(Workspace workspace) {

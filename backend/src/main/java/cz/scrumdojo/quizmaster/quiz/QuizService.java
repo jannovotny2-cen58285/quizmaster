@@ -26,9 +26,10 @@ public class QuizService {
     private QuizResponse toQuizResponse(Quiz quiz) {
         List<Question> questions = loadQuestions(quiz);
 
-        if (quiz.getFinalCount() != null && quiz.getFinalCount() > 0 && !questions.isEmpty()) {
+        Integer randomCount = quiz.getRandomQuestionCount();
+        if (randomCount != null && randomCount > 0 && !questions.isEmpty()) {
             Collections.shuffle(questions);
-            questions = new ArrayList<>(questions.subList(0, Math.min(quiz.getFinalCount(), questions.size())));
+            questions = new ArrayList<>(questions.subList(0, Math.min(randomCount, questions.size())));
         }
 
         return QuizResponse.builder()
@@ -40,18 +41,14 @@ public class QuizService {
             .difficulty(quiz.getDifficulty())
             .passScore(quiz.getPassScore())
             .timeLimit(quiz.getTimeLimit())
-            .size(quiz.getSize())
+            .randomQuestionCount(quiz.getRandomQuestionCount())
             .build();
     }
 
     private List<Question> loadQuestions(Quiz quiz) {
-        int questionsLimit = (quiz.getSize() != null && quiz.getSize() > 0)
-            ? quiz.getSize()
-            : quiz.getQuestionIds().length;
-
-        List<Question> questions = new ArrayList<>(questionsLimit);
-        for (int i = 0; i < questionsLimit; i++) {
-            questionRepository.findById(quiz.getQuestionIds()[i]).ifPresent(questions::add);
+        List<Question> questions = new ArrayList<>();
+        for (int questionId : quiz.getQuestionIds()) {
+            questionRepository.findById(questionId).ifPresent(questions::add);
         }
         return questions;
     }

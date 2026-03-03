@@ -52,7 +52,7 @@ public class QuizServiceTest {
             .difficulty(Difficulty.KEEP_QUESTION)
             .passScore(80)
             .questionIds(new int[]{q1.getId(), q2.getId(), q3.getId()})
-            .finalCount(2)
+            .randomQuestionCount(2)
             .build());
 
         QuizResponse response = quizService.getQuiz(quiz.getId()).orElseThrow();
@@ -74,7 +74,7 @@ public class QuizServiceTest {
             .difficulty(Difficulty.KEEP_QUESTION)
             .passScore(80)
             .questionIds(new int[]{q1.getId(), q2.getId(), q3.getId()})
-            .finalCount(2)
+            .randomQuestionCount(2)
             .build());
 
         QuizResponse response = quizService.getQuiz(quiz.getId()).orElseThrow();

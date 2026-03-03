@@ -40,8 +40,6 @@ public class Quiz {
     @Column(nullable = true)
     private String workspaceGuid; // Workspace GUID
 
-    private Integer size;
-
-    @Column(nullable = true)
-    private Integer finalCount;
+    @Column(name = "random_question_count")
+    private Integer randomQuestionCount;
 }

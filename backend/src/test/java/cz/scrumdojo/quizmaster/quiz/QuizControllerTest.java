@@ -34,7 +34,7 @@ public class QuizControllerTest {
         assertEquals(quiz.getMode(), quizResponse.getMode());
         assertEquals(quiz.getPassScore(), quizResponse.getPassScore());
         assertEquals(quiz.getTimeLimit(), quizResponse.getTimeLimit());
-        assertEquals(quiz.getSize(), quizResponse.getSize());
+        assertEquals(quiz.getRandomQuestionCount(), quizResponse.getRandomQuestionCount());
         assertEquals(1, quizResponse.getQuestions().length);
         assertEquals(question.getId(), quizResponse.getQuestions()[0].getId());
     }

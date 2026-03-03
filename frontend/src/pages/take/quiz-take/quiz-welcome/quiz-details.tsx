@@ -26,7 +26,7 @@ export const QuizDetails = ({ quiz, onStart }: QuizDetailsProps) => (
                 </div>
                 <div className="detail-item">
                     <label>Question count</label>
-                    <span id="question-count">{quiz.size || quiz.questions.length}</span>
+                    <span id="question-count">{quiz.randomQuestionCount || quiz.questions.length}</span>
                 </div>
                 <div className="detail-item">
                     <label>Pass score</label>

@@ -12,5 +12,5 @@ export interface Quiz {
     readonly difficulty?: Difficulty
     readonly passScore: number
     readonly timeLimit: number
-    readonly size?: number
+    readonly randomQuestionCount?: number
 }
