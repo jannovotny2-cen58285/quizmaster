@@ -34,4 +34,11 @@ export class TakeQuestionPage {
     questionFeedbackLocator = () => this.page.locator('p.question-feedback')
     questionScoreLocator = () => this.page.locator('p.question-score')
     questionExplanationLocator = () => this.page.locator('p.question-explanation')
+
+    numericalInputLocator = () => this.page.locator('input[type="number"]')
+    submitAnswerButtonLocator = () => this.page.locator('#submit-answer')
+    fillNumericalAnswer = async (answer: string) => {
+        await this.numericalInputLocator().fill(answer)
+        await this.submitAnswerButtonLocator().click()
+    }
 }

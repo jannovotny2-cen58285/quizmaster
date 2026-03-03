@@ -84,24 +84,23 @@ Then('progress shows {int} of {int}', async function (current: number, max: numb
 })
 
 Then('I should see the text "Game over time"', async function () {
-    await expectTextToBe(this.page.locator('dialog p'), 'Game over time')
+    await expectTextToBe(this.questionPage.dialogTextLocator(), 'Game over time')
 })
 
 Then('I should see the countdown timer {string}', async function (timer: string) {
-    const timerDiv = this.page.getByTestId('timerID')
-    await expectTextToBe(timerDiv, timer)
+    await expectTextToBe(this.questionPage.timerLocator(), timer)
 })
 
 Then('I should see the countdown timer after delay is less then {string}', async function (timer: string) {
     await this.page.clock.install({ time: new Date() })
-    await expectTextToBe(this.page.getByTestId('timerID'), timer)
+    await expectTextToBe(this.questionPage.timerLocator(), timer)
     await this.page.clock.fastForward(timer)
-    await expectTextToBe(this.page.getByTestId('timerID'), timer)
+    await expectTextToBe(this.questionPage.timerLocator(), timer)
 })
 
 Then('I will wait for {string}', async function (timer: string) {
     await this.page.clock.install({ time: new Date() })
-    await expectTextToBe(this.page.getByTestId('timerID'), timer)
+    await expectTextToBe(this.questionPage.timerLocator(), timer)
     await this.page.clock.fastForward(timer)
 })
 

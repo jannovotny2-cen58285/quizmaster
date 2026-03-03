@@ -21,10 +21,9 @@ Given(
 )
 
 Then('I see a number input', async function () {
-    await expect(this.page.locator('input[type="number"]')).toBeVisible()
+    await expect(this.takeQuestionPage.numericalInputLocator()).toBeVisible()
 })
 
 When('I enter {string}', async function (answer: string) {
-    await this.page.fill('input[type="number"]', answer)
-    await this.page.click('#submit-answer')
+    await this.takeQuestionPage.fillNumericalAnswer(answer)
 })

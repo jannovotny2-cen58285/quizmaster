@@ -8,6 +8,9 @@ export class QuestionPage {
     evaluateButtonLocator = () => this.page.locator('button#evaluate')
     evaluateModalButtonLocator = () => this.page.locator('dialog #evaluate')
 
+    dialogTextLocator = () => this.page.locator('dialog p')
+    timerLocator = () => this.page.getByTestId('timerID')
+
     navigationButtonsLocator = () => this.page.locator('button#back, button#next, button#evaluate')
     submitButtonLocator = () => this.page.locator('input.submit-btn')
 
