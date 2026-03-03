@@ -4,11 +4,9 @@ import { expectTextToBe } from 'steps/common.ts'
 import { Given, Then, When } from 'steps/fixture.ts'
 import {
     expectAttemptStatsTable,
-    expectAttemptStatsTableAsSecond,
     expectStatsTable,
-    expectSummaryStatsTable,
-    expectSummaryStatsTableAsFirst,
-} from 'steps/quiz/expects.ts'
+    expectSummaryStatsTable
+ } from 'steps/quiz/expects.ts'
 import { takeQuizWithAnswers, takeQuizWithAnswersTimed } from 'steps/quiz/ops.ts'
 
 Given('I take quiz {string} with answer(s)', async function (quizName: string, data: DataTable) {

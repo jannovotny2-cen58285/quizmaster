@@ -111,16 +111,6 @@ export const expectAttemptStatsTable = async (quizStatsPage: QuizStatsPage, data
     )
 }
 
-export const expectSummaryStatsTableAsFirst = async (quizStatsPage: QuizStatsPage, data: DataTable) => {
-    await expect(quizStatsPage.firstTableLocator()).toHaveAttribute('data-testid', 'summary-stats-table')
-    await expectSummaryStatsTable(quizStatsPage, data)
-}
-
-export const expectAttemptStatsTableAsSecond = async (quizStatsPage: QuizStatsPage, data: DataTable) => {
-    await expect(quizStatsPage.secondTableLocator()).toHaveAttribute('data-testid', 'attempt-stats-table')
-    await expectAttemptStatsTable(quizStatsPage, data)
-}
-
 const expectLabeledStatsTable = async (
     captionLocator: ReturnType<QuizStatsPage['summaryStatsTableCaptionLocator']>,
     headerCellsLocator: ReturnType<QuizStatsPage['summaryStatsTableHeaderCellsLocator']>,
