@@ -3,17 +3,7 @@ import { expect } from '@playwright/test'
 import { expectTextToBe, expectThatIsNotVisible, expectThatIsVisible } from 'steps/common.ts'
 import { Given, When, Then } from 'steps/fixture.ts'
 import { expectQuestion } from 'steps/question/expects.ts'
-import type { QuizmasterWorld } from 'steps/world'
-
-const openQuiz = async (world: QuizmasterWorld, quizId: string) => {
-    const quizUrl = world.quizBookmarks[quizId]?.url || `/quiz/${quizId}`
-    await world.page.goto(quizUrl)
-}
-
-export const startQuiz = async (world: QuizmasterWorld, quizId: string) => {
-    await openQuiz(world, quizId)
-    await world.quizWelcomePage.start()
-}
+import { openQuiz, startQuiz } from 'steps/quiz/ops.ts'
 
 Given('I open quiz {string}', async function (quizId: string) {
     await openQuiz(this, quizId)
