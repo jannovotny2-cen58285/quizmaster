@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/question")
 public class QuestionController {
 
     private final QuestionRepository questionRepository;
@@ -20,33 +20,33 @@ public class QuestionController {
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/question/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Question> getQuestion(@PathVariable Integer id) {
         return ResponseHelper.okOrNotFound(questionRepository.findById(id));
     }
 
     @Transactional
-    @DeleteMapping("/question/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Integer id) {
         questionRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/question/{editId}/edit")
+    @GetMapping("/{editId}/edit")
     public ResponseEntity<Question> getQuestionByEditId(@PathVariable String editId) {
         return ResponseHelper.okOrNotFound(questionRepository.findByEditId(editId));
     }
 
     @Transactional
-    @PostMapping("/question")
+    @PostMapping
     public QuestionCreateResponse saveQuestion(@RequestBody Question question) {
         var createdQuestion = questionRepository.save(question);
         return new QuestionCreateResponse(createdQuestion.getId(), createdQuestion.getEditId());
     }
 
     @Transactional
-    @PatchMapping("/question/{editId}")
+    @PatchMapping("/{editId}")
     public Integer updateQuestion(@RequestBody Question question, @PathVariable String editId) {
         var existingQuestion = questionRepository.findByEditId(editId)
             .orElseThrow(() -> new IllegalArgumentException("Question not found with editId: " + editId));

@@ -12,7 +12,7 @@ import java.util.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/quiz")
 public class QuizController {
 
     private final QuestionRepository questionRepository;
@@ -26,7 +26,7 @@ public class QuizController {
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/quiz/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<QuizResponse> getQuiz(@PathVariable Integer id) {
         Quiz quiz = quizRepository.findById(id).orElse(null);
         if (quiz == null) {
@@ -66,14 +66,14 @@ public class QuizController {
     }
 
     @Transactional
-    @PostMapping("/quiz")
+    @PostMapping
     public ResponseEntity<Integer> createQuiz(@RequestBody Quiz quizInput) {
         Quiz output = quizRepository.save(quizInput);
         return ResponseEntity.ok(output.getId());
     }
 
     @Transactional
-    @PutMapping("/quiz/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Integer> updateQuiz(@PathVariable Integer id, @RequestBody Quiz quizInput) {
         quizInput.setId(id);
         Quiz output = quizRepository.save(quizInput);
