@@ -49,7 +49,7 @@ export const QuestionForm = (props: QuestionFormProps) => {
 
         window.addEventListener('keydown', onKeyDown)
         return () => window.removeEventListener('keydown', onKeyDown)
-    }, [state, props])
+    }, [answers.length, state, props])
 
     const handleSubmit = () => {
         if (state.selectedAnswerIdxs.length > 0) {

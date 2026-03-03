@@ -19,14 +19,26 @@ When('I answer {string}', async function (answerList: string) {
     await answerQuestion(this, answerList)
 })
 
-When('I press the key {int}', async function (num: number) {
-    if (num < 0 || num > 9) {
-        throw new Error(`Invalid numpad key: ${num}`)
+When(/^I press the key ([0-9](?:,[0-9])*)$/, async function (keysInput: string) {
+    const keys = keysInput
+        .split(',')
+        .map(key => key.trim())
+        .filter(key => key.length > 0)
+
+    if (keys.length === 0) {
+        throw new Error('At least one key must be provided')
     }
 
     await this.page.click('body')
 
-    this.page.keyboard.press(`Numpad${num}`)
+    for (const key of keys) {
+        const num = Number(key)
+        if (!Number.isInteger(num) || num < 1 || num > 9) {
+            throw new Error(`Invalid numeric key: ${key}. Allowed keys are 1-9.`)
+        }
+
+        await this.page.keyboard.press(`Numpad${num}`)
+    }
 })
 
 When('I uncheck answer {string}', async function (answerList: string) {
