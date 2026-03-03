@@ -1,6 +1,7 @@
-Feature: Answer question using numeric keyboard
-  Quiz takers can answer single choice questions by pressing numeric keys (1-5)
-  on the keyboard, matching the answer's position in the list.
+Feature: Answer question using numeric keys
+  Quiz takers can answer single choice questions by pressing numeric keys (1-9)
+  on the keys, matching the answer's position in the list.
+  Impossible to answer 10th option.
 
   Scenario Outline: Single choice question - numeric key selects an answer
     Given a question "Which country is in Europe?"
@@ -10,6 +11,11 @@ Feature: Answer question using numeric keyboard
       | Morocco |   |
       | USA     |   |
       | Canada  |   |
+      | Iran    |   |
+      | China   |   |
+      | Japan   |   |
+      | Israel  |   |
+      | Kuwait  |   |
     And saved and bookmarked as "Europe"
 
     When I take question "Europe"
@@ -20,6 +26,5 @@ Feature: Answer question using numeric keyboard
       | key | feedback   |
       | 1   | Correct!   |
       | 2   | Incorrect! |
-      | 3   | Incorrect! |
-      | 4   | Incorrect! |
       | 5   | Incorrect! |
+      | 9   | Incorrect! |

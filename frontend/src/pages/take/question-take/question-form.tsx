@@ -34,9 +34,13 @@ export const QuestionForm = (props: QuestionFormProps) => {
 
     React.useEffect(() => {
         const onKeyDown = (e: KeyboardEvent) => {
-            if (!e.code.startsWith('Numpad')) return
+            const isNumpadDigit = /^Numpad[0-9]$/.test(e.code)
+            const isTopRowDigit = /^Digit[0-9]$/.test(e.code)
+
+            if (!isNumpadDigit && !isTopRowDigit) return
 
             const idx = Number(e.code.slice(-1)) - 1
+            if (idx < 0 || idx >= answers.length) return
 
             state.onSelectedAnswerChange(idx, true)
             state.submit()
