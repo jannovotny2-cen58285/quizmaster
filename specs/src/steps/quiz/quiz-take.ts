@@ -1,7 +1,7 @@
 import type { DataTable } from '@cucumber/cucumber'
-import { expect } from '@playwright/test'
 
 import { When, Then } from 'steps/fixture.ts'
+import { expectCorrectAnswersCounts } from 'steps/quiz/expects.ts'
 import { answerCorrectly, answerIncorrectly, progressThroughQuestions, repeatAsync } from 'steps/quiz/ops.ts'
 
 When('I answer the question', async function () {
@@ -29,9 +29,5 @@ When('I progress through the questions', async function () {
 })
 
 Then('I see the correct answers count', async function (dataTable: DataTable) {
-    const rows = dataTable.raw()
-    for (const [bookmark, expected] of rows) {
-        const actual = this.correctAnswersCounts[bookmark]
-        expect(actual).toBe(expected)
-    }
+    expectCorrectAnswersCounts(this.correctAnswersCounts, dataTable.raw())
 })

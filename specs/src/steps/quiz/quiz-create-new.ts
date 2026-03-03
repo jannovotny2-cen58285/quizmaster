@@ -4,6 +4,7 @@ import { expect } from '@playwright/test'
 
 import { expectedNumberOfChildrenToBe } from 'steps/common.ts'
 import { Then, When } from 'steps/fixture.ts'
+import { expectQuizFormErrors } from 'steps/quiz/expects.ts'
 import type { QuizMode, Difficulty } from 'steps/world/quiz.ts'
 
 When('I start creating a new quiz', async function () {
@@ -96,11 +97,10 @@ Then('I clear score', async function () {
 })
 
 Then('I see error messages in quiz form', async function (table: DataTable) {
-    const expectedErrors = table.raw().map(row => row[0])
-    for (const error of expectedErrors) {
-        const hasError = await this.quizCreatePage.hasError(error)
-        expect(hasError).toBe(true)
-    }
+    await expectQuizFormErrors(
+        this.quizCreatePage,
+        table.raw().map(row => row[0]),
+    )
 })
 
 Then('I see no error messages in quiz form', async function () {
