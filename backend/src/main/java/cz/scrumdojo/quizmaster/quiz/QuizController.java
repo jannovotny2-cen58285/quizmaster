@@ -27,16 +27,17 @@ public class QuizController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<QuizCreateResponse> createQuiz(@RequestBody Quiz quizInput) {
-        Quiz output = quizRepository.save(quizInput);
+    public ResponseEntity<QuizCreateResponse> createQuiz(@RequestBody QuizRequest request) {
+        Quiz output = quizRepository.save(request.toEntity());
         return ResponseEntity.ok(new QuizCreateResponse(output.getId()));
     }
 
     @Transactional
     @PutMapping("/{id}")
-    public ResponseEntity<QuizCreateResponse> updateQuiz(@PathVariable Integer id, @RequestBody Quiz quizInput) {
-        quizInput.setId(id);
-        Quiz output = quizRepository.save(quizInput);
+    public ResponseEntity<QuizCreateResponse> updateQuiz(@PathVariable Integer id, @RequestBody QuizRequest request) {
+        Quiz quiz = request.toEntity();
+        quiz.setId(id);
+        Quiz output = quizRepository.save(quiz);
         return ResponseEntity.ok(new QuizCreateResponse(output.getId()));
     }
 }

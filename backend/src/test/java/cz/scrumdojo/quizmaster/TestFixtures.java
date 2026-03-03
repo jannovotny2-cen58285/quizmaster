@@ -2,10 +2,12 @@ package cz.scrumdojo.quizmaster;
 
 import cz.scrumdojo.quizmaster.question.Question;
 import cz.scrumdojo.quizmaster.question.QuestionRepository;
+import cz.scrumdojo.quizmaster.question.QuestionRequest;
 import cz.scrumdojo.quizmaster.quiz.Quiz;
 import cz.scrumdojo.quizmaster.quiz.QuizMode;
 import cz.scrumdojo.quizmaster.quiz.Difficulty;
 import cz.scrumdojo.quizmaster.quiz.QuizRepository;
+import cz.scrumdojo.quizmaster.quiz.QuizRequest;
 import cz.scrumdojo.quizmaster.workspace.Workspace;
 import cz.scrumdojo.quizmaster.workspace.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,48 @@ public class TestFixtures {
 
     public Question.QuestionBuilder questionIn(Workspace workspace) {
         return question().workspaceGuid(workspace.getGuid());
+    }
+
+    public QuestionRequest questionRequest() {
+        return new QuestionRequest(
+            "What is the capital of Italy?",
+            new String[]{"Naples", "Rome", "Florence", "Palermo"},
+            new int[]{1},
+            new String[]{"No", "Correct!", "No", "No"},
+            null,
+            false,
+            null
+        );
+    }
+
+    public QuestionRequest multipleChoiceQuestionRequest() {
+        return new QuestionRequest(
+            "Which are cities in Italy?",
+            new String[]{"Naples", "Rome", "Paris", "Berlin"},
+            new int[]{0, 1},
+            new String[]{"Yes!", "Yes!", "No, France", "No, Germany"},
+            null,
+            false,
+            null
+        );
+    }
+
+    public QuizRequest quizRequest(Question... questions) {
+        int[] questionIds = Arrays.stream(questions)
+            .mapToInt(Question::getId)
+            .toArray();
+
+        return new QuizRequest(
+            "Test Quiz",
+            "Test Description",
+            questionIds,
+            QuizMode.LEARN,
+            Difficulty.KEEP_QUESTION,
+            85,
+            null,
+            null,
+            1
+        );
     }
 
     public Question.QuestionBuilder multipleChoiceQuestion() {

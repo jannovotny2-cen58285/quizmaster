@@ -20,20 +20,24 @@ public class QuestionControllerTest {
 
     @Test
     public void saveAndGetQuestion() {
-        var question = fixtures.question().build();
-        var response = questionController.saveQuestion(question).getBody();
+        var request = fixtures.questionRequest();
+        var response = questionController.saveQuestion(request).getBody();
         assertNotNull(response);
         assertNotNull(response.id());
 
         Question result = questionController.getQuestion(response.id()).getBody();
         assertNotNull(result);
-        assertQuestion(question, result);
+        assertEquals(request.question(), result.getQuestion());
+        assertArrayEquals(request.answers(), result.getAnswers());
+        assertArrayEquals(request.correctAnswers(), result.getCorrectAnswers());
+        assertArrayEquals(request.explanations(), result.getExplanations());
+        assertEquals(request.isEasyMode(), result.isEasyMode());
     }
 
     @Test
     public void deleteQuestion() {
-        var question = fixtures.question().build();
-        var response = questionController.saveQuestion(question).getBody();
+        var request = fixtures.questionRequest();
+        var response = questionController.saveQuestion(request).getBody();
         assertNotNull(response);
         var id = response.id();
         questionController.deleteQuestion(id);
@@ -45,24 +49,16 @@ public class QuestionControllerTest {
     public void updateQuestion() {
         var originalQuestion = fixtures.save(fixtures.question());
 
-        var updatedQuestion = fixtures.multipleChoiceQuestion().build();
-        questionController.updateQuestion(updatedQuestion, originalQuestion.getEditId());
+        var updateRequest = fixtures.multipleChoiceQuestionRequest();
+        questionController.updateQuestion(updateRequest, originalQuestion.getEditId());
 
         var result = questionController.getQuestion(originalQuestion.getId()).getBody();
         assertNotNull(result);
-        assertQuestion(updatedQuestion, result);
-    }
-
-    private void assertQuestion(Question question, Question result) {
-        assertEquals(question.getId(), result.getId());
-        assertEquals(question.getEditId(), result.getEditId());
-        assertEquals(question.getWorkspaceGuid(), result.getWorkspaceGuid());
-        assertEquals(question.getQuestion(), result.getQuestion());
-        assertArrayEquals(question.getAnswers(), result.getAnswers());
-        assertArrayEquals(question.getExplanations(), result.getExplanations());
-        assertArrayEquals(question.getCorrectAnswers(), result.getCorrectAnswers());
-        assertEquals(question.getQuestionExplanation(), result.getQuestionExplanation());
-        assertEquals(question.isEasyMode(), result.isEasyMode());
+        assertEquals(updateRequest.question(), result.getQuestion());
+        assertArrayEquals(updateRequest.answers(), result.getAnswers());
+        assertArrayEquals(updateRequest.correctAnswers(), result.getCorrectAnswers());
+        assertArrayEquals(updateRequest.explanations(), result.getExplanations());
+        assertEquals(updateRequest.isEasyMode(), result.isEasyMode());
     }
 
     @Test
@@ -77,8 +73,8 @@ public class QuestionControllerTest {
 
     @Test
     public void saveQuestion() {
-        var question = fixtures.question().build();
-        var response = questionController.saveQuestion(question).getBody();
+        var request = fixtures.questionRequest();
+        var response = questionController.saveQuestion(request).getBody();
         assertNotNull(response);
 
         assertNotNull(response.id());
@@ -87,8 +83,8 @@ public class QuestionControllerTest {
 
     @Test
     public void updateNonExistentQuestionReturns404() {
-        var question = fixtures.question().build();
-        var response = questionController.updateQuestion(question, "non-existent-edit-id");
+        var request = fixtures.questionRequest();
+        var response = questionController.updateQuestion(request, "non-existent-edit-id");
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 

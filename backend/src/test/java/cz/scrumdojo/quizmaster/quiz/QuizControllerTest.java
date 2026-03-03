@@ -20,9 +20,9 @@ public class QuizControllerTest {
     @Test
     public void createAndGetQuiz() {
         Question question = fixtures.save(fixtures.question());
-        Quiz quiz = fixtures.quiz(question).build();
+        QuizRequest request = fixtures.quizRequest(question);
 
-        QuizCreateResponse createResponse = quizController.createQuiz(quiz).getBody();
+        QuizCreateResponse createResponse = quizController.createQuiz(request).getBody();
         assertNotNull(createResponse, "Create response should not be null");
         Integer quizId = createResponse.id();
         assertNotNull(quizId, "Quiz ID should not be null after creation");
@@ -31,12 +31,12 @@ public class QuizControllerTest {
         assertNotNull(quizResponse);
 
         assertEquals(quizId, quizResponse.getId());
-        assertEquals(quiz.getTitle(), quizResponse.getTitle());
-        assertEquals(quiz.getDescription(), quizResponse.getDescription());
-        assertEquals(quiz.getMode(), quizResponse.getMode());
-        assertEquals(quiz.getPassScore(), quizResponse.getPassScore());
-        assertEquals(quiz.getTimeLimit(), quizResponse.getTimeLimit());
-        assertEquals(quiz.getRandomQuestionCount(), quizResponse.getRandomQuestionCount());
+        assertEquals(request.title(), quizResponse.getTitle());
+        assertEquals(request.description(), quizResponse.getDescription());
+        assertEquals(request.mode(), quizResponse.getMode());
+        assertEquals(request.passScore(), quizResponse.getPassScore());
+        assertEquals(request.timeLimit(), quizResponse.getTimeLimit());
+        assertEquals(request.randomQuestionCount(), quizResponse.getRandomQuestionCount());
         assertEquals(1, quizResponse.getQuestions().length);
         assertEquals(question.getId(), quizResponse.getQuestions()[0].getId());
     }

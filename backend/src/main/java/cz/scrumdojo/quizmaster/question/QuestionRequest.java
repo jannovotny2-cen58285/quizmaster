@@ -1,0 +1,23 @@
+package cz.scrumdojo.quizmaster.question;
+
+public record QuestionRequest(
+    String question,
+    String[] answers,
+    int[] correctAnswers,
+    String[] explanations,
+    String questionExplanation,
+    boolean isEasyMode,
+    String workspaceGuid
+) {
+    public Question toEntity() {
+        return Question.builder()
+            .question(question)
+            .answers(answers)
+            .correctAnswers(correctAnswers)
+            .explanations(explanations)
+            .questionExplanation(questionExplanation)
+            .isEasyMode(isEasyMode)
+            .workspaceGuid(workspaceGuid)
+            .build();
+    }
+}
