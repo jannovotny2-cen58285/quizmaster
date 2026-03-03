@@ -5,7 +5,6 @@ import lombok.*;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
-@Table(name = "workspace")
 public class Workspace {
 
     @Id
