@@ -7,6 +7,11 @@ export interface QuizStatsProps {
     readonly stats: Stats
 }
 
+interface SummaryStats {
+    readonly started: number
+    readonly finished: number
+}
+
 const formatDuration = (started: string, finished: string): string => {
     const start = new Date(started)
     const end = new Date(finished)
@@ -42,11 +47,33 @@ const formatDuration = (started: string, finished: string): string => {
     return `${hours} hour${hours !== 1 ? 's' : ''} ${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''} ${seconds} second${seconds !== 1 ? 's' : ''}`
 }
 
+
 export const QuizStats = ({ quiz, stats }: QuizStatsProps) => {
+    const summary: SummaryStats = {
+        started: stats.length,
+        finished: stats.filter(stat => Boolean(stat.finished)).length,
+    }
+
     return (
         <div className="quiz-stats">
             <h2>Statistics for quiz: {quiz.title}</h2>
-            <table>
+            <table data-testid="summary-stats-table">
+                <caption>Summary</caption>
+                <thead>
+                    <tr>
+                        <th>Started</th>
+                        <th>Finished</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{summary.started}</td>
+                        <td>{summary.finished}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table data-testid="attempt-stats-table">
+                <caption>Attempts</caption>
                 <thead>
                     <tr>
                         <th>Duration</th>

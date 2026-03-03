@@ -2,7 +2,13 @@ import type { DataTable } from '@cucumber/cucumber'
 
 import { expectTextToBe } from 'steps/common.ts'
 import { Given, Then, When } from 'steps/fixture.ts'
-import { expectStatsTable } from 'steps/quiz/expects.ts'
+import {
+    expectAttemptStatsTable,
+    expectAttemptStatsTableAsSecond,
+    expectStatsTable,
+    expectSummaryStatsTable,
+    expectSummaryStatsTableAsFirst,
+} from 'steps/quiz/expects.ts'
 import { takeQuizWithAnswers, takeQuizWithAnswersTimed } from 'steps/quiz/ops.ts'
 
 Given('I take quiz {string} with answer(s)', async function (quizName: string, data: DataTable) {
@@ -22,4 +28,13 @@ Then('I see stats page for quiz {string}', async function (quizName: string) {
 
 Then('I see stats table', async function (data: DataTable) {
     await expectStatsTable(this.quizStatsPage, data)
+})
+
+Then('I see summary stats table', async function (data: DataTable) {
+    await expectSummaryStatsTable(this.quizStatsPage, data)
+})
+
+
+Then('I see attempt stats table', async function (data: DataTable) {
+    await expectAttemptStatsTable(this.quizStatsPage, data)
 })

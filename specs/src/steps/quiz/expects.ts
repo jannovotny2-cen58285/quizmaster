@@ -73,8 +73,8 @@ export const expectAnswersChecked = async (takeQuestionPage: TakeQuestionPage, a
 }
 
 export const expectStatsTable = async (quizStatsPage: QuizStatsPage, data: DataTable) => {
-    const statsTableBodyRowsLocator = quizStatsPage.statsTableBodyRowsLocator()
-    const actualRowCount = await statsTableBodyRowsLocator.count()
+     const statsTableBodyRowsLocator = quizStatsPage.attemptStatsTableBodyRowsLocator()
+     const actualRowCount = await statsTableBodyRowsLocator.count()
 
     const expectedRows = data.rows().filter(row => row.some(cell => cell.trim() !== ''))
 
@@ -83,6 +83,71 @@ export const expectStatsTable = async (quizStatsPage: QuizStatsPage, data: DataT
     for (let i = 0; i < expectedRows.length; i++) {
         const expectedRow = expectedRows[i]
         const actualRowLocator = statsTableBodyRowsLocator.nth(i)
+
+        for (let j = 0; j < expectedRow.length; j++) {
+            const expectedCell = expectedRow[j].trim()
+            if (expectedCell !== '') {
+                await expectTextToBe(actualRowLocator.locator('td').nth(j), expectedCell)
+            }
+        }
+    }
+}
+
+export const expectSummaryStatsTable = async (quizStatsPage: QuizStatsPage, data: DataTable) => {
+    await expectLabeledStatsTable(
+        quizStatsPage.summaryStatsTableCaptionLocator(),
+        quizStatsPage.summaryStatsTableHeaderCellsLocator(),
+        quizStatsPage.summaryStatsTableBodyRowsLocator(),
+        data,
+    )
+}
+
+export const expectAttemptStatsTable = async (quizStatsPage: QuizStatsPage, data: DataTable) => {
+    await expectLabeledStatsTable(
+        quizStatsPage.attemptStatsTableCaptionLocator(),
+        quizStatsPage.attemptStatsTableHeaderCellsLocator(),
+        quizStatsPage.attemptStatsTableBodyRowsLocator(),
+        data,
+    )
+}
+
+export const expectSummaryStatsTableAsFirst = async (quizStatsPage: QuizStatsPage, data: DataTable) => {
+    await expect(quizStatsPage.firstTableLocator()).toHaveAttribute('data-testid', 'summary-stats-table')
+    await expectSummaryStatsTable(quizStatsPage, data)
+}
+
+export const expectAttemptStatsTableAsSecond = async (quizStatsPage: QuizStatsPage, data: DataTable) => {
+    await expect(quizStatsPage.secondTableLocator()).toHaveAttribute('data-testid', 'attempt-stats-table')
+    await expectAttemptStatsTable(quizStatsPage, data)
+}
+
+const expectLabeledStatsTable = async (
+    captionLocator: ReturnType<QuizStatsPage['summaryStatsTableCaptionLocator']>,
+    headerCellsLocator: ReturnType<QuizStatsPage['summaryStatsTableHeaderCellsLocator']>,
+    bodyRowsLocator: ReturnType<QuizStatsPage['summaryStatsTableBodyRowsLocator']>,
+    data: DataTable,
+) => {
+    const rawRows = data.raw()
+
+    const [captionRow = [], headerRow = [], ...bodyRows] = rawRows
+
+    if (captionRow[0]?.trim()) {
+        await expectTextToBe(captionLocator, captionRow[0].trim())
+    }
+
+    for (let i = 0; i < headerRow.length; i++) {
+        const expectedCell = headerRow[i].trim()
+        if (expectedCell !== '') {
+            await expectTextToBe(headerCellsLocator.nth(i), expectedCell)
+        }
+    }
+
+    const expectedBodyRows = bodyRows.filter(row => row.some(cell => cell.trim() !== ''))
+    await expect(await bodyRowsLocator.count()).toBe(expectedBodyRows.length)
+
+    for (let i = 0; i < expectedBodyRows.length; i++) {
+        const expectedRow = expectedBodyRows[i]
+        const actualRowLocator = bodyRowsLocator.nth(i)
 
         for (let j = 0; j < expectedRow.length; j++) {
             const expectedCell = expectedRow[j].trim()

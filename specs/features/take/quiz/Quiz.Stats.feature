@@ -62,7 +62,7 @@ Feature: Show stats
       | Duration      |    |
       | 10 seconds    |    |
 
-@skip
+
 Scenario: Show stats page with summary for successfully answered quiz
     Given workspace "Stats Success" with questions
       | question              | answers         |
