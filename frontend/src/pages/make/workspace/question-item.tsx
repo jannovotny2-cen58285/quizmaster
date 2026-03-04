@@ -24,7 +24,7 @@ export const QuestionItem: React.FC<Props> = ({
         <div className="question-item">
             {question.imageUrl && <img src={question.imageUrl} alt="" className="question-thumbnail" />}
             {index !== undefined && <span className="question-index">Q{index + 1}. </span>}
-            <span id="question-text">{question.question}</span>
+            <span className="question-text">{question.question}</span>
             <div className="edit-button">
                 <EditQuestionButton id={question.editId} editId={question.editId} onClick={onEditQuestion} />
             </div>
