@@ -59,25 +59,19 @@ export const QuestionForm = (props: QuestionProps) => {
     const isAnswered = currentAnswers !== undefined
     const hasSelectedAnswer = selectedAnswers !== undefined && selectedAnswers.length > 0
 
-    // Funkce pro Next button - dělá skip/submit/next/evaluate
     const handleNextButton = () => {
         if (!hasSelectedAnswer) {
-            // Pokud není zodpovězeno, skipni a bookmarkuj
             if (!bookmarks.has(nav.currentQuestionIdx)) {
                 bookmarks.toggle(nav.currentQuestionIdx)
             }
             nav.skip()
         } else {
-            // Pokud je zodpovězeno, submitni odpověď
             answer(selectedAnswers)
-            // Sestavíme aktualizovaný objekt QuizAnswers (react state update je asynchronní)
             const updatedQuizAnswers: QuizAnswers = {
                 firstAnswers: quizAnswers.firstAnswers,
                 finalAnswers: updated(quizAnswers.finalAnswers, nav.currentQuestionIdx, selectedAnswers),
             }
 
-            // Pokud po odeslání budou zodpovězeny všechny otázky, přejdeme na vyhodnocení,
-            // jinak pokračujeme na další otázku
             const allAnswered = props.quiz.questions.every(
                 (_, idx) => updatedQuizAnswers.finalAnswers[idx] !== undefined,
             )

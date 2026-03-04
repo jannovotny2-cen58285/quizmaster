@@ -1,9 +1,5 @@
 import type { Stats, StatsRecord } from 'model/stats.ts'
-// import { fetchJson, putJson } from './helpers.ts'
-// import { QuizCreateForm } from 'pages/make/quiz-create/quiz-create-form.tsx'
 
-// export const fetchStats = async (quizId: number) => await fetchJson<Stats>(`/api/quiz/${quizId}/stats`)
-// export const putStats = async (quizId: number, id: number, stats: Stats) => await putJson<Stats, string>(`/api/stats/${id}`, stats);
 export const fetchStats = async (quizId: string): Promise<Stats> => {
     try {
         const item = sessionStorage.getItem(`stats-${quizId}`)

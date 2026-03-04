@@ -37,7 +37,6 @@ export const QuizCreateForm = ({ questions, onSubmit, quiz }: QuizCreateProps) =
     const [feedbackMode, setFeedbackMode] = useState<QuizMode>('exam')
     const [difficulty, setDifficulty] = useState<Difficulty>('keep-question')
     const [isInitialized, setIsInitialized] = useState(false)
-    // Předvyplnění hodnot při editaci pouze při prvním načtení kvízu
     useEffect(() => {
         if (quiz && !isInitialized) {
             setTitle(quiz.title || '')
@@ -48,7 +47,6 @@ export const QuizCreateForm = ({ questions, onSubmit, quiz }: QuizCreateProps) =
             setFeedbackMode(quiz.mode || 'exam')
             setDifficulty(quiz.difficulty || 'keep-question')
             setCheckRandomize(!!quiz.randomQuestionCount)
-            // Nastavit vybrané otázky
             if (quiz.questions) {
                 for (const q of quiz.questions) {
                     addSelectedId(q.id)

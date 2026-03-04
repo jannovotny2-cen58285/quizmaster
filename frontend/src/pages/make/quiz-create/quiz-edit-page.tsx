@@ -1,4 +1,3 @@
-// Helper to map Quiz (backend) to QuizCreateFormData (form)
 import type { Quiz } from 'model/quiz.ts'
 
 import { useState, useEffect } from 'react'
