@@ -19,6 +19,10 @@ Given('I start creating a workspace', async function () {
     await openCreateWorkspacePage(this)
 })
 
+Given('workspace {string}', async function (name: string) {
+    await createWorkspace(this, name)
+})
+
 Given('workspace {string} with questions', async function (name: string, data: DataTable) {
     await createWorkspace(this, name)
 

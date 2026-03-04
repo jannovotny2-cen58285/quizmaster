@@ -7,6 +7,7 @@ export class QuestionEditPage {
     gotoEdit = (url: string) => this.page.goto(url, { waitUntil: 'networkidle' })
 
     isEditPage = () => this.page.locator('#edit-question-page').isVisible()
+    isCreatePage = () => this.page.locator('#create-question-page').isVisible()
 
     private questionLocator = () => this.page.locator('#question-text')
     enterQuestion = (question: string) => this.questionLocator().fill(question)
@@ -85,6 +86,9 @@ export class QuestionEditPage {
     questionExplanation = () => this.questionExplanationLocator().inputValue()
 
     submit = () => this.page.locator('button[type="submit"]').click()
+
+    private backButtonLocator = () => this.page.locator('button#back')
+    back = () => this.backButtonLocator().click()
 
     private questionUrlLocator = () => this.page.locator('#question-link')
     questionUrl = () => this.questionUrlLocator().textContent()

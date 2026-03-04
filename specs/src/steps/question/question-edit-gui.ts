@@ -31,6 +31,14 @@ Given('I start creating a question', async function () {
     await openCreatePage(this)
 })
 
+Given('page {string}', async function () {
+    // marker step used in some scenarios for readability
+})
+
+When('I start creating a new question', async function () {
+    await this.workspacePage.createNewQuestion()
+})
+
 Given('I start editing question {string}', async function (bookmark: string) {
     await openEditPage(this, bookmark)
 })
@@ -47,6 +55,19 @@ When('I disable explanations', async function () {
 
 Then('I see question edit page', async function () {
     await this.questionEditPage.isEditPage()
+})
+
+Then('I see the question creation page', async function () {
+    const isCreatePageVisible = await this.questionEditPage.isCreatePage()
+    expect(isCreatePageVisible).toBe(true)
+})
+
+When('I go back to the workspace {string}', async function () {
+    await this.questionEditPage.back()
+})
+
+Then('I see the workspace {string}', async function (name: string) {
+    expect(await this.workspacePage.workspaceNameValue()).toBe(name)
 })
 
 // Field assertions

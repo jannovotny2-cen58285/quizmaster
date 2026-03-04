@@ -12,9 +12,17 @@ import { ErrorMessage, createValidator } from 'pages/components/forms/validation
 interface QuestionEditProps {
     readonly question?: Question
     readonly onSubmit: (questionData: QuestionApiData) => void
+<<<<<<< HEAD
 }
 
 export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
+=======
+    readonly onBack?: () => void
+    readonly onAiAssistantClick?: (instructions: string) => void
+}
+
+export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClick }: QuestionEditProps) => {
+>>>>>>> 2a4901d5 (added back button to create quiz form)
     const state = useQuestionFormState(question)
     const [aiLoading, setAiLoading] = useState(false)
     const [aiError, setAiError] = useState('')
@@ -121,6 +129,11 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
                 />
             </Field>
             <Row>
+                {onBack && (
+                    <Button id="back" className="primary button" onClick={onBack}>
+                        Back
+                    </Button>
+                )}
                 <SubmitButton />
             </Row>
         </Form>

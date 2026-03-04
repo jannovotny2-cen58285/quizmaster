@@ -49,3 +49,11 @@ Feature: Create question form
     And I enable explanations
     Then I see explanations are enabled
     And I see explanation fields
+
+  Scenario: Test backButton
+    Given workspace "Testworkspace"
+    And page "Question Creation"
+    When I start creating a new question
+    And I see the question creation page
+    And I go back to the workspace "Testworkspace"
+    Then I see the workspace "Testworkspace"

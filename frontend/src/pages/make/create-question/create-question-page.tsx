@@ -18,9 +18,17 @@ export function CreateQuestionPage() {
         })
     }
 
+    const handleBack = () => {
+        if (workspaceGuid) {
+            navigate(`/workspace/${workspaceGuid}`)
+            return
+        }
+        navigate('/')
+    }
+
     return (
         <Page title="Create Question" id="create-question-page">
-            <QuestionEditForm onSubmit={handleSubmit} />
+            <QuestionEditForm onSubmit={handleSubmit} onBack={handleBack} />
         </Page>
     )
 }
