@@ -60,6 +60,17 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
                 <ErrorMessage errorCode="empty-question" />
                 {aiError && <Alert type="error">{aiError}</Alert>}
             </Field>
+            <Field label="Image URL">
+                <TextInput id="image-url" value={state.imageUrl} onChange={state.setImageUrl} />
+                {state.imageUrl && (
+                    <img
+                        src={state.imageUrl}
+                        alt="preview"
+                        className="image-preview"
+                        style={{ maxWidth: '300px', display: 'block', marginTop: '0.5rem' }}
+                    />
+                )}
+            </Field>
             <Row>
                 <Field label="Question type" required>
                     <select
@@ -108,17 +119,6 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
                     value={state.questionExplanation}
                     onChange={state.setQuestionExplanation}
                 />
-            </Field>
-            <Field label="Image URL">
-                <TextInput id="image-url" value={state.imageUrl} onChange={state.setImageUrl} />
-                {state.imageUrl && (
-                    <img
-                        src={state.imageUrl}
-                        alt="preview"
-                        className="image-preview"
-                        style={{ maxWidth: '300px', display: 'block', marginTop: '0.5rem' }}
-                    />
-                )}
             </Field>
             <Row>
                 <SubmitButton />
