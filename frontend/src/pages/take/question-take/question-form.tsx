@@ -83,7 +83,7 @@ export const QuestionForm = (props: QuestionFormProps) => {
             window.clearInterval(intervalId)
             window.clearTimeout(stopIntervalTimeoutId)
         }
-    }, [isNumerical, props.question.id])
+    }, [isNumerical])
 
     const handleSubmit = () => {
         if (state.hasAnswer) {
@@ -134,7 +134,6 @@ export const QuestionForm = (props: QuestionFormProps) => {
                         <input
                             type="number"
                             id="numerical-answer"
-                            autoFocus
                             ref={numericalInputRef}
                             value={state.numericalAnswer}
                             onChange={e => state.onNumericalAnswerChange(e.target.value)}
