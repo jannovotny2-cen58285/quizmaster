@@ -62,6 +62,7 @@ export const AnswersEdit = ({
             />
             {answerStates.map((state, idx) => (
                 <AnswerRow
+                    key={state.answer || idx}
                     state={state}
                     isMultipleChoice={isMultipleChoice}
                     onDelete={() => removeAnswer(idx)}
