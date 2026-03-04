@@ -54,7 +54,7 @@
     td {
         padding: 12px 16px;
         color: #333;
-        font-size: 0.95rem;
+        font-size: 0.955rem;
     }
 
     td:last-child {
@@ -74,12 +74,12 @@
 
     table[data-testid='attempt-stats-table'] th:first-child,
     table[data-testid='attempt-stats-table'] td:first-child {
-        width: 70%;
+        width: 85%;
     }
 
     table[data-testid='attempt-stats-table'] th:last-child,
     table[data-testid='attempt-stats-table'] td:last-child {
-        width: 30%;
+        width: 15%;
         text-align: left;
     }
 }
