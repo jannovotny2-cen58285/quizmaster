@@ -133,7 +133,7 @@ export const QuizCreateForm = ({ questions, onSubmit, quiz }: QuizCreateProps) =
             <Field label="Filter">
                 <TextInput id="question-filter" value={filter} onChange={setFilter} />
             </Field>
-            <QuestionSelect questions={filteredQuestions} onSelect={toggleSelectedId} />
+            <QuestionSelect questions={filteredQuestions} selectedIds={selectedIds} onSelect={toggleSelectedId} />
             <ErrorMessage errorCode="few-questions" />
 
             <div style={{ paddingLeft: '25px' }}>
