@@ -56,12 +56,6 @@ public class AiAssistantService {
         this.httpClient = HttpClient.newBuilder().connectTimeout(TIMEOUT).build();
     }
 
-    AiAssistantService(ObjectMapper objectMapper, String apiToken, HttpClient httpClient) {
-        this.objectMapper = objectMapper;
-        this.apiToken = apiToken;
-        this.httpClient = httpClient;
-    }
-
     public AiAssistantResponse generateQuestion(String prompt) {
         if (prompt == null || prompt.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question must not be empty.");

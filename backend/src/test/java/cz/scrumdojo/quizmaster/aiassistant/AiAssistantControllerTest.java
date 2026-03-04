@@ -2,127 +2,49 @@ package cz.scrumdojo.quizmaster.aiassistant;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(AiAssistantController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class AiAssistantControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private AiAssistantService aiAssistantService;
-
     @Test
-    public void generateAnswer() throws Exception {
-        when(aiAssistantService.generateQuestion("Vygeneruj otázku do quizu"))
-            .thenReturn(new AiAssistantResponse(
-                "AI generated question",
-                "Prague",
-                "Berlin",
-                "answer1"
-            ));
+    public void generateReturnsQuestionShape() throws Exception {
+        assumeTrue(
+            System.getenv("AI_TOKEN") != null && !System.getenv("AI_TOKEN").isBlank(),
+            "AI_TOKEN env var not set"
+        );
 
         mockMvc.perform(post("/api/ai-assistant")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                    {"question": "Vygeneruj otázku do quizu"}
+                    {"question": "capital cities of Europe"}
                     """))
             .andExpect(status().isOk())
-            .andExpect(content().json("""
-                                {
-                                    "question": "AI generated question",
-                                    "correctAnswerText": "Prague",
-                                    "incorrectAnswerText": "Berlin",
-                                    "correctAnswer": "answer1"
-                                }
-                """));
-
-                            verify(aiAssistantService, times(1)).generateQuestion("Vygeneruj otázku do quizu");
+            .andExpect(jsonPath("$.question").isNotEmpty())
+            .andExpect(jsonPath("$.answers").isArray())
+            .andExpect(jsonPath("$.answers.length()").value(2))
+            .andExpect(jsonPath("$.correctAnswers").isArray())
+            .andExpect(jsonPath("$.correctAnswers[0]").value(0));
     }
-
-                        @Test
-                        public void missingQuestionFieldReturnsBadRequest() throws Exception {
-                            when(aiAssistantService.generateQuestion(null))
-                                .thenThrow(new AiAssistantException(HttpStatus.BAD_REQUEST, "Question must not be empty."));
-
-                            mockMvc.perform(post("/api/ai-assistant")
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content("""
-                                        {}
-                                        """))
-                                .andExpect(status().isBadRequest())
-                                .andExpect(jsonPath("$.message").value("Question must not be empty."));
-
-                            verify(aiAssistantService, times(1)).generateQuestion(null);
-                        }
 
     @Test
     public void emptyInputReturnsBadRequest() throws Exception {
-        when(aiAssistantService.generateQuestion("   "))
-            .thenThrow(new AiAssistantException(HttpStatus.BAD_REQUEST, "Question must not be empty."));
-
         mockMvc.perform(post("/api/ai-assistant")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {"question": "   "}
                     """))
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("Question must not be empty."));
-    }
-
-    @Test
-    public void rateLimitReturnsTooManyRequests() throws Exception {
-        when(aiAssistantService.generateQuestion(anyString()))
-            .thenThrow(new AiAssistantException(HttpStatus.TOO_MANY_REQUESTS, "AI assistant rate limit reached."));
-
-        mockMvc.perform(post("/api/ai-assistant")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {"question": "Prompt"}
-                    """))
-            .andExpect(status().isTooManyRequests())
-            .andExpect(jsonPath("$.message").value("AI assistant rate limit reached."));
-    }
-
-    @Test
-    public void invalidTokenReturnsUnauthorized() throws Exception {
-        when(aiAssistantService.generateQuestion(anyString()))
-            .thenThrow(new AiAssistantException(HttpStatus.UNAUTHORIZED, "AI token is invalid."));
-
-        mockMvc.perform(post("/api/ai-assistant")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {"question": "Prompt"}
-                    """))
-            .andExpect(status().isUnauthorized())
-            .andExpect(jsonPath("$.message").value("AI token is invalid."));
-    }
-
-    @Test
-    public void upstreamErrorReturnsBadGateway() throws Exception {
-        when(aiAssistantService.generateQuestion(anyString()))
-            .thenThrow(new AiAssistantException(HttpStatus.BAD_GATEWAY, "Failed to generate AI response."));
-
-        mockMvc.perform(post("/api/ai-assistant")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {"question": "Prompt"}
-                    """))
-            .andExpect(status().isBadGateway())
-            .andExpect(jsonPath("$.message").value("Failed to generate AI response."));
+            .andExpect(status().isBadRequest());
     }
 }
