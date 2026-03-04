@@ -111,6 +111,14 @@ export const QuestionEditForm = ({ question, onSubmit }: QuestionEditProps) => {
             </Field>
             <Field label="Image URL">
                 <TextInput id="image-url" value={state.imageUrl} onChange={state.setImageUrl} />
+                {state.imageUrl && (
+                    <img
+                        src={state.imageUrl}
+                        alt="preview"
+                        className="image-preview"
+                        style={{ maxWidth: '300px', display: 'block', marginTop: '0.5rem' }}
+                    />
+                )}
             </Field>
             <Row>
                 <SubmitButton />

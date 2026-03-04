@@ -9,6 +9,7 @@ import {
     enterAnswer,
     enterAnswerExplanation,
     enterAnswerText,
+    enterImageUrl,
     enterQuestion,
     enterQuestionExplanation,
     markQuestionAsPartiallyScored,
@@ -280,6 +281,18 @@ When('I enter question explanation {string}', async function (explanation: strin
 
 When('mark question as partially scored', async function () {
     await markQuestionAsPartiallyScored(this)
+})
+
+When('I enter image URL {string}', async function (imageUrl: string) {
+    await enterImageUrl(this, imageUrl)
+})
+
+Then('I see image preview', async function () {
+    expect(await this.questionEditPage.imagePreviewVisible()).toBe(true)
+})
+
+Then('I do not see image preview', async function () {
+    expect(await this.questionEditPage.imagePreviewVisible()).toBe(false)
 })
 
 // Save question
