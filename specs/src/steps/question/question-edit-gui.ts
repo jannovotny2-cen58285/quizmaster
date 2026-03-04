@@ -31,7 +31,7 @@ Given('I start creating a question', async function () {
     await openCreatePage(this)
 })
 
-Given('page {string}', async function () {
+Given('page {string}', async () => {
     // marker step used in some scenarios for readability
 })
 

@@ -10,6 +10,11 @@ When('I start creating a new quiz', async function () {
     await this.workspacePage.createNewQuiz()
 })
 
+Then('I see the quiz creation page', async function () {
+    const isVisible = await this.page.locator('#create-quiz-page').isVisible()
+    expect(isVisible).toBe(true)
+})
+
 When('I enter quiz name {string}', async function (title: string) {
     await this.quizCreatePage.enterQuizName(title)
 })
