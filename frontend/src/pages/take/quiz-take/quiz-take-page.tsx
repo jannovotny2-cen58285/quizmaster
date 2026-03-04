@@ -29,7 +29,7 @@ export const QuizTakePage = () => {
             sessionStorage.removeItem('quizAnswers')
         }
     }
-    function handleEvaluate(answers: QuizAnswers | null) {
+    function handleEvaluate(answers: QuizAnswers | null, timedOut = false) {
         navigate(`/quiz/${quiz?.id}/questions`)
         updateSessionStorage(answers)
         setQuizAnswers(answers)
@@ -39,6 +39,7 @@ export const QuizTakePage = () => {
         putStats(String(quiz?.id), getQuizRunId(), {
             finished: new Date().toISOString(),
             score,
+            timedOut,
         })
     }
 

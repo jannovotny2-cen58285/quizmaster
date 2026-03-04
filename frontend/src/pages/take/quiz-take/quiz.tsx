@@ -14,7 +14,7 @@ import { useQuizBookmarkState } from './quiz-bookmark-state.ts'
 
 interface QuestionProps {
     readonly quiz: Quiz
-    readonly onEvaluate: (quizAnswers: QuizAnswers) => void
+    readonly onEvaluate: (quizAnswers: QuizAnswers, timedOut?: boolean) => void
 }
 
 export type QuizState = readonly AnswerIdxs[]
@@ -47,7 +47,11 @@ export const QuestionForm = (props: QuestionProps) => {
     }))
 
     const evaluate = () => {
-        props.onEvaluate(quizAnswers)
+        props.onEvaluate(quizAnswers, false)
+    }
+
+    const evaluateTimedOut = () => {
+        props.onEvaluate(quizAnswers, true)
     }
 
     const currentQuestion = props.quiz.questions[nav.currentQuestionIdx]
@@ -79,7 +83,7 @@ export const QuestionForm = (props: QuestionProps) => {
             )
 
             if (allAnswered) {
-                props.onEvaluate(updatedQuizAnswers)
+                props.onEvaluate(updatedQuizAnswers, false)
             } else {
                 nav.next()
             }
@@ -97,7 +101,7 @@ export const QuestionForm = (props: QuestionProps) => {
 
     return (
         <div>
-            <TimeLimit timeLimit={props.quiz.timeLimit} onConfirm={evaluate} />
+            <TimeLimit timeLimit={props.quiz.timeLimit} onConfirm={evaluateTimedOut} />
             <h2>Quiz</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                 <div id="feedback-mode">Feedback mode:</div>

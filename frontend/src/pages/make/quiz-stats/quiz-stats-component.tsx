@@ -10,6 +10,7 @@ export interface QuizStatsProps {
 interface SummaryStats {
     readonly started: number
     readonly finished: number
+    readonly timedOut: number
 }
 
 const formatDuration = (started: string, finished: string): string => {
@@ -48,9 +49,12 @@ const formatDuration = (started: string, finished: string): string => {
 }
 
 export const QuizStats = ({ quiz, stats }: QuizStatsProps) => {
+    const timedOutCount = stats.filter(stat => stat.timedOut ?? !stat.finished).length
+
     const summary: SummaryStats = {
         started: stats.length,
-        finished: stats.filter(stat => Boolean(stat.finished)).length,
+        finished: stats.length - timedOutCount,
+        timedOut: timedOutCount,
     }
 
     return (
@@ -62,12 +66,14 @@ export const QuizStats = ({ quiz, stats }: QuizStatsProps) => {
                     <tr>
                         <th>Started</th>
                         <th>Finished</th>
+                        <th>Timeout</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>{summary.started}</td>
                         <td>{summary.finished}</td>
+                        <td>{summary.timedOut}</td>
                     </tr>
                 </tbody>
             </table>

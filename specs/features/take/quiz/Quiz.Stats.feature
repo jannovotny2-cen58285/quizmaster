@@ -63,28 +63,27 @@ Feature: Show stats
       | 10 seconds    |    |
 
 
-Scenario: Show stats page with summary for successfully answered quiz
-    Given workspace "Stats Success" with questions
-      | question              | answers         |
-      | Jaký nábytek má Ikea? | Stůl (*), Auto  |
-      | Jaké nádobí má Ikea?  | Talíř (*), Kolo |
-    And a quiz "Stats Quiz" with all questions
-    And I take quiz "Stats Quiz" with answers
-      | question              | answers |
-      | Jaký nábytek má Ikea? | Stůl    |
-      | Jaké nádobí má Ikea?  | Talíř   |
-    When I open stats for quiz "Stats Quiz"
-    Then I see stats page for quiz "Stats Quiz"
-    And I see summary stats table
-      | Summary  |          |
-      | Started  | Finished |
-      |       1  |        1 |
-    And I see attempt stats table
-      | Attempts |       |
-      | Duration | Score |
-      |          |   100 |
+  Scenario: Show stats page with summary for successfully answered quiz
+      Given workspace "Stats Success" with questions
+        | question              | answers         |
+        | Jaký nábytek má Ikea? | Stůl (*), Auto  |
+        | Jaké nádobí má Ikea?  | Talíř (*), Kolo |
+      And a quiz "Stats Quiz" with all questions
+      And I take quiz "Stats Quiz" with answers
+        | question              | answers |
+        | Jaký nábytek má Ikea? | Stůl    |
+        | Jaké nádobí má Ikea?  | Talíř   |
+      When I open stats for quiz "Stats Quiz"
+      Then I see stats page for quiz "Stats Quiz"
+      And I see summary stats table
+        | Summary  |          |
+        | Started  | Finished |
+        |       1  |        1 |
+      And I see attempt stats table
+        | Attempts |       |
+        | Duration | Score |
+        |          |   100 |
 
-@skip
   Scenario: Show stats page with summary for timed out quiz
     Given workspace "Stats Success" with questions
       | question              | answers         |
@@ -99,5 +98,5 @@ Scenario: Show stats page with summary for successfully answered quiz
     Then I see stats page for quiz "Stats Quiz"
     And I see summary stats table
       | Summary  |          |           |
-      | Started  | Finished | Timed out |
+      | Started  | Finished | Timeout   |
       |       1  |        0 |         1 |

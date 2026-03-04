@@ -57,13 +57,18 @@
         text-align: right;
     }
 
-    table th:first-child,
-    table td:first-child {
+    table[data-testid='summary-stats-table'] th,
+    table[data-testid='summary-stats-table'] td {
+        width: 33.33%;
+    }
+
+    table[data-testid='attempt-stats-table'] th:first-child,
+    table[data-testid='attempt-stats-table'] td:first-child {
         width: 70%;
     }
 
-    table th:last-child,
-    table td:last-child {
+    table[data-testid='attempt-stats-table'] th:last-child,
+    table[data-testid='attempt-stats-table'] td:last-child {
         width: 30%;
     }
 }
