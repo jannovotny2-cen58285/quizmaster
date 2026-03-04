@@ -1,6 +1,8 @@
 package cz.scrumdojo.quizmaster.workspace;
 
-public record WorkspaceRequest(String title) {
+import jakarta.validation.constraints.NotBlank;
+
+public record WorkspaceRequest(@NotBlank String title) {
     public Workspace toEntity() {
         return Workspace.builder()
             .title(title)

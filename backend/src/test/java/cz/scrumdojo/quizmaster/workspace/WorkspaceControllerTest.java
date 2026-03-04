@@ -45,6 +45,24 @@ public class WorkspaceControllerTest {
     }
 
     @Test
+    public void saveWorkspaceBlankTitleReturnsBadRequest() throws Exception {
+        mockMvc.perform(post("/api/workspaces")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {"title": "  "}
+                    """))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void saveWorkspaceNullTitleReturnsBadRequest() throws Exception {
+        mockMvc.perform(post("/api/workspaces")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void getWorkspaceNotFound() throws Exception {
         mockMvc.perform(get("/api/workspaces/{guid}", "non-existent-guid"))
             .andExpect(status().isNotFound());

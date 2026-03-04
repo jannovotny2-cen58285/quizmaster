@@ -5,6 +5,7 @@ import cz.scrumdojo.quizmaster.question.QuestionRepository;
 import cz.scrumdojo.quizmaster.quiz.Quiz;
 import cz.scrumdojo.quizmaster.quiz.QuizRepository;
 import cz.scrumdojo.quizmaster.ResponseHelper;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class WorkspaceController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkspaceCreateResponse> saveWorkspace(@RequestBody WorkspaceRequest request) {
+    public ResponseEntity<WorkspaceCreateResponse> saveWorkspace(@Valid @RequestBody WorkspaceRequest request) {
         var createdWorkspace = workspaceRepository.save(request.toEntity());
         return ResponseEntity.ok(new WorkspaceCreateResponse(createdWorkspace.getGuid()));
     }
