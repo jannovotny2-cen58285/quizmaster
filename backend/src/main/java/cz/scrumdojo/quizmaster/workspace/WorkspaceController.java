@@ -30,13 +30,14 @@ public class WorkspaceController {
     }
 
     @GetMapping("/{guid}")
-    public ResponseEntity<Workspace> getWorkspace(@PathVariable String guid) {
-        return ResponseHelper.okOrNotFound(workspaceRepository.findById(guid));
+    public ResponseEntity<WorkspaceResponse> getWorkspace(@PathVariable String guid) {
+        return ResponseHelper.okOrNotFound(
+            workspaceRepository.findById(guid).map(WorkspaceResponse::from));
     }
 
     @PostMapping
-    public ResponseEntity<WorkspaceCreateResponse> saveWorkspace(@RequestBody Workspace workspace) {
-        var createdWorkspace = workspaceRepository.save(workspace);
+    public ResponseEntity<WorkspaceCreateResponse> saveWorkspace(@RequestBody WorkspaceRequest request) {
+        var createdWorkspace = workspaceRepository.save(request.toEntity());
         return ResponseEntity.ok(new WorkspaceCreateResponse(createdWorkspace.getGuid()));
     }
 
