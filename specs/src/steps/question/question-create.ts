@@ -35,6 +35,19 @@ Given(
     },
 )
 
+Given(
+    'a numerical question {string} with correct answer {string} bookmarked as {string} with explanation {string}',
+    async function (question: string, correctAnswer: string, bookmark: string, explanation: string) {
+        await openCreatePage(this)
+        await enterQuestion(this, question)
+        await this.questionEditPage.setNumericalChoice()
+        await this.questionEditPage.enterNumericalCorrectAnswer(correctAnswer)
+        await this.questionEditPage.enterQuestionExplanation(explanation)
+        this.questionWip.explanation = explanation
+        await saveQuestion(this, bookmark)
+    },
+)
+
 Given('questions', async function (data: DataTable) {
     for (const row of data.hashes()) {
         const { bookmark, question, answers, easy, explanation } = row
@@ -61,7 +74,9 @@ Given('with answers:', async function (answerRawTable: TableOf<AnswerRaw>) {
 })
 
 Given('with explanation {string}', async function (explanation: string) {
-    await this.questionEditPage.enableExplanations()
+    if (!(await this.questionEditPage.isNumericalChoice())) {
+        await this.questionEditPage.enableExplanations()
+    }
     await this.questionEditPage.enterQuestionExplanation(explanation)
     this.questionWip.explanation = explanation
 })

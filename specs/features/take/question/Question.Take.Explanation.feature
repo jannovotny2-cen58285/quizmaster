@@ -47,3 +47,10 @@ Feature: Question explanations after answering
       | Canada  | Located in America.                                                         |
     * I see the question explanation
 
+  Scenario: Numerical question explanation
+    Explanation is displayed after answering a numerical question
+    - for the whole question
+    Given a numerical question "One and only correct numerical answer" with correct answer "54" bookmarked as "Numbers" with explanation "54 is the correct answer because of reasons."
+    When I take question "Numbers"
+    And I enter "14"
+    Then I see the question explanation
