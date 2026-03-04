@@ -288,11 +288,11 @@ When('I enter image URL {string}', async function (imageUrl: string) {
 })
 
 Then('I see image preview', async function () {
-    expect(await this.questionEditPage.imagePreviewVisible()).toBe(true)
+    await expect(this.questionEditPage.imagePreviewLocator()).toBeVisible()
 })
 
 Then('I do not see image preview', async function () {
-    expect(await this.questionEditPage.imagePreviewVisible()).toBe(false)
+    await expect(this.questionEditPage.imagePreviewLocator()).not.toBeVisible()
 })
 
 // Save question

@@ -78,8 +78,7 @@ export class QuestionEditPage {
     enterImageUrl = (url: string) => this.imageUrlLocator().fill(url)
     imageUrlValue = () => this.imageUrlLocator().inputValue()
 
-    private imagePreviewLocator = () => this.page.locator('img.image-preview')
-    imagePreviewVisible = () => this.imagePreviewLocator().isVisible()
+    imagePreviewLocator = () => this.page.locator('img.image-preview')
 
     private questionExplanationLocator = () => this.page.locator('#question-explanation')
     enterQuestionExplanation = (question: string) => this.questionExplanationLocator().fill(question)
