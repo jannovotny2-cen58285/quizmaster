@@ -10,9 +10,8 @@ import { WorkspaceCreatePage } from 'pages/make/create-workspace/workspace-creat
 import { CreateQuestionPage } from 'pages/make/create-question/create-question-page'
 import { EditQuestionPage } from 'pages/make/create-question/edit-question-page'
 import { WorkspacePage } from 'pages/make/workspace/workspace'
-import { QuizCreatePage } from 'pages/make/quiz-create/quiz-create-page.tsx'
+import { QuizEditPage } from 'pages/make/quiz/quiz-edit-page'
 import { QuizStatsPage } from 'pages/make/quiz-stats/quiz-stats-page'
-import { QuizEditPage } from 'pages/make/quiz-create/quiz-edit-page'
 import { ROUTES } from 'urls.ts'
 
 export const App = () => (
@@ -32,7 +31,7 @@ export const App = () => (
             <Route path={ROUTES.workspaceQuestionEdit} element={<EditQuestionPage />} />
 
             {/* Quiz management (workspace-scoped) */}
-            <Route path={ROUTES.workspaceQuizNew} element={<QuizCreatePage />} />
+            <Route path={ROUTES.workspaceQuizNew} element={<QuizEditPage />} />
             <Route path={ROUTES.workspaceQuizEdit} element={<QuizEditPage />} />
             <Route path={ROUTES.workspaceQuizStats} element={<QuizStatsPage />} />
 

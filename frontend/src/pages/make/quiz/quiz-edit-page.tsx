@@ -1,40 +1,47 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { useApi } from 'api/hooks'
 import { fetchWorkspaceQuestions } from 'api/workspace'
 import { urls, useWorkspaceId } from 'urls.ts'
 
 import type { QuestionListItem } from 'model/question-list-item.ts'
-import { postQuiz } from 'api/quiz'
+import type { Quiz } from 'model/quiz.ts'
+import { postQuiz, fetchQuiz, putQuiz } from 'api/quiz'
 import { QuizEditForm, type QuizEditFormData } from './quiz-edit-form'
 import { tryCatch } from 'helpers'
 import { Alert, Page } from 'pages/components'
-import { QuizUrl } from './components/quiz-url'
 
-export const QuizCreatePage = () => {
+export const QuizEditPage = () => {
     const workspaceId = useWorkspaceId()
     const navigate = useNavigate()
+    const { id: quizId } = useParams()
 
     const [workspaceQuestions, setWorkspaceQuestions] = useState<readonly QuestionListItem[]>([])
-    const [quizId, setQuizId] = useState<string | undefined>(undefined)
+    const [quiz, setQuiz] = useState<Quiz | undefined>(undefined)
     const [errorMessage, setErrorMessage] = useState<string>('')
 
     useApi(workspaceId, fetchWorkspaceQuestions, setWorkspaceQuestions)
+    useApi(quizId, fetchQuiz, setQuiz)
 
     const onSubmit = (data: QuizEditFormData) =>
         tryCatch(setErrorMessage, async () => {
-            const quizId = await postQuiz(data)
-            setQuizId(quizId)
+            if (quizId) {
+                await putQuiz(data, quizId)
+            } else {
+                await postQuiz(data)
+            }
             navigate(urls.workspace(workspaceId))
         })
 
-    return (
-        <Page title="Create Quiz" id="create-quiz-page">
-            <QuizEditForm questions={workspaceQuestions} workspaceId={workspaceId} onSubmit={onSubmit} />
+    const isEdit = quizId !== undefined
+    const title = isEdit ? 'Edit Quiz' : 'Create Quiz'
+    const pageId = isEdit ? 'edit-quiz-page' : 'create-quiz-page'
 
+    return (
+        <Page title={title} id={pageId}>
+            <QuizEditForm quiz={quiz} questions={workspaceQuestions} onSubmit={onSubmit} />
             {errorMessage && <Alert type="error">{errorMessage}</Alert>}
-            {quizId && <QuizUrl quizId={quizId} />}
         </Page>
     )
 }

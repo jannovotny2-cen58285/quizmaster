@@ -6,7 +6,7 @@ import { useStateSet } from 'helpers'
 import type { QuestionListItem } from 'model/question-list-item.ts'
 import type { QuizCreateRequest } from 'api/quiz.ts'
 
-import { urls } from 'urls.ts'
+import { urls, useWorkspaceId } from 'urls.ts'
 import { Field, Form, NumberInput, RadioSet, Row, SubmitButton, TextArea, TextInput } from 'pages/components'
 import { QuestionSelect } from './components/question-select.tsx'
 import { ErrorMessage, createValidator } from 'pages/components/forms/validations.tsx'
@@ -20,11 +20,11 @@ import type { Quiz } from 'model/quiz.ts'
 interface QuizEditFormProps {
     readonly questions: readonly QuestionListItem[]
     readonly onSubmit: (data: QuizEditFormData) => void
-    readonly workspaceId: string
     readonly quiz?: Quiz
 }
 
-export const QuizEditForm = ({ questions, onSubmit, workspaceId, quiz }: QuizEditFormProps) => {
+export const QuizEditForm = ({ questions, onSubmit, quiz }: QuizEditFormProps) => {
+    const workspaceId = useWorkspaceId()
     const navigate = useNavigate()
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
