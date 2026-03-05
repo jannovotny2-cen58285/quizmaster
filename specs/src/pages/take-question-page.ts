@@ -8,7 +8,7 @@ export class TakeQuestionPage {
     questionImageLocator = (filename: string) => this.page.locator(`img[src*="${filename}"]`)
     private questionImageLocator_ = () => this.page.locator('img.question-image')
 
-    waitForLoaded = () => this.page.waitForSelector('h1')
+    waitForLoaded = () => this.expectSubmitDisabled()
 
     private answersLocator = () => this.page.locator('li')
     answerLocator = (answer: string) => this.page.locator(`li:has(input[value="${answer}"])`)

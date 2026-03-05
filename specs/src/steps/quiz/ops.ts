@@ -13,6 +13,7 @@ export const startQuiz = async (world: QuizmasterWorld, quizId: string) => {
 }
 
 export const answerNth = async (world: QuizmasterWorld, n: number) => {
+    await world.takeQuestionPage.waitForLoaded()
     await world.takeQuestionPage.selectAnswerNth(n)
     await world.takeQuestionPage.submit()
 }
