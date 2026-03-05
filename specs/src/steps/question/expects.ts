@@ -1,19 +1,16 @@
 import { expect } from '@playwright/test'
 
 import type { QuestionEditPage, TakeQuestionPage } from 'pages'
-import { expectTextToBe } from 'steps/common.ts'
 import type { Question } from 'steps/world'
 
 export const expectQuestion = async (takeQuestionPage: TakeQuestionPage, question: Question) => {
-    expect(await takeQuestionPage.questionText()).toBe(question.question)
+    await takeQuestionPage.expectQuestionText(question.question)
     const answers = question.answers
-    const answerLocators = takeQuestionPage.answersLocator()
 
-    expect(await answerLocators.count()).toBe(answers.length)
+    await takeQuestionPage.expectAnswerCount(answers.length)
 
     for (const [index, { answer }] of answers.entries()) {
-        const answerLocator = answerLocators.nth(index)
-        await expectTextToBe(answerLocator, answer)
+        await takeQuestionPage.expectAnswerText(index, answer)
     }
 }
 
@@ -24,10 +21,14 @@ export const expectAnswer = async (
     isCorrect: boolean,
     explanation: string | undefined,
 ) => {
-    expect(await page.answerText(index)).toBe(answer)
-    expect(await page.isAnswerCorrect(index)).toBe(isCorrect)
+    await page.expectAnswerText(index, answer)
+    if (isCorrect) {
+        await page.expectAnswerCorrect(index)
+    } else {
+        await page.expectAnswerIncorrect(index)
+    }
     if (explanation !== undefined) {
-        expect(await page.answerExplanation(index)).toBe(explanation)
+        await page.expectAnswerExplanation(index, explanation)
     }
 }
 
@@ -51,8 +52,7 @@ export const expectDeleteButtonsState = async (page: QuestionEditPage, expectedB
 }
 
 export const expectErrorCount = async (page: QuestionEditPage, n: number) => {
-    const errorCount = await page.errorMessageCount()
-    expect(errorCount).toBe(n)
+    await page.expectErrorCount(n)
 }
 
 export const expectErrorMessages = async (page: QuestionEditPage, expectedErrors: string[]) => {

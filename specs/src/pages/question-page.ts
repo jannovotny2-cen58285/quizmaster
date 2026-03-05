@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 
 export class QuestionPage {
     constructor(private page: Page) {}
@@ -18,9 +18,9 @@ export class QuestionPage {
     private unBookmarkQuestionButtonLocator = (title: string) =>
         this.page.locator(`[data-testid="delete-bookmark-${title}"]`)
 
-    private progressBarLocator = (attr: string) => this.page.locator('#progress-bar').getAttribute(attr)
-    progressCurrent = async () => Number.parseInt((await this.progressBarLocator('value')) ?? '')
-    progressMax = async () => Number.parseInt((await this.progressBarLocator('max')) ?? '')
+    private progressBarLocator = () => this.page.locator('#progress-bar')
+    progressCurrent = async () => Number.parseInt((await this.progressBarLocator().getAttribute('value')) ?? '')
+    progressMax = async () => Number.parseInt((await this.progressBarLocator().getAttribute('max')) ?? '')
 
     back = () => this.backButtonLocator().click()
     bookmark = () => this.bookmarkQuestionButtonLocator().click()
@@ -28,11 +28,16 @@ export class QuestionPage {
     next = () => this.nextButtonLocator().click()
     evaluate = () => this.evaluateButtonLocator().click()
     submit = () => this.submitButtonLocator().click()
-    isCurrentQuestionBookmarked = async () =>
-        (await this.bookmarkQuestionButtonLocator().getAttribute('data-bookmarked')) === 'true'
 
     bookmarkListLocator = (title: string) =>
         this.page.locator('[data-testid="bookmark-list"] button', { hasText: title })
 
     gotoBookmark = (title: string) => this.bookmarkListLocator(title).click()
+
+    // Retrying assertions
+    expectProgress = (current: number, max: number) =>
+        expect(this.progressBarLocator())
+            .toHaveAttribute('value', String(current))
+            .then(() => expect(this.progressBarLocator()).toHaveAttribute('max', String(max)))
+    expectBookmarked = () => expect(this.bookmarkQuestionButtonLocator()).toHaveAttribute('data-bookmarked', 'true')
 }

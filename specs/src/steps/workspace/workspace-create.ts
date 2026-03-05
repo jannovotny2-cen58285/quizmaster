@@ -64,11 +64,9 @@ When('I go back to the home page', async function () {
 })
 
 Then('I see the workspace creation page', async function () {
-    const isCreatePageVisible = await this.workspaceCreatePage.isCreatePage()
-    expect(isCreatePageVisible).toBe(true)
+    await this.workspaceCreatePage.expectCreatePageVisible()
 })
 
 Then('I see an error message on workspace page stating title must be mandatory', async function () {
-    const errorMessage = await this.workspaceCreatePage.errorMessage()
-    expect(errorMessage).not.toBe('')
+    await expect.poll(() => this.workspaceCreatePage.errorMessage()).not.toBe('')
 })

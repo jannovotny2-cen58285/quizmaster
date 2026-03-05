@@ -15,11 +15,11 @@ Given('I saved the workspace {string}', async function (workspaceTitle: string) 
 })
 
 Then('I see the {string} workspace page', async function (name: string) {
-    expect(await this.workspacePage.workspaceNameValue()).toBe(name)
+    await this.workspacePage.expectWorkspaceName(name)
 })
 
 Then('I see an empty workspace', async function () {
-    expect(await this.workspacePage.questionCount()).toBe(0)
+    await this.workspacePage.expectQuestionCount(0)
 })
 
 Then('I see question in list {string}', async function (question: string) {
@@ -27,7 +27,7 @@ Then('I see question in list {string}', async function (question: string) {
 })
 
 Then('I see workspace title {string}', async function (title: string) {
-    expect(await this.workspacePage.workspaceNameValue()).toBe(title)
+    await this.workspacePage.expectWorkspaceName(title)
 })
 
 When('I take question {string} from the list', async function (question: string) {
@@ -41,7 +41,7 @@ When('I delete question {string} from the list', async function (question: strin
 })
 
 Then('I cannot delete question {string}', async function (question: string) {
-    expect(await this.workspacePage.hasDeleteButton(question)).toBe(false)
+    await this.workspacePage.expectDeleteButtonNotVisible(question)
 })
 
 When('I edit question {string} from the list', async function (question: string) {

@@ -79,8 +79,7 @@ Then('I should see the answer', async function () {
 })
 
 Then('progress shows {int} of {int}', async function (current: number, max: number) {
-    expect(await this.questionPage.progressCurrent()).toBe(current)
-    expect(await this.questionPage.progressMax()).toBe(max)
+    await this.questionPage.expectProgress(current, max)
 })
 
 Then('I should see the text "Game over time"', async function () {
@@ -105,18 +104,17 @@ Then('I will wait for {string}', async function (timer: string) {
 })
 
 Then('I should see the results table', async function () {
-    const textResult = await this.quizScorePage.resultTableExists()
-    expect(textResult).toBe(true)
+    await this.quizScorePage.expectResultTableVisible()
 })
 
 Then('I see answer {string} checked', async function (answer: string) {
-    expect(await this.takeQuestionPage.isAnswerSelected(answer)).toBe(true)
+    await this.takeQuestionPage.expectAnswerChecked(answer)
 })
 
 Then('I see the submit button as active', async function () {
-    expect(await this.takeQuestionPage.submitButtonIsDisabled()).toBe(false)
+    await this.takeQuestionPage.expectSubmitEnabled()
 })
 
 Then('I see the submit button as inactive', async function () {
-    expect(await this.takeQuestionPage.submitButtonIsDisabled()).toBe(true)
+    await this.takeQuestionPage.expectSubmitDisabled()
 })

@@ -14,11 +14,11 @@ export const expectQuizResult = async (
     expectedTextResult: string,
     expectedPassScore: number,
 ) => {
-    expect(await page.correctAnswers()).toBe(expectedCorrectAnswers)
-    expect(await page.totalQuestions()).toBe(expectedTotalQuestions)
-    expect(await page.percentageResult()).toBe(expectedPercentage)
-    expect(await page.textResult()).toBe(expectedTextResult)
-    expect(await page.passScore()).toBe(expectedPassScore)
+    await page.expectCorrectAnswers(expectedCorrectAnswers)
+    await page.expectTotalQuestions(expectedTotalQuestions)
+    await page.expectPercentageResult(expectedPercentage)
+    await page.expectTextResult(expectedTextResult)
+    await page.expectPassScore(expectedPassScore)
 }
 
 export const expectOriginalResult = async (
@@ -27,15 +27,13 @@ export const expectOriginalResult = async (
     expectedPercentage: number,
     expectedTextResult: string,
 ) => {
-    expect(await page.firstCorrectAnswers()).toBe(expectedCorrectAnswers)
-    expect(await page.firstPercentageResult()).toBe(expectedPercentage)
-    expect(await page.firstTextResult()).toBe(expectedTextResult)
+    await page.expectFirstCorrectAnswers(expectedCorrectAnswers)
+    await page.expectFirstPercentageResult(expectedPercentage)
+    await page.expectFirstTextResult(expectedTextResult)
 }
 
 export const expectOriginalResultNotVisible = async (page: QuizScorePage) => {
-    expect(await page.firstCorrectAnswersPresent()).toBe(false)
-    expect(await page.firstPercentageResultPresent()).toBe(false)
-    expect(await page.firstTextResultPresent()).toBe(false)
+    await page.expectFirstResultNotVisible()
 }
 
 export const expectAllOptionsForQuestion = async (page: QuizScorePage, question: string, expectedAnswers: Answer[]) => {
@@ -78,7 +76,7 @@ export const expectStatsTable = async (quizStatsPage: QuizStatsPage, data: DataT
 
     const expectedRows = data.rows().filter(row => row.some(cell => cell.trim() !== ''))
 
-    await expect(actualRowCount).toBe(expectedRows.length)
+    expect(actualRowCount).toBe(expectedRows.length)
 
     for (let i = 0; i < expectedRows.length; i++) {
         const expectedRow = expectedRows[i]
@@ -133,7 +131,7 @@ const expectLabeledStatsTable = async (
     }
 
     const expectedBodyRows = bodyRows.filter(row => row.some(cell => cell.trim() !== ''))
-    await expect(await bodyRowsLocator.count()).toBe(expectedBodyRows.length)
+    await expect(bodyRowsLocator).toHaveCount(expectedBodyRows.length)
 
     for (let i = 0; i < expectedBodyRows.length; i++) {
         const expectedRow = expectedBodyRows[i]
@@ -156,7 +154,6 @@ export const expectCorrectAnswersCounts = (correctAnswersCounts: Record<string, 
 
 export const expectQuizFormErrors = async (quizCreatePage: QuizCreatePage, expectedErrors: string[]) => {
     for (const error of expectedErrors) {
-        const hasError = await quizCreatePage.hasError(error)
-        expect(hasError).toBe(true)
+        await expect.poll(() => quizCreatePage.hasError(error)).toBe(true)
     }
 }

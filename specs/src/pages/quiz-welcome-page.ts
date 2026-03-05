@@ -1,15 +1,24 @@
-import type { Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 
 export class QuizWelcomePage {
     constructor(private page: Page) {}
 
-    header = () => this.page.locator('h1').textContent()
-    name = () => this.page.locator('h2#quiz-name').textContent()
-    description = () => this.page.locator('p#quiz-description').textContent()
-    questionCount = async () => Number.parseInt((await this.page.locator('span#question-count').textContent()) ?? '')
-    feedback = () => this.page.locator('span#question-feedback').textContent()
-    passScore = async () => Number.parseInt((await this.page.locator('span#pass-score').textContent()) ?? '')
-    timeLimit = async () => Number.parseInt((await this.page.locator('span#time-limit').textContent()) ?? '')
+    private headerLocator = () => this.page.locator('h1')
+    private nameLocator = () => this.page.locator('h2#quiz-name')
+    private descriptionLocator = () => this.page.locator('p#quiz-description')
+    private questionCountLocator = () => this.page.locator('span#question-count')
+    private feedbackLocator = () => this.page.locator('span#question-feedback')
+    private passScoreLocator = () => this.page.locator('span#pass-score')
+    private timeLimitLocator = () => this.page.locator('span#time-limit')
+
+    expectHeader = (text: string) => expect(this.headerLocator()).toHaveText(text)
+    expectName = (name: string) => expect(this.nameLocator()).toHaveText(name)
+    expectDescription = (description: string) => expect(this.descriptionLocator()).toHaveText(description)
+    expectQuestionCount = (count: number) => expect(this.questionCountLocator()).toHaveText(String(count))
+    expectFeedback = (feedback: string) => expect(this.feedbackLocator()).toHaveText(feedback)
+    expectPassScore = (score: number) => expect(this.passScoreLocator()).toContainText(String(score))
+    timeLimit = async () => Number.parseInt((await this.timeLimitLocator().textContent()) ?? '')
+    expectTimeLimit = (seconds: number) => expect(this.timeLimitLocator()).toContainText(String(seconds))
 
     startButton = () => this.page.locator('button#start')
     start = () => this.startButton().click()

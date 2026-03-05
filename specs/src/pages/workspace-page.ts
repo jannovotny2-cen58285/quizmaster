@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 
 export class WorkspacePage {
     constructor(private page: Page) {}
@@ -48,4 +48,10 @@ export class WorkspacePage {
     hasQuiz = (quiz: string) => this.quizLocator(quiz).isVisible()
 
     questionThumbnail = (question: string) => this.questionLocator(question).locator('img.question-thumbnail')
+
+    // Retrying assertions
+    expectWorkspaceName = (name: string) => expect(this.workspaceNameLocator()).toHaveText(name)
+    expectQuestionCount = (count: number) => expect(this.questionsLocator()).toHaveCount(count)
+    expectDeleteButtonNotVisible = (question: string) =>
+        expect(this.questionLocator(question).locator('.delete-button button')).not.toBeVisible()
 }

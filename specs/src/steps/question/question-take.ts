@@ -73,7 +73,7 @@ Then('I see score {string}', async function (score: string) {
 })
 
 Then('no answer is selected', async function () {
-    expect(await this.takeQuestionPage.selectedAnswersLocator().count()).toBe(0)
+    await this.takeQuestionPage.expectNoAnswerSelected()
 })
 
 Then('I see the question explanation', async function () {
@@ -89,7 +89,7 @@ Then('I see individual explanations per answer:', async function (dataTable: Dat
 })
 
 Then('I see the {string} question for the quiz', async function (questionName: string) {
-    expect(await this.takeQuestionPage.questionText()).toBe(questionName)
+    await this.takeQuestionPage.expectQuestionText(questionName)
 })
 
 Then('I see individual color feedback per answer:', async function (dataTable: DataTable) {
@@ -97,25 +97,22 @@ Then('I see individual color feedback per answer:', async function (dataTable: D
 })
 
 Then('I see that question has number of correct answers displayed', async function () {
-    const correctAnswersNumberElement = this.takeQuestionPage.correctAnswersCountLocator()
-    await expect(correctAnswersNumberElement).toBeAttached()
+    await this.takeQuestionPage.expectCorrectAnswersCountAttached()
 })
 
 Then('I see that the question has {int} correct answers', async function (count: number) {
-    const correctAnswersNumberText = await this.takeQuestionPage.correctAnswersCountNumber()
-    expect(correctAnswersNumberText).toBe(count)
+    await this.takeQuestionPage.expectCorrectAnswersCount(count)
 })
 
 Then('I do not see correct answers count', async function () {
-    const correctAnswersNumberElement = this.takeQuestionPage.correctAnswersCountLocator()
-    await expect(this.takeQuestionPage.submitButtonLocator()).toBeVisible()
-    await expect(correctAnswersNumberElement).not.toBeAttached()
+    await this.takeQuestionPage.expectSubmitVisible()
+    await this.takeQuestionPage.expectCorrectAnswersCountNotAttached()
 })
 
 Then('I see the question image', async function () {
-    await expect(this.takeQuestionPage.questionImageVisible()).toBeVisible()
+    await this.takeQuestionPage.expectQuestionImage()
 })
 
 Then('I do not see a question image', async function () {
-    await expect(this.takeQuestionPage.questionImageVisible()).not.toBeVisible()
+    await this.takeQuestionPage.expectNoQuestionImage()
 })

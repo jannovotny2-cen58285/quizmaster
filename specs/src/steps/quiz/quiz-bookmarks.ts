@@ -3,7 +3,7 @@ import { expect } from '@playwright/test'
 import { When, Then } from 'steps/fixture.ts'
 
 Then('I see bookmarked question {string}', async function () {
-    expect(await this.questionPage.isCurrentQuestionBookmarked()).toBe(true)
+    await this.questionPage.expectBookmarked()
 })
 
 When('I click bookmark {string}', async function (questionTitle: string) {

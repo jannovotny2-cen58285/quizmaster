@@ -59,12 +59,11 @@ When('I disable explanations', async function () {
 // Title assertions
 
 Then('I see question edit page', async function () {
-    await this.questionEditPage.isEditPage()
+    await this.questionEditPage.expectEditPageVisible()
 })
 
 Then('I see the question creation page', async function () {
-    const isCreatePageVisible = await this.questionEditPage.isCreatePage()
-    expect(isCreatePageVisible).toBe(true)
+    await this.questionEditPage.expectCreatePageVisible()
 })
 
 When('I go back to the workspace {string}', async function () {
@@ -72,80 +71,78 @@ When('I go back to the workspace {string}', async function () {
 })
 
 Then('I see the workspace {string}', async function (name: string) {
-    expect(await this.workspacePage.workspaceNameValue()).toBe(name)
+    await this.workspacePage.expectWorkspaceName(name)
 })
 
 // Field assertions
 
 Then('I see empty question text', async function () {
-    const question = await this.questionEditPage.questionValue()
-    expect(question).toBe('')
+    await this.questionEditPage.expectQuestionValue('')
 })
 
 Then('I see question text {string}', async function (question: string) {
-    const questionValue = await this.questionEditPage.questionValue()
-    expect(questionValue).toBe(question)
+    await this.questionEditPage.expectQuestionValue(question)
 })
 
 Then(/I see explanations are (enabled|disabled)/, async function (value: string) {
-    const showExplanation = await this.questionEditPage.explanationsEnabled()
-    expect(showExplanation).toBe(value === 'enabled')
+    if (value === 'enabled') {
+        await this.questionEditPage.expectExplanationsChecked()
+    } else {
+        await this.questionEditPage.expectExplanationsUnchecked()
+    }
 })
 
 Then(/the question is (single|multiple|numerical) choice/, async function (value: string) {
-    const selectedType = await this.questionEditPage.questionType()
     const expectedType = value === 'numerical' ? 'numerical' : value === 'multiple' ? 'multiple' : 'single'
-    expect(selectedType).toBe(expectedType)
+    await this.questionEditPage.expectQuestionType(expectedType)
 })
 
 Then('I see numerical answer field', async function () {
-    const isVisible = await this.questionEditPage.isNumericalCorrectAnswerVisible()
-    expect(isVisible).toBe(true)
+    await this.questionEditPage.expectNumericalAnswerVisible()
 })
 
 Then('I do not see numerical answer field', async function () {
-    const isVisible = await this.questionEditPage.isNumericalCorrectAnswerVisible()
-    expect(isVisible).toBe(false)
+    await this.questionEditPage.expectNumericalAnswerNotVisible()
 })
 
 Then('I do not see answer fields', async function () {
-    const answerCount = await this.questionEditPage.answerRowCount()
-    expect(answerCount).toBe(0)
+    await this.questionEditPage.expectAnswerRowCount(0)
 })
 
 Then('I do not see Add Answer button', async function () {
-    const isVisible = await this.questionEditPage.isAddAnswerButtonVisible()
-    expect(isVisible).toBe(false)
+    await this.questionEditPage.expectAddAnswerNotVisible()
 })
 
 Then('I see numerical correct answer {string}', async function (value: string) {
-    const current = await this.questionEditPage.numericalCorrectAnswerValue()
-    expect(current).toBe(value)
+    await this.questionEditPage.expectNumericalCorrectAnswer(value)
 })
 
 Then(/easy mode is (on|off)/, async function (value: string) {
-    const isEasyMode = await this.questionEditPage.isEasyMode()
-    expect(isEasyMode).toBe(value === 'on')
+    if (value === 'on') {
+        await this.questionEditPage.expectEasyModeChecked()
+    } else {
+        await this.questionEditPage.expectEasyModeUnchecked()
+    }
 })
 
 Then(/easy mode is (available|not available)/, async function (value: string) {
-    const isEasyModeVisible = await this.questionEditPage.isEasyModeVisible()
-    expect(isEasyModeVisible).toBe(value === 'available')
+    if (value === 'available') {
+        await this.questionEditPage.expectEasyModeVisible()
+    } else {
+        await this.questionEditPage.expectEasyModeNotVisible()
+    }
 })
 
 Then('I see explanation fields', async function () {
-    const explanationFieldsCount = await this.questionEditPage.countExplanationFields()
-    expect(explanationFieldsCount).toBeGreaterThan(0)
+    await this.questionEditPage.expectExplanationFieldsExist()
 })
 
 Then('I do not see explanation fields', async function () {
-    const explanationFieldsCount = await this.questionEditPage.countExplanationFields()
-    expect(explanationFieldsCount).toBe(0)
+    await this.questionEditPage.expectNoExplanationFields()
 })
 
 Then('I see 2 default empty answers', async function () {
-    const answerCount = await this.questionEditPage.answerRowCount()
-    expect(answerCount).toBe(2)
+    await this.questionEditPage.expectAnswerRowCount(2)
 
     await expectEmptyAnswers(this.questionEditPage, 0)
     await expectEmptyAnswers(this.questionEditPage, 1)
@@ -154,8 +151,11 @@ Then('I see 2 default empty answers', async function () {
 })
 
 Then(/I see answer (\d+) as (correct|incorrect)/, async function (index: number, correctness: string) {
-    const isCorrect = correctness === 'correct'
-    expect(await this.questionEditPage.isAnswerCorrect(index - 1)).toBe(isCorrect)
+    if (correctness === 'correct') {
+        await this.questionEditPage.expectAnswerCorrect(index - 1)
+    } else {
+        await this.questionEditPage.expectAnswerIncorrect(index - 1)
+    }
 })
 
 Then(
@@ -168,7 +168,7 @@ Then(
 Then('I see the answers fields', async function (data: TableOf<AnswerRaw>) {
     const answers = data.raw()
 
-    expect(await this.questionEditPage.answerRowCount()).toBe(answers.length)
+    await this.questionEditPage.expectAnswerRowCount(answers.length)
 
     let i = 0
     for (const [answer, star, explanation] of answers) {
@@ -177,23 +177,21 @@ Then('I see the answers fields', async function (data: TableOf<AnswerRaw>) {
 })
 
 Then('I see empty question explanation', async function () {
-    const explanation = await this.questionEditPage.questionExplanation()
-    expect(explanation).toBe('')
+    await this.questionEditPage.expectQuestionExplanation('')
 })
 
 Then('I see question explanation {string}', async function (explanation: string) {
-    const explanationValue = await this.questionEditPage.questionExplanation()
-    expect(explanationValue).toBe(explanation)
+    await this.questionEditPage.expectQuestionExplanation(explanation)
 })
 
 Then('I see prefilled valid AI question', async function () {
-    const questionValue = await this.questionEditPage.questionValue()
-    expect(questionValue.trim().length).toBeGreaterThan(0)
+    await expect.poll(() => this.questionEditPage.questionValue().then(v => v.trim().length > 0)).toBe(true)
 
     const isNumerical = await this.questionEditPage.isNumericalChoice()
     if (isNumerical) {
-        const numericalAnswer = await this.questionEditPage.numericalCorrectAnswerValue()
-        expect(numericalAnswer.trim()).toMatch(/^-?\d+$/)
+        await expect
+            .poll(() => this.questionEditPage.numericalCorrectAnswerValue().then(v => /^-?\d+$/.test(v.trim())))
+            .toBe(true)
         return
     }
 
@@ -262,18 +260,18 @@ Then('request to AI assistant contains question {string}', async function (expec
 })
 
 Then('question field is updated to {string}', async function (expectedQuestion: string) {
-    expect(await this.questionEditPage.questionValue()).toBe(expectedQuestion)
+    await this.questionEditPage.expectQuestionValue(expectedQuestion)
 })
 
 Then('AI assistant returns generated question', async function () {
-    expect(await this.questionEditPage.questionValue()).toBe(this.aiAssistantGeneratedAnswer)
+    await this.questionEditPage.expectQuestionValue(this.aiAssistantGeneratedAnswer)
 })
 
 Then('AI assistant returns generated answers with only one correct answer', async function () {
-    expect(await this.questionEditPage.answerText(0)).toBe(this.aiAssistantGeneratedCorrectAnswer)
-    expect(await this.questionEditPage.answerText(1)).toBe(this.aiAssistantGeneratedIncorrectAnswer)
-    expect(await this.questionEditPage.isAnswerCorrect(0)).toBe(true)
-    expect(await this.questionEditPage.isAnswerCorrect(1)).toBe(false)
+    await this.questionEditPage.expectAnswerText(0, this.aiAssistantGeneratedCorrectAnswer)
+    await this.questionEditPage.expectAnswerText(1, this.aiAssistantGeneratedIncorrectAnswer)
+    await this.questionEditPage.expectAnswerCorrect(0)
+    await this.questionEditPage.expectAnswerIncorrect(1)
 })
 
 Then('Question type is set to {string}', async function (value: string) {
@@ -283,21 +281,21 @@ Then('Question type is set to {string}', async function (value: string) {
         : normalized.includes('multiple')
           ? 'multiple'
           : 'numerical'
-    expect(await this.questionEditPage.questionType()).toBe(expected)
+    await this.questionEditPage.expectQuestionType(expected)
 })
 
 Then('Question field is updated to AI generated question', async function () {
-    expect(await this.questionEditPage.questionValue()).toBe(this.aiAssistantGeneratedAnswer)
+    await this.questionEditPage.expectQuestionValue(this.aiAssistantGeneratedAnswer)
 })
 
 Then('answer1 field is filled with AI generated correct answer', async function () {
-    expect(await this.questionEditPage.answerText(0)).toBe(this.aiAssistantGeneratedCorrectAnswer)
-    expect(await this.questionEditPage.isAnswerCorrect(0)).toBe(true)
+    await this.questionEditPage.expectAnswerText(0, this.aiAssistantGeneratedCorrectAnswer)
+    await this.questionEditPage.expectAnswerCorrect(0)
 })
 
 Then('answer2 field is filled with AI generated incorrect answer', async function () {
-    expect(await this.questionEditPage.answerText(1)).toBe(this.aiAssistantGeneratedIncorrectAnswer)
-    expect(await this.questionEditPage.isAnswerCorrect(1)).toBe(false)
+    await this.questionEditPage.expectAnswerText(1, this.aiAssistantGeneratedIncorrectAnswer)
+    await this.questionEditPage.expectAnswerIncorrect(1)
 })
 
 // Field edits

@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 
 export class QuestionEditPage {
     constructor(private page: Page) {}
@@ -6,8 +6,10 @@ export class QuestionEditPage {
     gotoNew = () => this.page.goto('/question/new', { waitUntil: 'networkidle' })
     gotoEdit = (url: string) => this.page.goto(url, { waitUntil: 'networkidle' })
 
-    isEditPage = () => this.page.locator('#edit-question-page').isVisible()
-    isCreatePage = () => this.page.locator('#create-question-page').isVisible()
+    private editPageLocator = () => this.page.locator('#edit-question-page')
+    private createPageLocator = () => this.page.locator('#create-question-page')
+    isEditPage = () => this.editPageLocator().isVisible()
+    isCreatePage = () => this.createPageLocator().isVisible()
 
     private questionLocator = () => this.page.locator('#question-text')
     enterQuestion = (question: string) => this.questionLocator().fill(question)
@@ -30,17 +32,14 @@ export class QuestionEditPage {
     setNumericalChoice = () => this.questionTypeLocator().selectOption('numerical')
 
     private numericalCorrectAnswerLocator = () => this.page.locator('#numerical-correct-answer')
-    isNumericalCorrectAnswerVisible = () => this.numericalCorrectAnswerLocator().isVisible()
     enterNumericalCorrectAnswer = (value: string) => this.numericalCorrectAnswerLocator().fill(value)
     numericalCorrectAnswerValue = () => this.numericalCorrectAnswerLocator().inputValue()
 
     private easyModeLocator = () => this.page.locator('#easy-mode')
     isEasyMode = () => this.easyModeLocator().isChecked()
     setEasyMode = () => this.easyModeLocator().check()
-    isEasyModeVisible = () => this.easyModeLocator().isVisible()
 
     private explanationFieldsLocator = () => this.page.locator('input.explanation')
-    countExplanationFields = () => this.explanationFieldsLocator().count()
 
     private answerRowsLocator = () => this.page.locator('.answer-row')
     answerRowCount = () => this.answerRowsLocator().count()
@@ -68,7 +67,6 @@ export class QuestionEditPage {
     }
 
     private addAnswerButtonLocator = () => this.page.locator('button#add-answer')
-    isAddAnswerButtonVisible = () => this.addAnswerButtonLocator().isVisible()
     addAdditionalAnswer = async () => {
         const idx = await this.answerRowCount()
         await this.addAnswerButtonLocator().click()
@@ -77,7 +75,6 @@ export class QuestionEditPage {
 
     private imageUrlLocator = () => this.page.locator('#image-url')
     enterImageUrl = (url: string) => this.imageUrlLocator().fill(url)
-    imageUrlValue = () => this.imageUrlLocator().inputValue()
 
     imagePreviewLocator = () => this.page.locator('img.image-preview')
 
@@ -98,9 +95,34 @@ export class QuestionEditPage {
 
     errorsLocator = () => this.page.locator('.alert.error')
     hasError = (error: string) => this.page.getByTestId(error).waitFor({ state: 'visible' })
-    errorMessageCount = () => this.errorsLocator().count()
 
     answerDeleteButtonsLocator = () => this.page.locator('.answer-delete-button')
     private answerDeleteButtonLocator = (idx: number) => this.answerDeleteButtonsLocator().nth(idx)
     deleteAnswer = (index: number) => this.answerDeleteButtonLocator(index).click()
+
+    // Retrying assertions
+    expectEditPageVisible = () => expect(this.editPageLocator()).toBeVisible()
+    expectCreatePageVisible = () => expect(this.createPageLocator()).toBeVisible()
+    expectQuestionValue = (value: string) => expect(this.questionLocator()).toHaveValue(value)
+    expectQuestionType = (type: string) => expect(this.questionTypeLocator()).toHaveValue(type)
+    expectExplanationsChecked = () => expect(this.showExplanationLocator()).toBeChecked()
+    expectExplanationsUnchecked = () => expect(this.showExplanationLocator()).not.toBeChecked()
+    expectNumericalAnswerVisible = () => expect(this.numericalCorrectAnswerLocator()).toBeVisible()
+    expectNumericalAnswerNotVisible = () => expect(this.numericalCorrectAnswerLocator()).not.toBeVisible()
+    expectNumericalCorrectAnswer = (value: string) => expect(this.numericalCorrectAnswerLocator()).toHaveValue(value)
+    expectEasyModeChecked = () => expect(this.easyModeLocator()).toBeChecked()
+    expectEasyModeUnchecked = () => expect(this.easyModeLocator()).not.toBeChecked()
+    expectEasyModeVisible = () => expect(this.easyModeLocator()).toBeVisible()
+    expectEasyModeNotVisible = () => expect(this.easyModeLocator()).not.toBeVisible()
+    expectExplanationFieldsExist = () => expect(this.explanationFieldsLocator().first()).toBeVisible()
+    expectNoExplanationFields = () => expect(this.explanationFieldsLocator()).toHaveCount(0)
+    expectAnswerRowCount = (count: number) => expect(this.answerRowsLocator()).toHaveCount(count)
+    expectAnswerText = (index: number, value: string) => expect(this.answerTextLocator(index)).toHaveValue(value)
+    expectAnswerCorrect = (index: number) => expect(this.answerIsCorrectLocator(index)).toBeChecked()
+    expectAnswerIncorrect = (index: number) => expect(this.answerIsCorrectLocator(index)).not.toBeChecked()
+    expectAnswerExplanation = (index: number, value: string) =>
+        expect(this.answerExplanationLocator(index)).toHaveValue(value)
+    expectQuestionExplanation = (value: string) => expect(this.questionExplanationLocator()).toHaveValue(value)
+    expectAddAnswerNotVisible = () => expect(this.addAnswerButtonLocator()).not.toBeVisible()
+    expectErrorCount = (n: number) => expect(this.errorsLocator()).toHaveCount(n)
 }

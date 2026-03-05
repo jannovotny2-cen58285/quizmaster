@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 
 export class TakeQuestionPage {
     constructor(private page: Page) {}
@@ -6,31 +6,28 @@ export class TakeQuestionPage {
     private questionLocator = () => this.page.locator('h1')
     questionText = () => this.questionLocator().textContent()
     questionImageLocator = (filename: string) => this.page.locator(`img[src*="${filename}"]`)
-    questionImageVisible = () => this.page.locator('img.question-image')
+    private questionImageLocator_ = () => this.page.locator('img.question-image')
 
     waitForLoaded = () => this.page.waitForSelector('h1')
 
-    answersLocator = () => this.page.locator('li')
+    private answersLocator = () => this.page.locator('li')
     answerLocator = (answer: string) => this.page.locator(`li:has(input[value="${answer}"])`)
 
     answerRowLocator = (answer: string) => this.answerLocator(answer).locator('.answer-input-row')
     answerFeedbackLocator = (answer: string) => this.answerRowLocator(answer).locator('.answer-feedback')
     answerCheckLocator = (answer: string) => this.answerRowLocator(answer).locator('input')
-    answerCheckNthLocator = (number: number) => this.answersLocator().nth(number).locator('input')
+    private answerCheckNthLocator = (number: number) => this.answersLocator().nth(number).locator('input')
     answerExplanationLocator = (answer: string) => this.answerLocator(answer).locator('.explanation')
 
     correctAnswersCountLocator = () => this.page.locator('.correct-answers-count')
-    correctAnswersCountNumber = async () => Number(await this.correctAnswersCountLocator().textContent())
 
     selectAnswer = (answer: string) => this.answerCheckLocator(answer).check()
     selectAnswerNth = (number: number) => this.answerCheckNthLocator(number).check()
     unselectAnswer = (answer: string) => this.answerCheckLocator(answer).uncheck()
-    isAnswerSelected = (answer: string) => this.answerCheckLocator(answer).isChecked()
-    selectedAnswersLocator = () => this.answersLocator().locator('input:checked')
+    private selectedAnswersLocator = () => this.answersLocator().locator('input:checked')
 
-    submitButtonLocator = () => this.page.locator('input[type="submit"]')
+    private submitButtonLocator = () => this.page.locator('input[type="submit"]')
     submit = () => this.submitButtonLocator().click()
-    submitButtonIsDisabled = () => this.submitButtonLocator().isDisabled()
 
     questionFeedbackLocator = () => this.page.locator('p.question-feedback')
     questionScoreLocator = () => this.page.locator('p.question-score')
@@ -47,4 +44,19 @@ export class TakeQuestionPage {
         }
         await this.submit()
     }
+
+    // Retrying assertions
+    expectQuestionText = (text: string) => expect(this.questionLocator()).toHaveText(text)
+    expectAnswerCount = (count: number) => expect(this.answersLocator()).toHaveCount(count)
+    expectAnswerText = (index: number, text: string) => expect(this.answersLocator().nth(index)).toHaveText(text)
+    expectNoAnswerSelected = () => expect(this.selectedAnswersLocator()).toHaveCount(0)
+    expectAnswerChecked = (answer: string) => expect(this.answerCheckLocator(answer)).toBeChecked()
+    expectSubmitEnabled = () => expect(this.submitButtonLocator()).toBeEnabled()
+    expectSubmitDisabled = () => expect(this.submitButtonLocator()).toBeDisabled()
+    expectSubmitVisible = () => expect(this.submitButtonLocator()).toBeVisible()
+    expectCorrectAnswersCount = (count: number) => expect(this.correctAnswersCountLocator()).toHaveText(String(count))
+    expectCorrectAnswersCountAttached = () => expect(this.correctAnswersCountLocator()).toBeAttached()
+    expectCorrectAnswersCountNotAttached = () => expect(this.correctAnswersCountLocator()).not.toBeAttached()
+    expectQuestionImage = () => expect(this.questionImageLocator_()).toBeVisible()
+    expectNoQuestionImage = () => expect(this.questionImageLocator_()).not.toBeVisible()
 }

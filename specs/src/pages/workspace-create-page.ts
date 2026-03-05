@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 
 export class WorkspaceCreatePage {
     constructor(private page: Page) {}
@@ -22,4 +22,7 @@ export class WorkspaceCreatePage {
     back = () => this.page.locator('button#back').click()
 
     errorMessage = () => this.page.textContent('#error-message')
+
+    // Retrying assertions
+    expectCreatePageVisible = () => expect(this.page.locator('#create-workspace-page')).toBeVisible()
 }
