@@ -9,8 +9,8 @@ interface Props {
 export const QuizItem = ({ quiz, workspaceguid }: Props) => (
     <div className="quiz-item question-item">
         <span className="question-text">{quiz.title}</span>
-        <LinkButton to={`/quiz/${quiz.id}/edit?workspaceguid=${workspaceguid}`}>Edit</LinkButton>
-        <LinkButton to={`/quiz/${quiz.id}`}>Take</LinkButton>
-        <LinkButton to={`/quiz/${quiz.id}/stats`}>Statistics</LinkButton>
+        <LinkButton label="Edit" to={`/quiz/${quiz.id}/edit?workspaceguid=${workspaceguid}`} />
+        <LinkButton label="Take" to={`/quiz/${quiz.id}`} />
+        <LinkButton label="Statistics" to={`/quiz/${quiz.id}/stats`} />
     </div>
 )

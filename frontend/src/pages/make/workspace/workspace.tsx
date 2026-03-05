@@ -36,12 +36,16 @@ export function WorkspacePage() {
         <div className="workspace-page">
             {workspace.title && <h1 data-testid="workspace-title">{workspace.title}</h1>}
             <div className="create-buttons">
-                <LinkButton id="create-question" to={`/question/new?workspaceguid=${workspace.guid}`}>
-                    Create Question
-                </LinkButton>
-                <LinkButton id="create-quiz" to={`/quiz-create/new?workspaceguid=${workspace.guid}`}>
-                    Create Quiz
-                </LinkButton>
+                <LinkButton
+                    label="Create Question"
+                    id="create-question"
+                    to={`/question/new?workspaceguid=${workspace.guid}`}
+                />
+                <LinkButton
+                    label="Create Quiz"
+                    id="create-quiz"
+                    to={`/quiz-create/new?workspaceguid=${workspace.guid}`}
+                />
             </div>
             <ItemList title="My Questions">
                 {questions.map((q, index) => (

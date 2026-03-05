@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom'
 import './link-button.scss'
 
 interface LinkButtonProps {
+    readonly label: string
     readonly id?: string
     readonly className?: string
     readonly to: string
-    readonly children: React.ReactNode
 }
 
-export const LinkButton = ({ id, className, to, children }: LinkButtonProps) => (
+export const LinkButton = ({ label, id, className, to }: LinkButtonProps) => (
     <Link id={id} className={`link-button${className ? ` ${className}` : ''}`} to={to}>
-        {children}
+        {label}
     </Link>
 )

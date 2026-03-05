@@ -12,8 +12,8 @@ export const QuestionItem = ({ question, index, onDeleteQuestion }: Props) => (
         {question.imageUrl && <img src={question.imageUrl} alt="" className="question-thumbnail" />}
         <span className="question-index">Q{index + 1}. </span>
         <span className="question-text">{question.question}</span>
-        <LinkButton to={`/question/${question.editId}/edit`}>Edit</LinkButton>
-        <LinkButton to={`/question/${question.id}`}>Take</LinkButton>
+        <LinkButton label="Edit" to={`/question/${question.editId}/edit`} />
+        <LinkButton label="Take" to={`/question/${question.id}`} />
         {!question.isInAnyQuiz && (
             <Button className="link-button" onClick={onDeleteQuestion}>
                 Delete
