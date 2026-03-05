@@ -41,7 +41,7 @@ export const QuizEditPage = () => {
 
     return (
         <Page title={title} id={pageId}>
-            <QuizEditForm quiz={quiz} questions={workspaceQuestions} onSubmit={onSubmit} />
+            <QuizEditForm key={quiz?.id} quiz={quiz} questions={workspaceQuestions} onSubmit={onSubmit} />
             {errorMessage && <Alert type="error">{errorMessage}</Alert>}
         </Page>
     )

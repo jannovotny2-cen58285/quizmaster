@@ -22,8 +22,8 @@ export const preventDefault =
 type AlterValue<T> = (value: T) => void
 type StateSet<T> = [ReadonlySet<T>, AlterValue<T>, AlterValue<T>, AlterValue<T>]
 
-export const useStateSet = <T>(): StateSet<T> => {
-    const [value, setValue] = useState<ReadonlySet<T>>(new Set())
+export const useStateSet = <T>(initial?: Iterable<T>): StateSet<T> => {
+    const [value, setValue] = useState<ReadonlySet<T>>(new Set(initial))
 
     const withValue = (value: T) => (prev: ReadonlySet<T>) => new Set([...prev, value])
     const withoutValue = (value: T) => (prev: ReadonlySet<T>) => new Set([...prev].filter(v => v !== value))
