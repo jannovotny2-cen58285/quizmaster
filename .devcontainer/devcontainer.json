@@ -1,5 +1,5 @@
 {
-    "name": "Quizmaster Java Dev Environment",
+    "name": "Quizmaster Dev Environment",
     "dockerComposeFile": "compose.yaml",
     "service": "quizmaster",
     "runServices": [
