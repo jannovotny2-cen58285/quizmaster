@@ -63,12 +63,6 @@ It watches for changes in the `frontend` directory and reloads the browser autom
 
 You can run the end-to-end [Cucumber](https://cucumber.io/docs/guides/) + [Playwright](https://playwright.dev/) tests from the `specs` directory.
 
-Do not forget to install latest browsers with command:
-
-```sh
-cd specs
-pnpm playwright install --with-deps
-```
 
 Run one of the following commands from the `specs` directory:
 
