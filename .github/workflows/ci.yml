@@ -29,6 +29,9 @@ jobs:
           --health-retries 5
 
     steps:
+      - name: Fix container permissions for Actions temp
+        run: chmod -R 777 /__w/_temp
+
       - name: Checkout code
         uses: actions/checkout@v5
 
