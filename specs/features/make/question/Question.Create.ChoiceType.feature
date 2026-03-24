@@ -131,6 +131,16 @@ Feature: Create question - single/multiple choice
     And I see numerical correct answer "14"
 
   @skip
+  Scenario: Add tolerance to numerical question
+    When I mark the question as numerical choice
+    When I enter question "How many regions does Czechia have?"
+    When I enter numerical correct answer "14"
+    When I set tolerance to "3"
+    When I submit the question
+    Then I see question edit page
+    Then I see tolerance "3"
+
+  @skip
   Scenario: Numeric question: Create numerical question with decimal places
     * I switch to numeric question
     * I enter question "Value of Pi on 3 decimal places"
