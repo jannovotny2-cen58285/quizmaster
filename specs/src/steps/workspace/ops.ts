@@ -75,7 +75,6 @@ export const createNumericalQuestionInAutoWorkspace = async (
     question: string,
     correctAnswer: string,
     explanation?: string,
-    tolerance?: string,
 ) => {
     await ensureWorkspace(world)
     await navigateToWorkspace(world)
@@ -84,9 +83,6 @@ export const createNumericalQuestionInAutoWorkspace = async (
     await enterQuestion(world, question)
     await world.questionEditPage.setNumericalChoice()
     await world.questionEditPage.enterNumericalCorrectAnswer(correctAnswer)
-    if (tolerance != null) {
-        await world.questionEditPage.enterNumericalTolerance(tolerance)
-    }
     if (explanation) {
         await world.questionEditPage.enterQuestionExplanation(explanation)
         world.questionWip.explanation = explanation

@@ -6,7 +6,6 @@ export interface Question {
     readonly aiPrompt: string
     readonly question: string
     readonly imageUrl?: string
-    readonly tolerance?: number
     readonly answers: string[]
     readonly explanations: string[]
     readonly questionExplanation: string
