@@ -14,3 +14,19 @@ Feature: Take a numerical question
       | answer | feedback   |
       | 11     | Incorrect! |
       | 14     | Correct!   |
+
+@skip
+  Scenario Outline: Numerical question with tolerance accepts values inside range
+    Given a numerical question "What is the boiling point of water in Celsius? (tolerance 10)" with correct answer "100" bookmarked as "boiling-point"
+    When I take question "boiling-point"
+    Then I see a number input
+    When I enter "<answer>"
+    Then I see feedback "<feedback>"
+
+    Examples:
+      | answer | feedback   |
+      | 89     | Incorrect! |
+      | 90     | Correct!   |
+      | 100    | Correct!   |
+      | 110    | Correct!   |
+      | 111    | Incorrect! |
