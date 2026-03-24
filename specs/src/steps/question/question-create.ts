@@ -74,6 +74,6 @@ Given('saved and bookmarked as {string}', async function (bookmark) {
     this.questionBookmarks[bookmark] = this.questionWip
     this.activeQuestionBookmark = bookmark
     await this.questionEditPage.submit()
-    await this.workspacePage.goto(this.workspaceGuid)
+    await this.page.waitForURL(`**/workspace/${this.workspaceGuid}`)
     await this.workspacePage.editQuestion(this.questionWip.question)
 })

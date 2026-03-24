@@ -399,7 +399,7 @@ When('I attempt to submit the question', submitQuestion)
 When('I submit the question', async function () {
     await this.questionEditPage.submit()
     if (this.workspaceGuid && this.questionWip.question) {
-        await this.workspacePage.goto(this.workspaceGuid)
+        await this.page.waitForURL(`**/workspace/${this.workspaceGuid}`)
         await this.workspacePage.editQuestion(this.questionWip.question)
     }
 })
