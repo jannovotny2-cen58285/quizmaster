@@ -16,6 +16,7 @@ import {
     markQuestionAsPartiallyScored,
     markAnswerCorrectness,
     submitQuestion,
+    enterAIPrompt,
 } from 'steps/question/ops.ts'
 import {
     expectAnswer,
@@ -309,7 +310,7 @@ When('I enter question {string}', async function (question: string) {
 })
 
 When('I ask AI: {string}', async function (instructions: string) {
-    await enterQuestion(this, instructions)
+    await enterAIPrompt(this, instructions)
     if (!this.aiAssistantGeneratedAnswer) {
         await mockDefaultAiAssistant(this)
     }

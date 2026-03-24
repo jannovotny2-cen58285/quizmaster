@@ -38,6 +38,7 @@ export const useQuestionFormState = (question?: Question) => {
         question?.correctAnswers?.[0] === 0 &&
         /^-?\d+$/.test(question?.answers?.[0] || '')
 
+    const [aiPromptText, setAiPromptText] = useState<string>(question?.aiPrompt || '')
     const [questionText, setQuestionText] = useState<string>(question?.question || '')
     const [questionType, setQuestionType] = useState<QuestionType>(
         isQuestionNumerical ? 'numerical' : (question?.correctAnswers?.length || 0) > 1 ? 'multiple' : 'single',
@@ -134,6 +135,7 @@ export const useQuestionFormState = (question?: Question) => {
 
     return {
         questionText,
+        aiPromptText,
         answerStates,
         answers,
         explanations,
@@ -148,6 +150,7 @@ export const useQuestionFormState = (question?: Question) => {
         showExplanations,
         imageUrl,
         setQuestionText,
+        setAiPromptText,
         addAnswer,
         removeAnswer,
         setQuestionExplanation,

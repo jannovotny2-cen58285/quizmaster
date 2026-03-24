@@ -9,7 +9,11 @@ export class QuestionEditPage {
     isCreatePage = () => this.createPageLocator().isVisible()
 
     private questionLocator = () => this.page.locator('#question-text')
+
+    private aiPromptLocator = () => this.page.locator('#ai-prompt-text')
     enterQuestion = (question: string) => this.questionLocator().fill(question)
+
+    enterAIPrompt = (prompt: string) => this.aiPromptLocator().fill(prompt)
     questionValue = () => this.questionLocator().inputValue()
 
     private aiAssistButtonLocator = () => this.page.getByRole('button', { name: /AI assist(ant)?/i })

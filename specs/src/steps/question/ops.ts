@@ -11,6 +11,10 @@ export const enterQuestion = async (world: QuizmasterWorld, question: string) =>
     world.questionWip.question = question
 }
 
+export const enterAIPrompt = async (world: QuizmasterWorld, prompt: string) => {
+    await world.questionEditPage.enterAIPrompt(prompt)
+}
+
 const enterPartialAnswer = async (world: QuizmasterWorld, index: number, answer: Partial<Answer>) => {
     const questionWip = world.questionWip
     const origAnswer = questionWip.answers[index] || emptyAnswer()

@@ -38,10 +38,10 @@ export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClic
 
         try {
             if (onAiAssistantClick) {
-                onAiAssistantClick(state.questionText)
+                onAiAssistantClick(state.aiPromptText)
                 return
             }
-            const response = await postAiAssistant(state.questionText)
+            const response = await postAiAssistant(state.aiPromptText)
             state.applyAiResponse(response)
             setAiGenerated(true)
         } catch (error) {
@@ -54,30 +54,6 @@ export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClic
 
     return (
         <Form id="question-create-form" validator={validator} onSubmit={handleSubmit}>
-            <Field label="Question" required>
-                <div className="question-input-with-action">
-                    <TextArea
-                        id="question-text"
-                        className="question-textarea-with-action"
-                        value={state.questionText}
-                        onChange={state.setQuestionText}
-                    />
-                    <Button
-                        id="question-ai-assistant-button"
-                        className="secondary button question-ai-assistant-button"
-                        onClick={handleAiAssistantClick}
-                        disabled={aiLoading}
-                    >
-                        {aiLoading ? 'Loading...' : 'AI Assistant'}
-                    </Button>
-                </div>
-                <ErrorMessage errorCode="empty-question" />
-                {aiError && <Alert type="error">{aiError}</Alert>}
-            </Field>
-            <Field label="Image URL">
-                <TextInput id="image-url" value={state.imageUrl} onChange={state.setImageUrl} />
-                {state.imageUrl && <img src={state.imageUrl} alt="preview" className="image-preview" />}
-            </Field>
             <Row>
                 <Field label="Question type" required>
                     <select
@@ -99,6 +75,41 @@ export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClic
                     />
                 )}
             </Row>
+            <Field label="AI Prompt">
+                <div className="question-input-with-action">
+                    <TextArea
+                        id="ai-prompt-text"
+                        className="question-textarea-with-action"
+                        placeholder="AI Prompt..."
+                        value={state.aiPromptText}
+                        onChange={state.setAiPromptText}
+                    />
+                    <Button
+                        id="question-ai-assistant-button"
+                        className="secondary button question-ai-assistant-button"
+                        onClick={handleAiAssistantClick}
+                        disabled={aiLoading}
+                    >
+                        {aiLoading ? 'Loading...' : 'AI Assistant'}
+                    </Button>
+                </div>
+                {aiError && <Alert type="error">{aiError}</Alert>}
+            </Field>
+            <Field label="Question" required>
+                <div className="question-input-with-action">
+                    <TextArea
+                        id="question-text"
+                        className="question-textarea-with-action"
+                        value={state.questionText}
+                        onChange={state.setQuestionText}
+                    />
+                </div>
+                <ErrorMessage errorCode="empty-question" />
+            </Field>
+            <Field label="Image URL">
+                <TextInput id="image-url" value={state.imageUrl} onChange={state.setImageUrl} />
+                {state.imageUrl && <img src={state.imageUrl} alt="preview" className="image-preview" />}
+            </Field>
             {state.isNumerical ? (
                 <Field label="Correct numerical answer" required>
                     <input
