@@ -15,7 +15,6 @@ Feature: Generate question and answers using AI
     When I start creating a question
     Then I see AI section
 
-  @skip
   Scenario: AI prompt section is hidden when editing question
     Given a question "What is the capital of Czech Republic?"
       * with answers:

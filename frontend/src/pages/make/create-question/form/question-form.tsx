@@ -17,6 +17,7 @@ interface QuestionEditProps {
 }
 
 export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClick }: QuestionEditProps) => {
+    const isEditing = question != null
     const state = useQuestionFormState(question)
     const [aiLoading, setAiLoading] = useState(false)
     const [aiError, setAiError] = useState('')
@@ -75,26 +76,28 @@ export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClic
                     />
                 )}
             </Row>
-            <Field label="AI Prompt">
-                <div className="question-input-with-action">
-                    <TextArea
-                        id="ai-prompt-text"
-                        className="question-textarea-with-action"
-                        placeholder="AI Prompt..."
-                        value={state.aiPromptText}
-                        onChange={state.setAiPromptText}
-                    />
-                    <Button
-                        id="question-ai-assistant-button"
-                        className="secondary button question-ai-assistant-button"
-                        onClick={handleAiAssistantClick}
-                        disabled={aiLoading}
-                    >
-                        {aiLoading ? 'Loading...' : 'AI Assistant'}
-                    </Button>
-                </div>
-                {aiError && <Alert type="error">{aiError}</Alert>}
-            </Field>
+            {!isEditing && (
+                <Field label="AI Prompt">
+                    <div className="question-input-with-action">
+                        <TextArea
+                            id="ai-prompt-text"
+                            className="question-textarea-with-action"
+                            placeholder="AI Prompt..."
+                            value={state.aiPromptText}
+                            onChange={state.setAiPromptText}
+                        />
+                        <Button
+                            id="question-ai-assistant-button"
+                            className="secondary button question-ai-assistant-button"
+                            onClick={handleAiAssistantClick}
+                            disabled={aiLoading}
+                        >
+                            {aiLoading ? 'Loading...' : 'AI Assistant'}
+                        </Button>
+                    </div>
+                    {aiError && <Alert type="error">{aiError}</Alert>}
+                </Field>
+            )}
             <Field label="Question" required>
                 <div className="question-input-with-action">
                     <TextArea
