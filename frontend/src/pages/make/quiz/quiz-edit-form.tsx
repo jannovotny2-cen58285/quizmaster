@@ -1,4 +1,5 @@
 import './quiz-edit-form.scss'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { urls, useWorkspaceId } from 'urls.ts'
@@ -14,6 +15,32 @@ import type { QuestionListItem } from 'model/question-list-item.ts'
 import type { Quiz } from 'model/quiz.ts'
 import { formatTimeLimit } from './utils/formatTimeLimit.ts'
 
+const TIME_LIMIT_PARTIAL_REGEX = /^(?:\d*|\d+m|\d+s|\d+m\d*|\d+s\d*|\d+m\d+s|\d+s\d+m)$/i
+
+const parseTimeLimitToSeconds = (value: string): number => {
+    const minutesAndSeconds = value.match(/^(\d+)m(\d+)s$/i)
+    if (minutesAndSeconds) {
+        return Number(minutesAndSeconds[1]) * 60 + Number(minutesAndSeconds[2])
+    }
+
+    const secondsAndMinutes = value.match(/^(\d+)s(\d+)m$/i)
+    if (secondsAndMinutes) {
+        return Number(secondsAndMinutes[1]) + Number(secondsAndMinutes[2]) * 60
+    }
+
+    const onlyMinutes = value.match(/^(\d+)m$/i)
+    if (onlyMinutes) {
+        return Number(onlyMinutes[1]) * 60
+    }
+
+    const onlySeconds = value.match(/^(\d+)s$/i)
+    if (onlySeconds) {
+        return Number(onlySeconds[1])
+    }
+
+    return NaN
+}
+
 interface QuizEditFormProps {
     readonly questions: readonly QuestionListItem[]
     readonly onSubmit: (data: QuizEditFormData) => void
@@ -23,11 +50,27 @@ export const QuizEditForm = ({ questions, onSubmit, quiz }: QuizEditFormProps) =
     const workspaceId = useWorkspaceId()
     const navigate = useNavigate()
     const state = useQuizFormState(questions, quiz)
+    const [timeLimitText, setTimeLimitText] = useState(`${state.timeLimit}s`)
 
     const validator = createValidator(() => validateQuizForm(state), errorMessage)
 
     const onBack = () => {
         navigate(urls.workspace(workspaceId))
+    }
+
+    const onTimeLimitTextChange = (value: string) => {
+
+        const inputIsValid = TIME_LIMIT_PARTIAL_REGEX.test(value)
+        if (!inputIsValid) {
+            return
+        }
+
+        setTimeLimitText(value)
+
+        if (inputIsValid) {
+            const parsedTime = parseTimeLimitToSeconds(value)
+            state.setTimeLimit(parsedTime)
+        }
     }
 
     return (
@@ -44,15 +87,15 @@ export const QuizEditForm = ({ questions, onSubmit, quiz }: QuizEditFormProps) =
                     <NumberInput id="pass-score" value={state.passScore} onChange={state.setPassScore} />
                     <ErrorMessage errorCode="score-above-max" />
                 </Field>
-                <Field label="Time limit (in sec)">
+                <Field label="Time limit (eg. 10m30s)">
                     <Row>
-                        <NumberInput id="time-limit" value={state.timeLimit} onChange={state.setTimeLimit} />
+                        <TextInput id="time-limit" value={timeLimitText} onChange={onTimeLimitTextChange} />
                         <span id="formatted-time-limit" className="bold-count">
                             {formatTimeLimit(state.timeLimit)}
                         </span>
                     </Row>
-                    <ErrorMessage errorCode="negative-time-limit" />
                     <ErrorMessage errorCode="time-limit-above-max" />
+                    <ErrorMessage errorCode="time-limit-invalid-format" />
                 </Field>
             </Row>
             <Field label="Feedback mode">

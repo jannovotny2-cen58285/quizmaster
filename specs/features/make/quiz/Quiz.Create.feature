@@ -81,17 +81,20 @@ Scenario: Test backButton
   And I go back to the workspace "Testworkspace"
   Then I see the workspace "Testworkspace"
 
-Scenario Outline: Quiz time limit formatting
+Scenario: Quiz time limit formatting
   Given workspace "Testworkspace"
   And page "Quiz Creation"
   When I start creating a new quiz
   And I see the quiz creation page
-  And I set quiz time limit to "<timeLimit>"
-  Then I see formatted quiz time limit "<formattedTimeLimit>"
-
-  Examples:
+  Then form reacts correctly to all given inputs
       | timeLimit | formattedTimeLimit |
-      | 10        | 0h 0m 10s          |
-      | 120       | 0h 2m 0s           |
-      | 170       | 0h 2m 50s          |
-      | 4182      | 1h 9m 42s          |
+      | 10s       | 0h 0m 10s          |
+      | 120s      | 0h 2m 0s           |
+      | 170s      | 0h 2m 50s          |
+      | 4182s     | 1h 9m 42s          |
+      | 4m        | 0h 4m 0s           |
+      | 4M        | 0h 4m 0s           |
+      | 35m30s    | 0h 35m 30s         |
+      | 100M90s   | 1h 41m 30s         |
+      | 90S100m   | 1h 41m 30s         |
+      |           | Not valid format   |

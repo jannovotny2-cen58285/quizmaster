@@ -1,7 +1,7 @@
 export const errorMessage = {
     'empty-title': 'Quiz title is required.',
-    'negative-time-limit': 'Time limit cannot be negative.',
     'time-limit-above-max': 'Time limit cannot exceed 21600 seconds (6 hours).',
+    'time-limit-invalid-format': 'Time limit format is invalid.',
     'score-above-max': 'Pass score cannot exceed 100%.',
     'few-questions': 'At least two questions must be selected.',
     'too-many-randomized-questions': 'Final question count cannot exceed the number of selected questions.',
@@ -22,8 +22,8 @@ export function validateQuizForm(state: QuizFormState): Set<ErrorCode> {
     const errors = new Set<ErrorCode>()
 
     if (!state.title) errors.add('empty-title')
-    if (state.timeLimit < 0) errors.add('negative-time-limit')
     if (state.timeLimit > 21600) errors.add('time-limit-above-max')
+    if (isNaN(state.timeLimit)) errors.add('time-limit-invalid-format')
     if (state.passScore > 100) errors.add('score-above-max')
     if (state.selectedIds.size < 2) errors.add('few-questions')
     if (state.randomQuestionCount > 0 && state.randomQuestionCount > state.selectedIds.size)

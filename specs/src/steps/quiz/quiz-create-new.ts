@@ -129,10 +129,9 @@ Then('I see question is not marked {string}', async function (question: string) 
     await expect(this.page.getByLabel(question)).not.toBeChecked()
 })
 
-Then('I set quiz time limit to {string}', async function (timeLimit: string) {
-    await this.quizCreatePage.timeLimitInput().fill(timeLimit)
-})
-
-Then('I see formatted quiz time limit {string}', async function (formattedTimeLimit: string) {
-    await expect(this.quizCreatePage.formattedTimeLimitLabel()).toHaveText(formattedTimeLimit)
+Then('form reacts correctly to all given inputs', async function (data: DataTable) {
+    for (const row of data.hashes()) {
+            await this.quizCreatePage.timeLimitInput().fill(row.timeLimit)
+            await expect(this.quizCreatePage.formattedTimeLimitLabel()).toHaveText(row.formattedTimeLimit)
+        }
 })
