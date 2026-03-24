@@ -32,16 +32,14 @@ Feature: Take a numerical question
 
   @skip
   Scenario Outline: Numerical question with decimal answer
-    Given a numerical question "What is the minimum safe space between car and bicycle in Czech Republic in meters?" with correct answer "1.5" bookmarked as "car-bike-distance"
-    When I take question "car-bike-distance"
+    Given a numerical question "How many fingers does a healthy human have?" with correct answer "10" bookmarked as "fingers"
+    When I take question "fingers"
     Then I see a number input
     When I enter "<answer>"
     Then I see feedback "<feedback>"
     Examples:
       | answer | feedback   |
-      | 1      | Incorrect! |
-      | 1.49   | Incorrect! |
-      | 1.5    | Correct!   |
-      | 1,5    | Correct!   |
-      | 1.5000 | Correct!   |
-      | 2.0    | Incorrect! |
+      | 9.5    | Incorrect! |
+      | 10     | Correct!   |
+      | 10.0   | Correct!   |
+      | 10.1   | Incorrect! |
