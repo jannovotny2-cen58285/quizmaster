@@ -4,7 +4,7 @@ import { postAiAssistant } from 'api/ai-assistant.ts'
 import { SubmitButton, Form, Field, TextArea, TextInput, CheckField, Row, Button, Alert } from 'pages/components'
 import { AnswersEdit, stateToQuestionApiData } from 'pages/make/create-question/form'
 import { useQuestionFormState } from './question-form-state'
-import { validateQuestionFormState, errorMessage } from './validators.ts'
+import { validateQuestionFormState, errorMessage, isValidImageUrl } from './validators.ts'
 import type { QuestionApiData } from 'api/question.ts'
 import type { Question } from 'model/question.ts'
 import { ErrorMessage, createValidator } from 'pages/components/forms/validations.tsx'
@@ -24,6 +24,8 @@ export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClic
     const [aiGenerated, setAiGenerated] = useState(false)
 
     const validator = createValidator(() => validateQuestionFormState(state), errorMessage)
+    const hasImagePreview = state.imageUrl.trim() !== '' && isValidImageUrl(state.imageUrl)
+    const hasInvalidImageUrl = state.imageUrl.trim() !== '' && !isValidImageUrl(state.imageUrl)
 
     const handleSubmit = () =>
         onSubmit({
@@ -112,7 +114,8 @@ export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClic
             </Field>
             <Field label="Image URL">
                 <TextInput id="image-url" value={state.imageUrl} onChange={state.setImageUrl} />
-                {state.imageUrl && <img src={state.imageUrl} alt="preview" className="image-preview" />}
+                {hasInvalidImageUrl && <Alert type="error" dataTestId="invalid-image-url">{errorMessage['invalid-image-url']}</Alert>}
+                {hasImagePreview && <img src={state.imageUrl} alt="preview" className="image-preview" />}
             </Field>
             {state.isNumerical ? (
                 <>
