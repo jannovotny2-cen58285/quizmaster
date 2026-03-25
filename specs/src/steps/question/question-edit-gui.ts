@@ -395,7 +395,7 @@ When('I enter an invalid image URL {string}', async function (invalidUrl: string
 })
 
 When('I enter an invalid image URL containing a 2049 character URL', async function () {
-    const tooLongUrl = 'https://example.com/' + 'a'.repeat(2050)
+    const tooLongUrl = `https://example.com/${'a'.repeat(2050)}`
     await this.questionEditPage.enterImageUrl(tooLongUrl)
 })
 
