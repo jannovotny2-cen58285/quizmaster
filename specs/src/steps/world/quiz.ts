@@ -1,6 +1,5 @@
 export type QuizMode = 'learn' | 'exam'
 export type Difficulty = 'easy' | 'hard' | 'keep-question'
-export type TimeLimitType = 'quiz' | 'question'
 
 export interface Quiz {
     title: string
@@ -9,7 +8,6 @@ export interface Quiz {
     mode: QuizMode
     passScore: number
     timeLimit: number
-    timeLimitType?: TimeLimitType
     randomQuestionCount?: number
     difficulty?: Difficulty
 }
@@ -25,7 +23,6 @@ export const emptyQuiz = (): Quiz => ({
     mode: 'exam',
     passScore: 0,
     timeLimit: 120,
-    timeLimitType: 'quiz',
 })
 export const emptyQuizBookmark = (): QuizBookmark => ({
     url: '',
@@ -35,5 +32,4 @@ export const emptyQuizBookmark = (): QuizBookmark => ({
     mode: 'exam',
     passScore: 0,
     timeLimit: 120,
-    timeLimitType: 'quiz',
 })

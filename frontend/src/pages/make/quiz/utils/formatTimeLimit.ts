@@ -1,4 +1,4 @@
-export function formatTimeLimit(timeLimit: number): string {
+export function formatTimeLimit(timeLimit: number) {
     if (timeLimit === undefined || timeLimit === null || Number.isNaN(timeLimit)) {
         return 'Not valid format'
     }
