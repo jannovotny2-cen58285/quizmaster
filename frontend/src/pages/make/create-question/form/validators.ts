@@ -3,6 +3,7 @@ import type { QuestionFormState } from './question-form-state.ts'
 export const errorMessage = {
     'empty-question': 'Question must not be empty.',
     'invalid-image-url': 'Image URL must be a valid http(s) image URL.',
+    'image-url-too-long': 'Image URL is too long (max 2048 characters).',
     'empty-answer': 'Answers must not be empty.',
     'no-correct-answer': 'At least one correct answer must be selected.',
     'empty-answer-explanation': 'All or none answer explanations must be filled in.',
@@ -15,7 +16,6 @@ type ErrorCode = keyof typeof errorMessage
 
 const HTTP_URL_REGEX = /^https?:\/\/[^\s]+$/i
 const IMAGE_FILE_URL_REGEX = /\.(png|jpe?g|gif|webp|bmp|svg)(?:$|[?#])/i
-const IMAGE_SIZE_ENDPOINT_REGEX = /\/\d+(?:\/\d+)+(?:$|[?#])/i
 
 export const isValidImageUrl = (imageUrl: string): boolean => {
     const normalized = imageUrl.trim()
@@ -24,10 +24,7 @@ export const isValidImageUrl = (imageUrl: string): boolean => {
         return true
     }
 
-    return (
-        HTTP_URL_REGEX.test(normalized) &&
-        (IMAGE_FILE_URL_REGEX.test(normalized) || IMAGE_SIZE_ENDPOINT_REGEX.test(normalized))
-    )
+    return HTTP_URL_REGEX.test(normalized) && IMAGE_FILE_URL_REGEX.test(normalized)
 }
 
 export function validateQuestionFormState(state: QuestionFormState): Set<ErrorCode> {
@@ -40,6 +37,7 @@ export function validateQuestionFormState(state: QuestionFormState): Set<ErrorCo
 
     if (state.questionText.trim() === '') errors.add('empty-question')
     if (!isValidImageUrl(state.imageUrl)) errors.add('invalid-image-url')
+    if (state.imageUrl.trim().length > 2048) errors.add('image-url-too-long')
 
     if (state.isNumerical) {
         const numericalValue = state.numericalAnswer.trim()

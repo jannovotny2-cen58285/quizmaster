@@ -4,7 +4,7 @@ Feature: Create question with image
 
   Scenario: Enter image URL with preview
     Given I start creating a question
-    When I enter image URL "https://placekitten.com/300/200"
+    When I enter image URL "https://placekitten.com/300/200.jpg"
     Then I see image preview
 
   Scenario: Image URL is optional

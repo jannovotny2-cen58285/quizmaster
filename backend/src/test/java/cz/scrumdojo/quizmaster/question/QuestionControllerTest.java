@@ -90,7 +90,7 @@ public class QuestionControllerTest {
 
     @Test
     public void saveAndGetQuestionWithImageUrl() {
-        var imageUrl = "https://placekitten.com/300/200";
+        var imageUrl = "https://placekitten.com/300/200.jpg";
         var request = fixtures.questionRequestWithImage(imageUrl);
         var response = questionController.saveQuestion(request).getBody();
         assertNotNull(response);
@@ -98,6 +98,35 @@ public class QuestionControllerTest {
         Question result = questionController.getQuestion(response.id()).getBody();
         assertNotNull(result);
         assertEquals(imageUrl, result.getImageUrl());
+    }
+
+    @Test
+    public void saveQuestionWithInvalidImageUrlReturnsBadRequest() {
+        var request = fixtures.questionRequestWithImage("javascript:alert('xss')");
+
+        var response = questionController.saveQuestion(request);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    public void saveQuestionWithImageUrlTooLongReturnsBadRequest() {
+        var tooLongUrl = "https://example.com/" + "a".repeat(2050);
+        var request = fixtures.questionRequestWithImage(tooLongUrl);
+
+        var response = questionController.saveQuestion(request);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    public void updateQuestionWithInvalidImageUrlReturnsBadRequest() {
+        var originalQuestion = fixtures.save(fixtures.question());
+        var request = fixtures.questionRequestWithImage("javascript:alert('xss')");
+
+        var response = questionController.updateQuestion(request, originalQuestion.getEditId());
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test

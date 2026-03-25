@@ -4,7 +4,7 @@ Feature: Displaying an image for a question
 
   Scenario: User sees the question image when answering
     Given a question "Which animal is on the picture?"
-      * with image "https://placekitten.com/300/200"
+      * with image "https://placekitten.com/300/200.jpg"
       * with answers:
         | Cat | * |
         | Dog |   |

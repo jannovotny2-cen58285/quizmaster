@@ -26,6 +26,7 @@ export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClic
     const validator = createValidator(() => validateQuestionFormState(state), errorMessage)
     const hasImagePreview = state.imageUrl.trim() !== '' && isValidImageUrl(state.imageUrl)
     const hasInvalidImageUrl = state.imageUrl.trim() !== '' && !isValidImageUrl(state.imageUrl)
+    const hasImageUrlTooLong = state.imageUrl.trim().length > 2048
 
     const handleSubmit = () =>
         onSubmit({
@@ -114,7 +115,12 @@ export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClic
             </Field>
             <Field label="Image URL">
                 <TextInput id="image-url" value={state.imageUrl} onChange={state.setImageUrl} />
-                {hasInvalidImageUrl && (
+                {hasImageUrlTooLong && (
+                    <Alert type="error" dataTestId="image-url-too-long">
+                        {errorMessage['image-url-too-long']}
+                    </Alert>
+                )}
+                {hasInvalidImageUrl && !hasImageUrlTooLong && (
                     <Alert type="error" dataTestId="invalid-image-url">
                         {errorMessage['invalid-image-url']}
                     </Alert>

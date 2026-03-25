@@ -56,8 +56,8 @@ Feature: Workspace page management
 
   Scenario: Question with image shows thumbnail in workspace
     Given workspace "Workspace" with questions
-      | question              | answers      | image                            |
-      | Which animal is this? | Cat (*), Dog | https://placekitten.com/300/200   |
-      | 2 + 2 = ?             | 4 (*), 5     |                                  |
+      | question              | answers      | image                                 |
+      | Which animal is this? | Cat (*), Dog | https://placekitten.com/300/200.jpg   |
+      | 2 + 2 = ?             | 4 (*), 5     |                                       |
     Then I see image thumbnail for question "Which animal is this?"
     And I do not see image thumbnail for question "2 + 2 = ?"

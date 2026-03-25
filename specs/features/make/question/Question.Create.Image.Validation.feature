@@ -24,9 +24,9 @@ Feature: Image URL validation when creating a question
     And I see image preview
 
     Examples:
-      | image-url                        |
-      | https://example.com/image.jpg    |
-      | http://placekitten.com/300/200   |
+      | image-url                            |
+      | https://example.com/image.jpg        |
+      | http://placekitten.com/300/200.jpg   |
 
   Scenario: Empty image URL is optional
     Given I start creating a question
@@ -57,3 +57,16 @@ Feature: Image URL validation when creating a question
     When I clear image URL and enter "https://example.com/image.jpg"
     Then I see no error messages
     And I see image preview
+
+  Scenario: Image URL within maximum length is accepted
+    Given I start creating a question
+    When I enter image URL "https://example.com/image-with-very-long-path-but-still-within-2048-characters-limit.jpg"
+    Then I see no error messages
+    And I see image preview
+
+  Scenario: Image URL exceeding maximum length shows error
+    Given I start creating a question
+    When I enter an invalid image URL containing a 2049 character URL
+    Then I see error messages
+      | image-url-too-long |
+    And I do not see image preview
