@@ -14,12 +14,12 @@ Feature: Quiz Welcome page
       | description | Description A |
       | mode        | exam          |
       | pass score  | 66            |
-      | time limit  | 120           |
+      | time limit  | 120s           |
     And a quiz "Quiz B" with questions "Q1, Q2, Q3, Q4"
       | description | Description B |
       | mode        | learn         |
       | pass score  | 75            |
-      | time limit  | 60            |
+      | time limit  | 60s            |
     When I open quiz "<quiz>"
     Then I see the welcome page
     * I see quiz name "<name>"
@@ -31,5 +31,5 @@ Feature: Quiz Welcome page
 
     Examples:
       | quiz   | name   | description   | count | score | mode                | time limit |
-      | Quiz A | Quiz A | Description A | 3     | 66    | Feedback at the end | 120        |
-      | Quiz B | Quiz B | Description B | 4     | 75    | Continuous feedback | 60         |
+      | Quiz A | Quiz A | Description A | 3     | 66    | Feedback at the end | 120s       |
+      | Quiz B | Quiz B | Description B | 4     | 75    | Continuous feedback | 60s        |

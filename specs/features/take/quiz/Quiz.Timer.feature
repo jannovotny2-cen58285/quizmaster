@@ -9,11 +9,11 @@ Feature: Run timer
       | Planet    | Which planet is known as the Red Planet? | Mars (*), Venus      |
       | Australia | What's the capital city of Australia?     | Sydney, Canberra (*) |
     And a quiz "Quiz A" with questions "Planet, Australia"
-      | pass score | 85  |
-      | time limit | 120 |
+      | pass score | 85   |
+      | time limit | 120s |
     And a quiz "Quiz B" with questions "Planet, Australia"
-      | pass score | 85 |
-      | time limit | 60 |
+      | pass score | 85  |
+      | time limit | 60s |
 
   Scenario Outline: Display countdown timer
     Given I start quiz "<quiz>"
