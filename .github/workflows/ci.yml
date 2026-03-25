@@ -13,6 +13,8 @@ jobs:
     container:
       image: ghcr.io/scrumdojo/quizmaster-java-devenv:v1
       options: --user vscode
+      env:
+        OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
 
     steps:
       - name: Start PostgreSQL
