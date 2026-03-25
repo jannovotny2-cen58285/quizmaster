@@ -1,15 +1,18 @@
 package cz.scrumdojo.quizmaster.aiassistant;
 
+import cz.scrumdojo.quizmaster.TestcontainersConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @SpringBootTest
+@Import(TestcontainersConfiguration.class)
 public class AiAssistantServiceTest {
 
     @Autowired
