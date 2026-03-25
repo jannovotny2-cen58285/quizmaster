@@ -5,8 +5,9 @@ import type { Quiz } from 'model/quiz.ts'
 import { useApi } from 'api/hooks.ts'
 import { fetchQuiz } from 'api/quiz.ts'
 import { QuizDetails } from './quiz-details.tsx'
-import { putStats } from 'api/stats.ts'
-import { getRandomRunId, setQuizRunId } from 'helpers.ts'
+import { createAttempt } from 'api/stats.ts'
+import { setQuizRunId } from 'helpers.ts'
+import { AttemptStatus } from 'model/stats.ts'
 
 export const QuizWelcomePage = () => {
     const navigate = useNavigate()
@@ -15,15 +16,27 @@ export const QuizWelcomePage = () => {
 
     useApi(params.id, fetchQuiz, setQuiz)
 
-    const onStart = () => {
+    const onStart = async () => {
         const quizId = params.id
         navigate(`/quiz/${quizId}/questions`)
         sessionStorage.removeItem('quizAnswers')
-        const quizRunId = getRandomRunId()
-        putStats(String(quiz?.id), quizRunId, {
-            started: new Date().toISOString(),
-        })
-        setQuizRunId(quizRunId)
+
+        if (quiz) {
+            const startTime = new Date()
+            const attempt = await createAttempt({
+                quizId: quiz.id,
+                durationSeconds: 0,
+                points: 0,
+                score: 0,
+                status: AttemptStatus.IN_PROGRESS,
+                maxScore: 0,
+                startedAt: startTime.toISOString(),
+                finishedAt: null,
+            })
+            setQuizRunId(attempt.id)
+            // Store start time in sessionStorage for duration calculation
+            sessionStorage.setItem('quizStartTime', startTime.getTime().toString())
+        }
     }
 
     return quiz && <QuizDetails quiz={quiz} onStart={onStart} />

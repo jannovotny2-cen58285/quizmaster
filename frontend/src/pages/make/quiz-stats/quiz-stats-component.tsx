@@ -13,18 +13,13 @@ interface SummaryStats {
     readonly timedOut: number
 }
 
-const formatDuration = (started: string, finished: string): string => {
-    const start = new Date(started)
-    const end = new Date(finished)
-    const diffMs = end.getTime() - start.getTime()
-    const diffSeconds = Math.round(diffMs / 1000)
-
-    if (diffSeconds < 60) {
-        return `${diffSeconds} second${diffSeconds !== 1 ? 's' : ''}`
+const formatDuration = (durationSeconds: number): string => {
+    if (durationSeconds < 60) {
+        return `${durationSeconds} second${durationSeconds !== 1 ? 's' : ''}`
     }
 
-    const minutes = Math.floor(diffSeconds / 60)
-    const seconds = diffSeconds % 60
+    const minutes = Math.floor(durationSeconds / 60)
+    const seconds = durationSeconds % 60
 
     if (minutes < 60) {
         if (seconds === 0) {
@@ -49,13 +44,11 @@ const formatDuration = (started: string, finished: string): string => {
 }
 
 export const QuizStats = ({ quiz, stats }: QuizStatsProps) => {
-    const timedOutCount = stats.filter(stat => stat.timedOut ?? !stat.finished).length
-
-    const calculatePoints = (score: number, maxScore: number): number => (score / 100) * maxScore
+    const timedOutCount = stats.filter(stat => stat.status === 'TIMEOUT').length
 
     const summary: SummaryStats = {
         started: stats.length,
-        finished: stats.length - timedOutCount,
+        finished: stats.filter(stat => stat.status === 'FINISHED').length,
         timedOut: timedOutCount,
     }
 
@@ -88,13 +81,14 @@ export const QuizStats = ({ quiz, stats }: QuizStatsProps) => {
                         <th>Correct Answers</th>
                         <th>Incorrect Answers</th>
                         <th>Score</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     {stats.map(stat => (
                         <tr key={stat.id}>
                             {(() => {
-                                const points = calculatePoints(stat.score, stat.maxScore)
+                                const points = stat.points
                                 const incorrectPoints = Math.max(stat.maxScore - points, 0)
                                 const formatPoints = (value: number): string => {
                                     // Round to 1 decimal place and check if it's a whole number
@@ -105,14 +99,19 @@ export const QuizStats = ({ quiz, stats }: QuizStatsProps) => {
                                     const percentage = total > 0 ? Math.round((value / total) * 100) : 0
                                     return `${formatPoints(value)} (${percentage}%)`
                                 }
+                                const formatStatus = (status: string): string => {
+                                    // Capitalize first letter and make rest lowercase
+                                    return status.charAt(0) + status.slice(1).toLowerCase().replace('_', ' ')
+                                }
 
                                 return (
                                     <>
-                                        <td>{formatDuration(stat.started, stat.finished)}</td>
+                                        <td>{formatDuration(stat.durationSeconds)}</td>
                                         <td>{`${formatPoints(points)}/${stat.maxScore}`}</td>
                                         <td>{formatPointsWithPercentage(points, stat.maxScore)}</td>
                                         <td>{formatPointsWithPercentage(incorrectPoints, stat.maxScore)}</td>
                                         <td>{stat.score}</td>
+                                        <td>{formatStatus(stat.status)}</td>
                                     </>
                                 )
                             })()}

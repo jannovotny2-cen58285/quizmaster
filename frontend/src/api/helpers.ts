@@ -10,6 +10,8 @@ export const fetchJson = async <T>(url: string, init?: RequestInit): Promise<T> 
         .then(response => response.json())
         .then(data => data as T)
 
+export const getJson = fetchJson
+
 const sendData =
     (method: string) =>
     <T, U>(url: string, data?: T): Promise<U> =>

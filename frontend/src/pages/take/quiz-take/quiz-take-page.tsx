@@ -6,9 +6,10 @@ import { QuizScorePage } from './quiz-score-page.tsx'
 import { QuestionForm } from './quiz.tsx'
 import type { QuizAnswers } from './quiz-answers-state.ts'
 import { useNavigate } from 'react-router-dom'
-import { putStats } from 'api/stats.ts'
+import { updateAttempt } from 'api/stats.ts'
 import { getQuizRunId } from 'helpers.ts'
 import { evaluate } from './quiz-score.ts'
+import { AttemptStatus } from 'model/stats.ts'
 
 export const QuizTakePage = () => {
     const quiz = useQuizApi()
@@ -29,20 +30,41 @@ export const QuizTakePage = () => {
             sessionStorage.removeItem('quizAnswers')
         }
     }
-    function handleEvaluate(answers: QuizAnswers | null, timedOut = false) {
+
+    async function handleEvaluate(answers: QuizAnswers | null, timedOut = false) {
         navigate(`/quiz/${quiz?.id}/questions`)
         updateSessionStorage(answers)
         setQuizAnswers(answers)
 
-        const score =
-            quiz && answers ? Math.round((evaluate(quiz, answers).score / evaluate(quiz, answers).total) * 100) : 0
-        const maxScore = quiz && answers ? evaluate(quiz, answers).total : 0
-        putStats(String(quiz?.id), getQuizRunId(), {
-            finished: new Date().toISOString(),
-            score,
-            timedOut,
-            maxScore,
-        })
+        if (!quiz || !answers) return
+
+        const evaluation = evaluate(quiz, answers)
+        const score = Math.round((evaluation.score / evaluation.total) * 100)
+        const points = evaluation.score
+        const maxScore = evaluation.total
+        const attemptId = getQuizRunId()
+
+        // Get start time from sessionStorage to avoid timezone issues
+        const startTimeMs = sessionStorage.getItem('quizStartTime')
+        const endTime = new Date()
+
+        if (startTimeMs) {
+            const durationSeconds = Math.round((endTime.getTime() - Number.parseInt(startTimeMs)) / 1000)
+
+            await updateAttempt(attemptId, {
+                quizId: quiz.id,
+                durationSeconds,
+                points,
+                score,
+                status: timedOut ? AttemptStatus.TIMEOUT : AttemptStatus.FINISHED,
+                maxScore,
+                startedAt: new Date(Number.parseInt(startTimeMs)).toISOString(),
+                finishedAt: endTime.toISOString(),
+            })
+
+            // Clean up
+            sessionStorage.removeItem('quizStartTime')
+        }
     }
 
     if (quiz) {
