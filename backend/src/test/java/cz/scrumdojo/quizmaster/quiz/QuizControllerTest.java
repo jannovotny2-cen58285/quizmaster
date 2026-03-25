@@ -1,17 +1,14 @@
 package cz.scrumdojo.quizmaster.quiz;
 
-import cz.scrumdojo.quizmaster.TestcontainersConfiguration;
 import cz.scrumdojo.quizmaster.TestFixtures;
 import cz.scrumdojo.quizmaster.question.Question;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Import(TestcontainersConfiguration.class)
 public class QuizControllerTest {
 
     @Autowired
