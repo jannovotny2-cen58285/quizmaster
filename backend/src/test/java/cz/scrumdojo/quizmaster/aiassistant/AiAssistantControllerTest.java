@@ -35,16 +35,16 @@ public class AiAssistantControllerTest {
                 .content("""
                     {
                         "type": "single",
-                        "question": "capital cities of Europe"
+                        "question": "Generate a question about capital cities of Europe with 1 correct answer and 2 incorrect answers"
                     }
                     """))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.type").value("single"))
             .andExpect(jsonPath("$.question").isNotEmpty())
             .andExpect(jsonPath("$.answers").isArray())
-            .andExpect(jsonPath("$.answers.length()").value(Matchers.greaterThanOrEqualTo(2)))
+            .andExpect(jsonPath("$.answers.length()").value(3))
             .andExpect(jsonPath("$.correctAnswers").isArray())
-            .andExpect(jsonPath("$.correctAnswers[0]").value(0));
+            .andExpect(jsonPath("$.correctAnswers.length()").value(1));
     }
 
     @Tag("ai")
@@ -56,16 +56,16 @@ public class AiAssistantControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {
-                        "question": "capital cities of Europe"
+                        "question": "Generate a question about European geography with 1 correct answer and 3 incorrect answers"
                     }
                     """))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.type").value("single"))
             .andExpect(jsonPath("$.question").isNotEmpty())
             .andExpect(jsonPath("$.answers").isArray())
-            .andExpect(jsonPath("$.answers.length()").value(Matchers.greaterThanOrEqualTo(2)))
+            .andExpect(jsonPath("$.answers.length()").value(4))
             .andExpect(jsonPath("$.correctAnswers").isArray())
-            .andExpect(jsonPath("$.correctAnswers[0]").value(0));
+            .andExpect(jsonPath("$.correctAnswers.length()").value(1));
     }
 
     @Test

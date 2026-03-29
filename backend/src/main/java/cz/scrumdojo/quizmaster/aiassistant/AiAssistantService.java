@@ -22,7 +22,7 @@ import java.time.Duration;
 public class AiAssistantService {
 
     private static final String OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-    private static final String MODEL = "minimax/minimax-m2.5";
+    private static final String MODEL = "openai/gpt-4o-mini";
     private static final Duration TIMEOUT = Duration.ofSeconds(60);
 
     private final ObjectMapper objectMapper;
@@ -50,10 +50,9 @@ public class AiAssistantService {
         }
 
         try {
-            String selectedPrompt = type == AiAssistantQuestionType.SINGLE ? systemPrompt : type.getPrompt();
             String body = objectMapper.writeValueAsString(new ChatRequest(
                 MODEL,
-                new Message[]{new Message("system", selectedPrompt), new Message("user", prompt)}
+                new Message[]{new Message("system", systemPrompt), new Message("user", prompt)}
             ));
 
             HttpRequest request = HttpRequest.newBuilder()

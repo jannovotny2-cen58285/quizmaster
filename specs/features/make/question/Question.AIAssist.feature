@@ -3,8 +3,8 @@ Feature: Generate question and answers using AI
   @slow
   Scenario: Generate single-choice question and answers using AI assist
     Given I start creating a question
-    When I ask AI: "Vygeneruj mi otázku na téma: Hlavní město nějakého státu"
-    Then request to AI assistant contains question "Vygeneruj mi otázku na téma: Hlavní město nějakého státu"
+    When I ask AI: "Generate a question about capital cities with 1 correct answer and 2 incorrect answers"
+    Then request to AI assistant contains question "Generate a question about capital cities with 1 correct answer and 2 incorrect answers"
     And Question field is not empty
     And the question is single choice
     And AI assistant returns at least 2 generated answers
@@ -14,8 +14,8 @@ Feature: Generate question and answers using AI
   Scenario: Generate multiple-choice question and answers using AI assist
     Given I start creating a question
     When I mark the question as multiple choice
-    And I ask AI: "Vygeneruj mi otázku na téma: Hlavní města v Evropě"
-    Then request to AI assistant contains question "Vygeneruj mi otázku na téma: Hlavní města v Evropě"
+    And I ask AI: "Generate a question about European capitals with 2 correct answers and 2 incorrect answers"
+    Then request to AI assistant contains question "Generate a question about European capitals with 2 correct answers and 2 incorrect answers"
     And the question is multiple choice
     And Question field is not empty
     And AI assistant returns at least 2 generated answers

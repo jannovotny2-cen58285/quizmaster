@@ -21,36 +21,36 @@ public class AiAssistantServiceTest {
 
     @Tag("ai")
     @Test
-    void generateQuestionReturnsValidResponse_single() {
+    void generateSingleChoiceQuestion() {
         assumeTrue(!apiToken.isBlank(), "ai.token not configured");
 
-        var response = aiAssistantService.generateQuestion(AiAssistantQuestionType.SINGLE, "capital cities of Europe");
+        var response = aiAssistantService.generateQuestion(
+            AiAssistantQuestionType.SINGLE,
+            "Generate a question about capital cities of Europe with 1 correct answer and 3 incorrect answers"
+        );
 
         assertNotNull(response.question());
-        assertEquals(AiAssistantQuestionType.SINGLE, response.type());
         assertFalse(response.question().isBlank());
-        assertNotNull(response.answers());
-        assertTrue(response.answers().length >= 2);
-        assertNotNull(response.correctAnswers());
+        assertEquals(AiAssistantQuestionType.SINGLE, response.type());
+        assertEquals(4, response.answers().length);
         assertEquals(1, response.correctAnswers().length);
-        assertEquals(0, response.correctAnswers()[0]);
     }
 
     @Tag("ai")
     @Test
-    void generateQuestionReturnsValidResponse_multiple() {
+    void generateMultipleChoiceQuestion() {
         assumeTrue(!apiToken.isBlank(), "ai.token not configured");
 
-        var response = aiAssistantService.generateQuestion(AiAssistantQuestionType.MULTIPLE, "capital cities of Europe");
+        var response = aiAssistantService.generateQuestion(
+            AiAssistantQuestionType.MULTIPLE,
+            "Generate a question about European capitals with 2 correct answers and 2 incorrect answers"
+        );
 
         assertNotNull(response.question());
-        assertEquals(AiAssistantQuestionType.MULTIPLE, response.type());
         assertFalse(response.question().isBlank());
-        assertNotNull(response.answers());
-        assertTrue(response.answers().length >= 2);
-        assertNotNull(response.correctAnswers());
-        assertTrue(response.correctAnswers().length >= 2);
-        assertEquals(0, response.correctAnswers()[0]);
+        assertEquals(AiAssistantQuestionType.MULTIPLE, response.type());
+        assertEquals(4, response.answers().length);
+        assertEquals(2, response.correctAnswers().length);
     }
 
     @Test
