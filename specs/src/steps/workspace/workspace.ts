@@ -63,5 +63,6 @@ Then('I take quiz {string}', async function (quiz: string) {
 })
 
 When('I open stats for quiz {string}', async function (quizName: string) {
+    await this.workspacePage.goto(this.workspaceGuid)
     await this.workspacePage.statsQuiz(quizName)
 })
