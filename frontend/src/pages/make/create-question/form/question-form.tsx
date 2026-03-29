@@ -1,7 +1,18 @@
 import { useState } from 'react'
 
 import { postAiAssistant } from 'api/ai-assistant.ts'
-import { SubmitButton, Form, Field, TextArea, TextInput, CheckField, Row, Button, Alert, RadioSet } from 'pages/components'
+import {
+    SubmitButton,
+    Form,
+    Field,
+    TextArea,
+    TextInput,
+    CheckField,
+    Row,
+    Button,
+    Alert,
+    RadioSet,
+} from 'pages/components'
 import { AnswersEdit, stateToQuestionApiData } from 'pages/make/create-question/form'
 import { useQuestionFormState } from './question-form-state'
 import { validateQuestionFormState, errorMessage, isValidImageUrl } from './validators.ts'
