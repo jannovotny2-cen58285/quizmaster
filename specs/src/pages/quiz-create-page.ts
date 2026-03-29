@@ -43,6 +43,7 @@ export class QuizCreatePage {
     expectQuizDescriptionValue = (value: string) => expect(this.quizDescriptionLocator()).toHaveValue(value)
     expectTimeLimitValue = (value: string) => expect(this.timeLimitInput()).toHaveValue(value)
     expectPassScoreValue = (value: string) => expect(this.passScoreInput()).toHaveValue(value)
-    expectSelectedQuestionCount = (count: number) => expect(this.selectedQuestionCountLocator()).toHaveText(String(count))
+    expectSelectedQuestionCount = (count: number) =>
+        expect(this.selectedQuestionCountLocator()).toHaveText(String(count))
     expectTotalQuestionCount = (count: number) => expect(this.totalQuestionCountLocator()).toHaveText(String(count))
 }
