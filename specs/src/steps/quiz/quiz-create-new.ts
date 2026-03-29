@@ -20,8 +20,8 @@ When('I enter quiz name {string}', async function (title: string) {
     await this.quizCreatePage.enterQuizName(title)
 })
 
-When('I set randomized question count to {int}', async function (finalCount: string) {
-    await this.quizCreatePage.enterQuizFinalCount(finalCount)
+When('I set randomized question count to {int}', async function (finalCount: number) {
+    await this.quizCreatePage.enterQuizFinalCount(String(finalCount))
 })
 
 Then('I see empty quiz title', async function () {
