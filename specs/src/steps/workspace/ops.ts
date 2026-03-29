@@ -9,7 +9,7 @@ import {
 import { emptyQuestion, type QuizmasterWorld } from 'steps/world'
 
 export const openCreateWorkspacePage = async (world: QuizmasterWorld) => {
-    world.workspaceCreatePage.gotoNew()
+    await world.workspaceCreatePage.gotoNew()
 }
 
 export const createWorkspace = async (world: QuizmasterWorld, name: string) => {
