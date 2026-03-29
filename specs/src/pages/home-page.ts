@@ -10,10 +10,8 @@ export class HomePage {
     waitForLoaded = () => this.page.waitForSelector('h1:has-text("Welcome to Quizmaster! You rock.")')
 
     // Locators for the links
-    createQuestionLink = () => this.page.locator('a[href="/question/new"]')
     createWorkspaceLink = () => this.page.locator('a[href="/workspace/new"]')
 
     // Retrying assertions
-    expectCreateQuestionLinkVisible = () => expect(this.createQuestionLink()).toBeVisible()
     expectCreateWorkspaceLinkVisible = () => expect(this.createWorkspaceLink()).toBeVisible()
 }

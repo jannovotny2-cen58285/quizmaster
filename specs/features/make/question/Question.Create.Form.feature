@@ -2,8 +2,7 @@ Feature: Create question form
   The question creation form starts with sensible defaults: empty question text,
   two empty answer fields, single choice mode, and no explanations visible.
   Answers can be added and removed. The explanation checkbox controls whether
-  explanation fields are shown. After successful submission, the user receives
-  a take-question URL and an edit-question URL.
+  explanation fields are shown.
 
   Scenario: Default values
     Given I start creating a question

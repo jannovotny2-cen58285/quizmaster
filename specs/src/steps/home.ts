@@ -10,10 +10,6 @@ Then('I see the home page', async function (this: QuizmasterWorld) {
     await this.homePage.waitForLoaded()
 })
 
-Then('I can create a new question', async function (this: QuizmasterWorld) {
-    await this.homePage.expectCreateQuestionLinkVisible()
-})
-
 Then('I can create a new workspace', async function (this: QuizmasterWorld) {
     await this.homePage.expectCreateWorkspaceLinkVisible()
 })
