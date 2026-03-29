@@ -1,9 +1,9 @@
 package cz.scrumdojo.quizmaster.aiassistant;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
@@ -52,7 +52,8 @@ public class AiAssistantService {
         try {
             String body = objectMapper.writeValueAsString(new ChatRequest(
                 MODEL,
-                new Message[]{new Message("system", systemPrompt), new Message("user", prompt)}
+                new Message[]{new Message("system", systemPrompt), new Message("user", prompt)},
+                new ResponseFormat("json_object")
             ));
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -71,7 +72,7 @@ public class AiAssistantService {
 
             JsonNode root = objectMapper.readTree(response.body());
             String content = root.path("choices").path(0).path("message").path("content").asText("").trim();
-            AssistantResponse assistantResponse = objectMapper.readValue(cleanAiResponse(content), AssistantResponse.class);
+            AssistantResponse assistantResponse = objectMapper.readValue(content, AssistantResponse.class);
 
             return new AiAssistantResponse(type, assistantResponse.question(), assistantResponse.answers(), assistantResponse.correctAnswers());
         } catch (ResponseStatusException e) {
@@ -81,19 +82,9 @@ public class AiAssistantService {
         }
     }
 
-    public String cleanAiResponse(String content) {
-        if (StringUtils.isNotBlank(content)) {
-            int openJsonBrace = StringUtils.indexOf(content, '{');
-            int closeJsonBrace = StringUtils.lastIndexOf(content, '}');
-            if (openJsonBrace >= 0 && closeJsonBrace >= 0) {
-                return content.substring(openJsonBrace, closeJsonBrace + 1);
-            }
-        }
+    private record ChatRequest(String model, Message[] messages, @JsonProperty("response_format") ResponseFormat responseFormat) {}
 
-        throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "AI assistant request failed.");
-    }
-
-    private record ChatRequest(String model, Message[] messages) {}
+    private record ResponseFormat(String type) {}
 
     private record Message(String role, String content) {}
 

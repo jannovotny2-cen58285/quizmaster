@@ -58,44 +58,4 @@ public class AiAssistantServiceTest {
         assertThrows(ResponseStatusException.class, () -> aiAssistantService.generateQuestion(AiAssistantQuestionType.SINGLE, "   "));
     }
 
-    @Test
-    void cleanAiResponseTest() {
-        String cleaned = aiAssistantService.cleanAiResponse("""
-                ```json
-                {
-                    "question": "Which dog breed is typically recognized as the tallest?",
-                    "answers": ["Great Dane", "German Shepherd", "Golden Retriever", "Labrador Retriever"],
-                    "correctAnswers": [0]
-                }
-                ```
-                """);
-
-        assertEquals("""
-                {
-                    "question": "Which dog breed is typically recognized as the tallest?",
-                    "answers": ["Great Dane", "German Shepherd", "Golden Retriever", "Labrador Retriever"],
-                    "correctAnswers": [0]
-                }""", cleaned);
-    }
-
-    @Test
-    void cleanAiResponseTest_wrongInput() {
-        assertThrows(ResponseStatusException.class, () -> {
-            aiAssistantService.cleanAiResponse("I'm Sorry Dave, I'm Afraid I Can't Do That");
-        });
-    }
-
-    @Test
-    void cleanAiResponseTest_empty() {
-        assertThrows(ResponseStatusException.class, () -> {
-            aiAssistantService.cleanAiResponse("");
-        });
-    }
-
-    @Test
-    void cleanAiResponseTest_null() {
-        assertThrows(ResponseStatusException.class, () -> {
-            aiAssistantService.cleanAiResponse(null);
-        });
-    }
 }
