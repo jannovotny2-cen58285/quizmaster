@@ -59,6 +59,13 @@ sourceSets {
 
 tasks.withType<Test> {
     jvmArgs("-XX:+EnableDynamicAgentLoading")
+    testLogging {
+        events("passed", "skipped", "failed")
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
 }
 
 tasks.named<Test>("test") {

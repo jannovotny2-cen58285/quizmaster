@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - devcontainer
+      - ci-test-report
   workflow_dispatch:
 
 jobs:
@@ -58,3 +59,21 @@ jobs:
       - name: Run end-to-end tests
         working-directory: specs
         run: pnpm ci:test:e2e
+
+      - name: Upload backend test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-results
+          path: |
+            backend/build/reports/tests/test/
+            backend/build/test-results/test/
+
+      - name: Upload E2E test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results
+          path: |
+            specs/playwright-report/
+            specs/test-results/

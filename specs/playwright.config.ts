@@ -10,6 +10,15 @@ export default defineConfig({
         timeout: 10000,
     },
     workers: Number(process.env.PW_WORKERS) || 2,
+    use: {
+        trace: 'retain-on-failure',
+        screenshot: 'only-on-failure',
+        video: 'retain-on-failure',
+    },
+    reporter: [
+        ['html', { open: 'never', outputFolder: 'playwright-report' }],
+        ['junit', { outputFile: 'test-results/results.xml' }],
+    ],
     projects: [
         {
             name: 'chromium',
