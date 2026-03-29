@@ -3,7 +3,6 @@ import { expect } from '@playwright/test'
 import type { DataTable } from '@cucumber/cucumber'
 
 import type { QuestionPage, QuizCreatePage, QuizScorePage, QuizStatsPage, TakeQuestionPage } from 'pages'
-import { expectTextToBe } from 'steps/common.ts'
 import type { Answer } from 'steps/world'
 
 export const expectQuizResult = async (
@@ -71,8 +70,8 @@ export const expectAnswersChecked = async (takeQuestionPage: TakeQuestionPage, a
 }
 
 export const expectStatsTable = async (quizStatsPage: QuizStatsPage, data: DataTable) => {
-    const statsTableBodyRowsLocator = quizStatsPage.attemptStatsTableBodyRowsLocator()
-    const actualRowCount = await statsTableBodyRowsLocator.count()
+    const statsTableBodyRows = quizStatsPage.attemptStatsBodyRows()
+    const actualRowCount = await statsTableBodyRows.count()
 
     const expectedRows = data.rows().filter(row => row.some(cell => cell.trim() !== ''))
 
@@ -80,70 +79,35 @@ export const expectStatsTable = async (quizStatsPage: QuizStatsPage, data: DataT
 
     for (let i = 0; i < expectedRows.length; i++) {
         const expectedRow = expectedRows[i]
-        const actualRowLocator = statsTableBodyRowsLocator.nth(i)
 
         for (let j = 0; j < expectedRow.length; j++) {
             const expectedCell = expectedRow[j].trim()
             if (expectedCell !== '') {
-                await expectTextToBe(actualRowLocator.locator('td').nth(j), expectedCell)
+                await quizStatsPage.expectAttemptStatsBodyRowCell(i, j, expectedCell)
             }
         }
     }
+}
+
+const parseLabeledStatsData = (data: DataTable) => {
+    const rawRows = data.raw()
+    const [captionRow = [], headerRow = [], ...bodyRows] = rawRows
+    const captionText = captionRow[0]?.trim() || undefined
+    const headerCells = headerRow.map(c => c.trim())
+    const filteredBodyRows = bodyRows
+        .filter(row => row.some(cell => cell.trim() !== ''))
+        .map(row => row.map(cell => cell.trim()))
+    return { captionText, headerCells, bodyRows: filteredBodyRows }
 }
 
 export const expectSummaryStatsTable = async (quizStatsPage: QuizStatsPage, data: DataTable) => {
-    await expectLabeledStatsTable(
-        quizStatsPage.summaryStatsTableCaptionLocator(),
-        quizStatsPage.summaryStatsTableHeaderCellsLocator(),
-        quizStatsPage.summaryStatsTableBodyRowsLocator(),
-        data,
-    )
+    const { captionText, headerCells, bodyRows } = parseLabeledStatsData(data)
+    await quizStatsPage.expectLabeledTable('summary', captionText, headerCells, bodyRows)
 }
 
 export const expectAttemptStatsTable = async (quizStatsPage: QuizStatsPage, data: DataTable) => {
-    await expectLabeledStatsTable(
-        quizStatsPage.attemptStatsTableCaptionLocator(),
-        quizStatsPage.attemptStatsTableHeaderCellsLocator(),
-        quizStatsPage.attemptStatsTableBodyRowsLocator(),
-        data,
-    )
-}
-
-const expectLabeledStatsTable = async (
-    captionLocator: ReturnType<QuizStatsPage['summaryStatsTableCaptionLocator']>,
-    headerCellsLocator: ReturnType<QuizStatsPage['summaryStatsTableHeaderCellsLocator']>,
-    bodyRowsLocator: ReturnType<QuizStatsPage['summaryStatsTableBodyRowsLocator']>,
-    data: DataTable,
-) => {
-    const rawRows = data.raw()
-
-    const [captionRow = [], headerRow = [], ...bodyRows] = rawRows
-
-    if (captionRow[0]?.trim()) {
-        await expectTextToBe(captionLocator, captionRow[0].trim())
-    }
-
-    for (let i = 0; i < headerRow.length; i++) {
-        const expectedCell = headerRow[i].trim()
-        if (expectedCell !== '') {
-            await expectTextToBe(headerCellsLocator.nth(i), expectedCell)
-        }
-    }
-
-    const expectedBodyRows = bodyRows.filter(row => row.some(cell => cell.trim() !== ''))
-    await expect(bodyRowsLocator).toHaveCount(expectedBodyRows.length)
-
-    for (let i = 0; i < expectedBodyRows.length; i++) {
-        const expectedRow = expectedBodyRows[i]
-        const actualRowLocator = bodyRowsLocator.nth(i)
-
-        for (let j = 0; j < expectedRow.length; j++) {
-            const expectedCell = expectedRow[j].trim()
-            if (expectedCell !== '') {
-                await expectTextToBe(actualRowLocator.locator('td').nth(j), expectedCell)
-            }
-        }
-    }
+    const { captionText, headerCells, bodyRows } = parseLabeledStatsData(data)
+    await quizStatsPage.expectLabeledTable('attempt', captionText, headerCells, bodyRows)
 }
 
 export const expectCorrectAnswersCounts = (correctAnswersCounts: Record<string, string>, rows: string[][]) => {

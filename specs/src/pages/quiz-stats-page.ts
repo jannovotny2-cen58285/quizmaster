@@ -1,17 +1,58 @@
-import type { Page } from '@playwright/test'
+import { expect, type Locator, type Page } from '@playwright/test'
+
+import { expectTextToBe } from 'steps/common.ts'
 
 export class QuizStatsPage {
     constructor(private page: Page) {}
 
-    public pageHeadingLocator = () => this.page.locator('h2')
-    public firstTableLocator = () => this.page.locator('table').nth(0)
-    public secondTableLocator = () => this.page.locator('table').nth(1)
-    public attemptStatsTableLocator = () => this.page.getByTestId('attempt-stats-table')
-    public summaryStatsTableLocator = () => this.page.getByTestId('summary-stats-table')
-    public attemptStatsTableCaptionLocator = () => this.attemptStatsTableLocator().locator('caption')
-    public summaryStatsTableCaptionLocator = () => this.summaryStatsTableLocator().locator('caption')
-    public attemptStatsTableHeaderCellsLocator = () => this.attemptStatsTableLocator().locator('thead th')
-    public summaryStatsTableHeaderCellsLocator = () => this.summaryStatsTableLocator().locator('thead th')
-    public attemptStatsTableBodyRowsLocator = () => this.attemptStatsTableLocator().locator('tbody tr')
-    public summaryStatsTableBodyRowsLocator = () => this.summaryStatsTableLocator().locator('tbody tr')
+    private pageHeadingLocator = () => this.page.locator('h2')
+    private attemptStatsTableLocator = () => this.page.getByTestId('attempt-stats-table')
+    private summaryStatsTableLocator = () => this.page.getByTestId('summary-stats-table')
+
+    private tableCaptionLocator = (table: Locator) => table.locator('caption')
+    private tableHeaderCellsLocator = (table: Locator) => table.locator('thead th')
+    private tableBodyRowsLocator = (table: Locator) => table.locator('tbody tr')
+
+    attemptStatsBodyRows = () => this.tableBodyRowsLocator(this.attemptStatsTableLocator())
+
+    expectPageHeading = (text: string) => expectTextToBe(this.pageHeadingLocator(), text)
+
+    expectAttemptStatsRowCount = (count: number) =>
+        expect(this.tableBodyRowsLocator(this.attemptStatsTableLocator())).toHaveCount(count)
+
+    expectAttemptStatsBodyRowCell = (rowIndex: number, colIndex: number, text: string) =>
+        expectTextToBe(
+            this.tableBodyRowsLocator(this.attemptStatsTableLocator()).nth(rowIndex).locator('td').nth(colIndex),
+            text,
+        )
+
+    expectLabeledTable = async (
+        table: 'attempt' | 'summary',
+        captionText: string | undefined,
+        headerCells: string[],
+        bodyRows: string[][],
+    ) => {
+        const tableLocator = table === 'attempt' ? this.attemptStatsTableLocator() : this.summaryStatsTableLocator()
+
+        if (captionText) {
+            await expectTextToBe(this.tableCaptionLocator(tableLocator), captionText)
+        }
+
+        for (let i = 0; i < headerCells.length; i++) {
+            if (headerCells[i] !== '') {
+                await expectTextToBe(this.tableHeaderCellsLocator(tableLocator).nth(i), headerCells[i])
+            }
+        }
+
+        const rows = this.tableBodyRowsLocator(tableLocator)
+        await expect(rows).toHaveCount(bodyRows.length)
+
+        for (let i = 0; i < bodyRows.length; i++) {
+            for (let j = 0; j < bodyRows[i].length; j++) {
+                if (bodyRows[i][j] !== '') {
+                    await expectTextToBe(rows.nth(i).locator('td').nth(j), bodyRows[i][j])
+                }
+            }
+        }
+    }
 }

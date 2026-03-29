@@ -1,6 +1,5 @@
 import type { DataTable } from '@cucumber/cucumber'
 
-import { expectTextToBe } from 'steps/common.ts'
 import { Given, Then, When } from 'steps/fixture.ts'
 import { expectAttemptStatsTable, expectStatsTable, expectSummaryStatsTable } from 'steps/quiz/expects.ts'
 import { takeQuizWithAnswers, takeQuizWithAnswersTimed, takeQuizWithoutCompletingInTimeLimit } from 'steps/quiz/ops.ts'
@@ -21,7 +20,7 @@ When('I take quiz {string} which I do not complete in time limit', async functio
 })
 
 Then('I see stats page for quiz {string}', async function (quizName: string) {
-    await expectTextToBe(this.quizStatsPage.pageHeadingLocator(), `Statistics for quiz: ${quizName}`)
+    await this.quizStatsPage.expectPageHeading(`Statistics for quiz: ${quizName}`)
 })
 
 Then('I see stats table', async function (data: DataTable) {
