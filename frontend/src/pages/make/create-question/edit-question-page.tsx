@@ -5,7 +5,6 @@ import { fetchWorkspaceQuestion, type QuestionApiData, updateQuestion } from 'ap
 
 import { Page } from 'pages/components/page.tsx'
 import { QuestionEditForm } from './form/question-form.tsx'
-import { LoadedIndicator } from './components.tsx'
 import type { Question } from 'model/question.ts'
 import { urls, useWorkspaceId } from 'urls.ts'
 
@@ -15,16 +14,8 @@ export function EditQuestionPage() {
     const questionId = params.id || ''
 
     const [question, setQuestion] = useState<Question | undefined>(undefined)
-    const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
-    useApi(
-        questionId,
-        id => fetchWorkspaceQuestion(workspaceId, id),
-        question => {
-            setQuestion(question)
-            setIsLoaded(true)
-        },
-    )
+    useApi(questionId, id => fetchWorkspaceQuestion(workspaceId, id), setQuestion)
     const navigate = useNavigate()
 
     const handleSubmit = (questionData: QuestionApiData) => {
@@ -35,8 +26,7 @@ export function EditQuestionPage() {
 
     return (
         <Page title="Edit Question" id="edit-question-page">
-            <QuestionEditForm key={question?.id ?? ''} question={question} onSubmit={handleSubmit} />
-            <LoadedIndicator isLoaded={isLoaded} />
+            {question && <QuestionEditForm question={question} onSubmit={handleSubmit} />}
         </Page>
     )
 }
