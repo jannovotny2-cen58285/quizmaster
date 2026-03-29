@@ -76,7 +76,9 @@ public class AiAssistantService {
             AssistantResponse assistantResponse = objectMapper.readValue(content, AssistantResponse.class);
             validateResponse(assistantResponse);
 
-            return new AiAssistantResponse(type, assistantResponse.question(), assistantResponse.answers(), assistantResponse.correctAnswers());
+            AiAssistantQuestionType derivedType = assistantResponse.correctAnswers().length > 1
+                ? AiAssistantQuestionType.MULTIPLE : AiAssistantQuestionType.SINGLE;
+            return new AiAssistantResponse(derivedType, assistantResponse.question(), assistantResponse.answers(), assistantResponse.correctAnswers());
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {

@@ -24,13 +24,19 @@ export class QuestionEditPage {
     enableExplanations = () => this.showExplanationLocator().check()
     disableExplanations = () => this.showExplanationLocator().uncheck()
 
-    private questionTypeLocator = () => this.page.locator('#question-type')
-    questionType = () => this.questionTypeLocator().inputValue()
+    private questionTypeRadio = (value: string) => this.page.locator(`#question-type-${value}`)
+    questionType = async () => {
+        for (const type of ['single', 'multiple', 'numerical']) {
+            const radio = this.questionTypeRadio(type)
+            if ((await radio.count()) > 0 && (await radio.isChecked())) return type
+        }
+        return ''
+    }
     isMultipleChoice = async () => (await this.questionType()) === 'multiple'
     isNumericalChoice = async () => (await this.questionType()) === 'numerical'
-    setMultipleChoice = () => this.questionTypeLocator().selectOption('multiple')
-    setSingleChoice = () => this.questionTypeLocator().selectOption('single')
-    setNumericalChoice = () => this.questionTypeLocator().selectOption('numerical')
+    setMultipleChoice = () => this.questionTypeRadio('multiple').check()
+    setSingleChoice = () => this.questionTypeRadio('single').check()
+    setNumericalChoice = () => this.questionTypeRadio('numerical').check()
 
     private numericalCorrectAnswerLocator = () => this.page.locator('#numerical-correct-answer')
     enterNumericalCorrectAnswer = (value: string) => this.numericalCorrectAnswerLocator().fill(value)
@@ -106,7 +112,7 @@ export class QuestionEditPage {
     expectCreatePageVisible = () => expect(this.createPageLocator()).toBeVisible()
     expectQuestionValue = (value: string) => expect(this.questionLocator()).toHaveValue(value)
     expectQuestionValueNotEmpty = () => expect(this.questionLocator()).not.toBeEmpty({ timeout: 60000 })
-    expectQuestionType = (type: string) => expect(this.questionTypeLocator()).toHaveValue(type)
+    expectQuestionType = (type: string) => expect(this.questionTypeRadio(type)).toBeChecked()
     expectExplanationsChecked = () => expect(this.showExplanationLocator()).toBeChecked()
     expectExplanationsUnchecked = () => expect(this.showExplanationLocator()).not.toBeChecked()
     expectNumericalAnswerVisible = () => expect(this.numericalCorrectAnswerLocator()).toBeVisible()

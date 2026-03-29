@@ -12,8 +12,7 @@ Feature: Generate question and answers using AI
   @slow
   Scenario: Generate multiple-choice question and answers using AI assist
     Given I start creating a question
-    When I mark the question as multiple choice
-    And I ask AI: "Generate a question about European capitals with 2 correct answers and 2 incorrect answers"
+    When I ask AI: "Generate a question about European capitals with 2 correct answers and 2 incorrect answers"
     Then the question is multiple choice
     And Question field is not empty
     And AI assistant returns at least 2 generated answers

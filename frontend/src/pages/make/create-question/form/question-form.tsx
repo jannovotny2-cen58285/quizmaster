@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { postAiAssistant } from 'api/ai-assistant.ts'
-import { SubmitButton, Form, Field, TextArea, TextInput, CheckField, Row, Button, Alert } from 'pages/components'
+import { SubmitButton, Form, Field, TextArea, TextInput, CheckField, Row, Button, Alert, RadioSet } from 'pages/components'
 import { AnswersEdit, stateToQuestionApiData } from 'pages/make/create-question/form'
 import { useQuestionFormState } from './question-form-state'
 import { validateQuestionFormState, errorMessage, isValidImageUrl } from './validators.ts'
@@ -58,27 +58,6 @@ export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClic
 
     return (
         <Form id="question-create-form" validator={validator} onSubmit={handleSubmit}>
-            <Row>
-                <Field label="Question type" required>
-                    <select
-                        id="question-type"
-                        value={state.questionType}
-                        onChange={e => state.selectQuestionType(e.target.value as 'single' | 'multiple' | 'numerical')}
-                    >
-                        <option value="single">Single choice</option>
-                        <option value="multiple">Multiple choice</option>
-                        <option value="numerical">Numerical question</option>
-                    </select>
-                </Field>
-                {state.isMultipleChoice && (
-                    <CheckField
-                        id="easy-mode"
-                        label="Easy mode"
-                        checked={state.easyMode}
-                        onToggle={state.setEasyMode}
-                    />
-                )}
-            </Row>
             {!isEditing && !state.isNumerical && (
                 <Field label="AI Prompt">
                     <div className="question-input-with-action">
@@ -113,6 +92,24 @@ export const QuestionEditForm = ({ question, onSubmit, onBack, onAiAssistantClic
                 </div>
                 <ErrorMessage errorCode="empty-question" />
             </Field>
+            <Row>
+                <Field label="Question type" required>
+                    <RadioSet
+                        name="question-type"
+                        value={state.questionType}
+                        onChange={state.selectQuestionType}
+                        options={{ single: 'Single choice', multiple: 'Multiple choice', numerical: 'Numerical' }}
+                    />
+                </Field>
+                {state.isMultipleChoice && (
+                    <CheckField
+                        id="easy-mode"
+                        label="Easy mode"
+                        checked={state.easyMode}
+                        onToggle={state.setEasyMode}
+                    />
+                )}
+            </Row>
             <Field label="Image URL">
                 <TextInput id="image-url" value={state.imageUrl} onChange={state.setImageUrl} />
                 {hasImageUrlTooLong && (
