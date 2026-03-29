@@ -5,14 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 @Service
@@ -25,14 +28,17 @@ public class AiAssistantService {
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
     private final String apiToken;
+    private final String systemPrompt;
 
     public AiAssistantService(
         ObjectMapper objectMapper,
         @Value("${ai.token:}") String apiToken
-    ) {
+    ) throws IOException {
         this.objectMapper = objectMapper;
         this.apiToken = apiToken.strip();
         this.httpClient = HttpClient.newBuilder().connectTimeout(TIMEOUT).build();
+        this.systemPrompt = new ClassPathResource("prompts/question-generation.md")
+            .getContentAsString(StandardCharsets.UTF_8);
     }
 
     public AiAssistantResponse generateQuestion(AiAssistantQuestionType type, String prompt) {
@@ -44,9 +50,10 @@ public class AiAssistantService {
         }
 
         try {
+            String selectedPrompt = type == AiAssistantQuestionType.SINGLE ? systemPrompt : type.getPrompt();
             String body = objectMapper.writeValueAsString(new ChatRequest(
                 MODEL,
-                new Message[]{new Message("system", type.getPrompt()), new Message("user", prompt)}
+                new Message[]{new Message("system", selectedPrompt), new Message("user", prompt)}
             ));
 
             HttpRequest request = HttpRequest.newBuilder()
