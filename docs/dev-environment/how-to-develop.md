@@ -44,6 +44,17 @@ To run the application, in the `backend` directory execute:
 
 This command does not build the front end, so you need to run `pnpm run build` first.
 
+### Run backend tests
+
+Run the following commands from the `backend` directory:
+
+- `./gradlew test` — runs **all** tests, including AI integration tests that call a real LLM (requires `OPENROUTER_API_KEY`)
+- `./gradlew testLocal` — runs only local tests (excludes AI tests, no API key needed)
+- `./gradlew testAi` — runs only AI integration tests (requires `OPENROUTER_API_KEY`)
+
+AI tests are tagged with JUnit 5 `@Tag("ai")`. When `OPENROUTER_API_KEY` is not set,
+AI tests are skipped automatically via `assumeTrue`.
+
 <!-- markdownlint-disable-next-line MD045 MD033-->
 ## <img alt="Vite logo" src="https://vitejs.dev/logo.svg" height="20"> Running Vite Development Server
 
