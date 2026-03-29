@@ -13,6 +13,7 @@ frontend/.vite
 specs/.features-gen
 specs/coverage/
 specs/node_modules/
+specs/playwright-report/
 specs/test-results
 
 site/coverage/
