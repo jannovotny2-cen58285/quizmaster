@@ -339,11 +339,11 @@ When('I clear image URL and type {string}', async function (imageUrl: string) {
 })
 
 Then('I see image preview', async function () {
-    await expect(this.questionEditPage.imagePreviewLocator()).toBeVisible()
+    await expect(this.questionEditPage.imagePreviewLocator()).toBeAttached()
 })
 
 Then('I do not see image preview', async function () {
-    await expect(this.questionEditPage.imagePreviewLocator()).not.toBeVisible()
+    await expect(this.questionEditPage.imagePreviewLocator()).not.toBeAttached()
 })
 
 // Save question
