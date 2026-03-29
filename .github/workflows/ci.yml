@@ -10,6 +10,10 @@ on:
 
 jobs:
   build:
+    permissions:
+      checks: write
+      contents: read
+      actions: read
     runs-on: ubuntu-24.04
     container:
       image: ghcr.io/scrumdojo/dev-quizmaster:v4
@@ -77,3 +81,19 @@ jobs:
           path: |
             specs/playwright-report/
             specs/test-results/
+
+      - name: Publish backend test results
+        if: always()
+        uses: dorny/test-reporter@v2
+        with:
+          name: Backend Tests
+          path: backend/build/test-results/test/*.xml
+          reporter: java-junit
+
+      - name: Publish E2E test results
+        if: always()
+        uses: dorny/test-reporter@v2
+        with:
+          name: E2E Tests
+          path: specs/test-results/results.xml
+          reporter: jest-junit
