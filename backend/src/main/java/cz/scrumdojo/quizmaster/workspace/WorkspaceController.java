@@ -3,6 +3,7 @@ package cz.scrumdojo.quizmaster.workspace;
 import cz.scrumdojo.quizmaster.question.Question;
 import cz.scrumdojo.quizmaster.question.QuestionRepository;
 import cz.scrumdojo.quizmaster.question.QuestionRequest;
+import cz.scrumdojo.quizmaster.question.QuestionResponse;
 import cz.scrumdojo.quizmaster.question.QuestionWriteResponse;
 import cz.scrumdojo.quizmaster.quiz.Quiz;
 import cz.scrumdojo.quizmaster.quiz.QuizRepository;
@@ -77,11 +78,11 @@ public class WorkspaceController {
 
     @Transactional(readOnly = true)
     @GetMapping("/{guid}/questions/{id}")
-    public ResponseEntity<Question> getWorkspaceQuestion(@PathVariable String guid, @PathVariable Integer id) {
+    public ResponseEntity<QuestionResponse> getWorkspaceQuestion(@PathVariable String guid, @PathVariable Integer id) {
         if (!workspaceRepository.existsById(guid))
             return ResponseEntity.notFound().build();
 
-        return ResponseHelper.okOrNotFound(questionRepository.findByIdAndWorkspaceGuid(id, guid));
+        return ResponseHelper.okOrNotFound(questionRepository.findByIdAndWorkspaceGuid(id, guid).map(QuestionResponse::from));
     }
 
     @Transactional
