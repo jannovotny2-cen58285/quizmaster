@@ -34,12 +34,10 @@ public class AiAssistantControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {
-                        "type": "single",
                         "question": "Generate a question about capital cities of Europe with 1 correct answer and 2 incorrect answers"
                     }
                     """))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.type").value("single"))
             .andExpect(jsonPath("$.question").isNotEmpty())
             .andExpect(jsonPath("$.answers").isArray())
             .andExpect(jsonPath("$.answers.length()").value(3))
@@ -49,7 +47,7 @@ public class AiAssistantControllerTest {
 
     @Tag("ai")
     @Test
-    public void generateReturnsQuestionShape_missingType() throws Exception {
+    public void generateReturnsQuestionShape_questionOnly() throws Exception {
         assumeTrue(!apiToken.isBlank(), "ai.token not configured");
 
         mockMvc.perform(post("/api/ai-assistant")
@@ -60,7 +58,6 @@ public class AiAssistantControllerTest {
                     }
                     """))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.type").value("single"))
             .andExpect(jsonPath("$.question").isNotEmpty())
             .andExpect(jsonPath("$.answers").isArray())
             .andExpect(jsonPath("$.answers.length()").value(4))

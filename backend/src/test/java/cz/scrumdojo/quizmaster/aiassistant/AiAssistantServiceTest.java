@@ -25,13 +25,11 @@ public class AiAssistantServiceTest {
         assumeTrue(!apiToken.isBlank(), "ai.token not configured");
 
         var response = aiAssistantService.generateQuestion(
-            AiAssistantQuestionType.SINGLE,
             "Generate a question about capital cities of Europe with 1 correct answer and 3 incorrect answers"
         );
 
         assertNotNull(response.question());
         assertFalse(response.question().isBlank());
-        assertEquals(AiAssistantQuestionType.SINGLE, response.type());
         assertEquals(4, response.answers().length);
         assertEquals(1, response.correctAnswers().length);
     }
@@ -42,20 +40,18 @@ public class AiAssistantServiceTest {
         assumeTrue(!apiToken.isBlank(), "ai.token not configured");
 
         var response = aiAssistantService.generateQuestion(
-            AiAssistantQuestionType.MULTIPLE,
             "Generate a question about European capitals with 2 correct answers and 2 incorrect answers"
         );
 
         assertNotNull(response.question());
         assertFalse(response.question().isBlank());
-        assertEquals(AiAssistantQuestionType.MULTIPLE, response.type());
         assertEquals(4, response.answers().length);
         assertEquals(2, response.correctAnswers().length);
     }
 
     @Test
     void generateQuestionFailsOnEmptyPrompt() {
-        assertThrows(ResponseStatusException.class, () -> aiAssistantService.generateQuestion(AiAssistantQuestionType.SINGLE, "   "));
+        assertThrows(ResponseStatusException.class, () -> aiAssistantService.generateQuestion("   "));
     }
 
     @Tag("ai")
@@ -64,7 +60,6 @@ public class AiAssistantServiceTest {
         assumeTrue(!apiToken.isBlank(), "ai.token not configured");
 
         var response = aiAssistantService.generateQuestion(
-            AiAssistantQuestionType.SINGLE,
             "Create a question on exoplanets. There must be exactly 2 correct answers and exactly 2 incorrect answers. Total: 4 answers."
         );
 
@@ -79,7 +74,6 @@ public class AiAssistantServiceTest {
         assumeTrue(!apiToken.isBlank(), "ai.token not configured");
 
         var response = aiAssistantService.generateQuestion(
-            AiAssistantQuestionType.SINGLE,
             "Create a question about European capitals. There must be exactly 1 correct answer and exactly 2 incorrect answers. Total: 3 answers."
         );
 

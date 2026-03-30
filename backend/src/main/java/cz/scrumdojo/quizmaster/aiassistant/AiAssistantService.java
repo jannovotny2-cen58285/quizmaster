@@ -44,7 +44,7 @@ public class AiAssistantService {
             .getContentAsString(StandardCharsets.UTF_8);
     }
 
-    public AiAssistantResponse generateQuestion(AiAssistantQuestionType type, String prompt) {
+    public AiAssistantResponse generateQuestion(String prompt) {
         if (prompt == null || prompt.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question must not be empty.");
         }
@@ -78,9 +78,7 @@ public class AiAssistantService {
             AssistantResponse assistantResponse = objectMapper.readValue(content, AssistantResponse.class);
             validateResponse(assistantResponse);
 
-            AiAssistantQuestionType derivedType = assistantResponse.correctAnswers().length > 1
-                ? AiAssistantQuestionType.MULTIPLE : AiAssistantQuestionType.SINGLE;
-            return new AiAssistantResponse(derivedType, assistantResponse.question(), assistantResponse.answers(), assistantResponse.correctAnswers());
+            return new AiAssistantResponse(assistantResponse.question(), assistantResponse.answers(), assistantResponse.correctAnswers());
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {

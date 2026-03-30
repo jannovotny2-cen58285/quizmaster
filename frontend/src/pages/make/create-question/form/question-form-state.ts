@@ -98,7 +98,7 @@ export const useQuestionFormState = (question?: Question) => {
 
     const applyAiResponse = (response: AiAssistantResponse) => {
         setQuestionText(response.question)
-        setQuestionType(response.type)
+        setQuestionType(response.correctAnswers.length > 1 ? 'multiple' : 'single')
         setAnswers(response.answers)
         setExplanations(response.answers.map(() => ''))
         setCorrectAnswers(Array.from(response.correctAnswers))
