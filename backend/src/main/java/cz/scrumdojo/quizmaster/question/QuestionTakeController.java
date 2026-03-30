@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/question")
-public class QuestionController {
+public class QuestionTakeController {
 
     private final QuestionRepository questionRepository;
 
-    public QuestionController(QuestionRepository questionRepository) {
+    public QuestionTakeController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 

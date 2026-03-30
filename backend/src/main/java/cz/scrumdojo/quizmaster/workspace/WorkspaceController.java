@@ -2,9 +2,6 @@ package cz.scrumdojo.quizmaster.workspace;
 
 import cz.scrumdojo.quizmaster.question.Question;
 import cz.scrumdojo.quizmaster.question.QuestionRepository;
-import cz.scrumdojo.quizmaster.question.QuestionRequest;
-import cz.scrumdojo.quizmaster.question.QuestionResponse;
-import cz.scrumdojo.quizmaster.question.QuestionWriteResponse;
 import cz.scrumdojo.quizmaster.quiz.Quiz;
 import cz.scrumdojo.quizmaster.quiz.QuizRepository;
 import cz.scrumdojo.quizmaster.ResponseHelper;
@@ -75,56 +72,4 @@ public class WorkspaceController {
 
         return ResponseEntity.ok(items);
     }
-
-    @Transactional(readOnly = true)
-    @GetMapping("/{guid}/questions/{id}")
-    public ResponseEntity<QuestionResponse> getWorkspaceQuestion(@PathVariable String guid, @PathVariable Integer id) {
-        if (!workspaceRepository.existsById(guid))
-            return ResponseEntity.notFound().build();
-
-        return ResponseHelper.okOrNotFound(questionRepository.findByIdAndWorkspaceGuid(id, guid).map(QuestionResponse::from));
-    }
-
-    @Transactional
-    @PostMapping("/{guid}/questions")
-    public ResponseEntity<QuestionWriteResponse> createWorkspaceQuestion(
-            @PathVariable String guid, @RequestBody QuestionRequest request) {
-        if (!workspaceRepository.existsById(guid))
-            return ResponseEntity.notFound().build();
-
-        var created = questionRepository.save(request.toEntity(guid));
-        return ResponseEntity.ok(new QuestionWriteResponse(created.getId()));
-    }
-
-    @Transactional
-    @PatchMapping("/{guid}/questions/{id}")
-    public ResponseEntity<QuestionWriteResponse> updateWorkspaceQuestion(
-            @PathVariable String guid, @PathVariable Integer id, @RequestBody QuestionRequest request) {
-        if (!workspaceRepository.existsById(guid))
-            return ResponseEntity.notFound().build();
-
-        return questionRepository.findByIdAndWorkspaceGuid(id, guid)
-            .map(existing -> {
-                var question = request.toEntity(guid);
-                question.setId(existing.getId());
-                questionRepository.save(question);
-                return ResponseEntity.ok(new QuestionWriteResponse(existing.getId()));
-            })
-            .orElse(ResponseEntity.notFound().build());
-    }
-
-    @Transactional
-    @DeleteMapping("/{guid}/questions/{id}")
-    public ResponseEntity<Void> deleteWorkspaceQuestion(@PathVariable String guid, @PathVariable Integer id) {
-        if (!workspaceRepository.existsById(guid))
-            return ResponseEntity.notFound().build();
-
-        return questionRepository.findByIdAndWorkspaceGuid(id, guid)
-            .map(existing -> {
-                questionRepository.deleteById(id);
-                return ResponseEntity.noContent().<Void>build();
-            })
-            .orElse(ResponseEntity.notFound().build());
-    }
-
 }
