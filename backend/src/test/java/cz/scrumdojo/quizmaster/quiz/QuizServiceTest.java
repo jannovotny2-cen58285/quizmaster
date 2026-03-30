@@ -2,6 +2,7 @@ package cz.scrumdojo.quizmaster.quiz;
 
 import cz.scrumdojo.quizmaster.TestFixtures;
 import cz.scrumdojo.quizmaster.question.Question;
+import cz.scrumdojo.quizmaster.question.QuestionResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +31,7 @@ public class QuizServiceTest {
 
         QuizResponse response = quizService.getQuiz(quiz.getId()).orElseThrow();
 
-        assertEquals(2, response.getQuestions().length);
+        assertEquals(2, response.questions().length);
     }
 
     @Test
@@ -42,7 +43,7 @@ public class QuizServiceTest {
 
         QuizResponse response = quizService.getQuiz(quiz.getId()).orElseThrow();
 
-        assertEquals(2, response.getQuestions().length);
+        assertEquals(2, response.questions().length);
     }
 
     @Test
@@ -56,8 +57,8 @@ public class QuizServiceTest {
 
         QuizResponse response = quizService.getQuiz(quiz.getId()).orElseThrow();
 
-        Set<Integer> returnedIds = Arrays.stream(response.getQuestions())
-            .map(Question::getId)
+        Set<Integer> returnedIds = Arrays.stream(response.questions())
+            .map(QuestionResponse::id)
             .collect(Collectors.toSet());
         assertTrue(poolIds.containsAll(returnedIds));
     }
@@ -76,7 +77,7 @@ public class QuizServiceTest {
 
         QuizResponse response = quizService.getQuiz(quiz.getId()).orElseThrow();
 
-        assertEquals(1, response.getQuestions().length);
-        assertEquals(q1.getId(), response.getQuestions()[0].getId());
+        assertEquals(1, response.questions().length);
+        assertEquals(q1.getId(), response.questions()[0].id());
     }
 }

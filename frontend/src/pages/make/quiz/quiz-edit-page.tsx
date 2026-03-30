@@ -28,9 +28,9 @@ export const QuizEditPage = () => {
     const onSubmit = (data: QuizEditFormData) =>
         tryCatch(setErrorMessage, async () => {
             if (quizId) {
-                await putQuiz(data, quizId)
+                await putQuiz(data, quizId, workspaceId)
             } else {
-                await postQuiz(data)
+                await postQuiz(data, workspaceId)
             }
             navigate(urls.workspace(workspaceId))
         })

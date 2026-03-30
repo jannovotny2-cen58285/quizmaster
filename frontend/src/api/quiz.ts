@@ -15,15 +15,18 @@ export interface QuizCreateRequest {
 
 export const fetchQuiz = async (quizId: string) => await fetchJson<Quiz>(`/api/quiz/${quizId}`)
 
-interface QuizCreateResponse {
+interface QuizWriteResponse {
     readonly id: number
 }
 
-export const putQuiz = async (quiz: QuizCreateRequest, id: string) => {
-    await putJson<QuizCreateRequest, QuizCreateResponse>(`/api/quiz/${id}`, quiz)
+export const postQuiz = async (quiz: QuizCreateRequest, workspaceGuid: string) => {
+    const response = await postJson<QuizCreateRequest, QuizWriteResponse>(
+        `/api/workspaces/${workspaceGuid}/quizzes`,
+        quiz,
+    )
+    return String(response.id)
 }
 
-export const postQuiz = async (quiz: QuizCreateRequest) => {
-    const response = await postJson<QuizCreateRequest, QuizCreateResponse>('/api/quiz', quiz)
-    return String(response.id)
+export const putQuiz = async (quiz: QuizCreateRequest, id: string, workspaceGuid: string) => {
+    await putJson<QuizCreateRequest, QuizWriteResponse>(`/api/workspaces/${workspaceGuid}/quizzes/${id}`, quiz)
 }

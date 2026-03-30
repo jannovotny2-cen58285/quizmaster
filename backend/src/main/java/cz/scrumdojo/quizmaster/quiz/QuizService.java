@@ -2,7 +2,7 @@ package cz.scrumdojo.quizmaster.quiz;
 
 import cz.scrumdojo.quizmaster.question.Question;
 import cz.scrumdojo.quizmaster.question.QuestionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import cz.scrumdojo.quizmaster.question.QuestionResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,7 +15,6 @@ public class QuizService {
     private final QuestionRepository questionRepository;
     private final QuizRepository quizRepository;
 
-    @Autowired
     public QuizService(QuestionRepository questionRepository, QuizRepository quizRepository) {
         this.questionRepository = questionRepository;
         this.quizRepository = quizRepository;
@@ -34,17 +33,21 @@ public class QuizService {
             questions = questions.subList(0, Math.min(randomCount, questions.size()));
         }
 
-        return QuizResponse.builder()
-            .id(quiz.getId())
-            .title(quiz.getTitle())
-            .description(quiz.getDescription())
-            .questions(questions.toArray(new Question[0]))
-            .mode(quiz.getMode())
-            .difficulty(quiz.getDifficulty())
-            .passScore(quiz.getPassScore())
-            .timeLimit(quiz.getTimeLimit())
-            .randomQuestionCount(quiz.getRandomQuestionCount())
-            .build();
+        QuestionResponse[] questionResponses = questions.stream()
+            .map(QuestionResponse::from)
+            .toArray(QuestionResponse[]::new);
+
+        return new QuizResponse(
+            quiz.getId(),
+            quiz.getTitle(),
+            questionResponses,
+            quiz.getMode(),
+            quiz.getDifficulty(),
+            quiz.getPassScore(),
+            quiz.getDescription(),
+            quiz.getTimeLimit(),
+            quiz.getRandomQuestionCount()
+        );
     }
 
     private List<Question> loadQuestions(Quiz quiz) {
