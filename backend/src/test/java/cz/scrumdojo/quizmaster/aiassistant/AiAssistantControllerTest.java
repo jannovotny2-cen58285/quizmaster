@@ -13,8 +13,6 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.hamcrest.Matchers;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AiAssistantControllerTest {
