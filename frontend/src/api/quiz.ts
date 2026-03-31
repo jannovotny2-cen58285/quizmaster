@@ -1,4 +1,4 @@
-import { fetchJson, postJson, putJson } from './helpers.ts'
+import { fetchJson, postJson, putJson, callDelete } from './helpers.ts'
 import type { Quiz, QuizMode, Difficulty } from 'model/quiz.ts'
 
 export interface QuizCreateRequest {
@@ -30,3 +30,6 @@ export const postQuiz = async (quiz: QuizCreateRequest, workspaceGuid: string) =
 export const putQuiz = async (quiz: QuizCreateRequest, id: string, workspaceGuid: string) => {
     await putJson<QuizCreateRequest, QuizWriteResponse>(`/api/workspaces/${workspaceGuid}/quizzes/${id}`, quiz)
 }
+
+export const deleteQuiz = async (workspaceGuid: string, quizId: string) =>
+    await callDelete(`/api/workspaces/${workspaceGuid}/quizzes/${quizId}`)

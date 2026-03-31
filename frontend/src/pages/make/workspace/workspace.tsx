@@ -8,6 +8,7 @@ import type { Workspace } from 'model/workspace'
 import { useApi } from 'api/hooks'
 import { fetchWorkspace, fetchWorkspaceQuestions, fetchWorkspaceQuizzes } from 'api/workspace'
 import { deleteQuestion } from 'api/question'
+import { deleteQuiz } from 'api/quiz'
 
 import { urls, useWorkspaceId } from 'urls.ts'
 import { ItemList, LinkButton } from 'pages/components'
@@ -20,6 +21,7 @@ export function WorkspacePage() {
     const [workspace, setWorkspace] = useState<Workspace>({ guid: workspaceId, title: '' })
     const [questions, setQuestions] = useState<readonly QuestionListItem[]>([])
     const [quizzes, setQuizzes] = useState<readonly QuizListItem[]>([])
+    const [quizToDelete, setQuizToDelete] = useState<{ id: number; title: string } | null>(null)
 
     useApi(workspaceId, fetchWorkspace, setWorkspace)
     useApi(workspaceId, fetchWorkspaceQuestions, setQuestions)
@@ -27,6 +29,14 @@ export function WorkspacePage() {
 
     const onDeleteQuestion = async (id: number) => {
         await deleteQuestion(workspaceId, `${id}`)
+        setQuestions(await fetchWorkspaceQuestions(workspaceId))
+    }
+
+    const onConfirmDeleteQuiz = async () => {
+        if (!quizToDelete) return
+        await deleteQuiz(workspaceId, `${quizToDelete.id}`)
+        setQuizToDelete(null)
+        setQuizzes(await fetchWorkspaceQuizzes(workspaceId))
         setQuestions(await fetchWorkspaceQuestions(workspaceId))
     }
 
@@ -53,9 +63,24 @@ export function WorkspacePage() {
             </ItemList>
             <ItemList title="My quizzes">
                 {quizzes.map(quiz => (
-                    <QuizItem key={quiz.id} quiz={quiz} />
+                    <QuizItem
+                        key={quiz.id}
+                        quiz={quiz}
+                        onDeleteClick={q => setQuizToDelete({ id: q, title: quiz.title })}
+                    />
                 ))}
             </ItemList>
+            {quizToDelete && (
+                <dialog open>
+                    <p>Delete quiz &quot;{quizToDelete.title}&quot;?</p>
+                    <button type="button" onClick={onConfirmDeleteQuiz}>
+                        Confirm
+                    </button>
+                    <button type="button" onClick={() => setQuizToDelete(null)}>
+                        Cancel
+                    </button>
+                </dialog>
+            )}
         </div>
     )
 }

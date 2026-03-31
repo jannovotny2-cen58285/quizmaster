@@ -45,4 +45,18 @@ public class QuizMakeController {
             })
             .orElse(ResponseEntity.notFound().build());
     }
+
+    @Transactional
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteQuiz(
+            @PathVariable String guid, @PathVariable Integer id) {
+        if (!workspaceRepository.existsById(guid))
+            return ResponseEntity.notFound().build();
+
+        if (quizRepository.findByIdAndWorkspaceGuid(id, guid).isEmpty())
+            return ResponseEntity.notFound().build();
+
+        quizRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

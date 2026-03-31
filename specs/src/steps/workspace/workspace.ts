@@ -23,6 +23,10 @@ Then('I see question in list {string}', async function (question: string) {
     await this.workspacePage.expectQuestionVisible(question)
 })
 
+Then('I do not see question {string} in the list', async function (question: string) {
+    await this.workspacePage.expectQuestionNotVisible(question)
+})
+
 Then('I see workspace title {string}', async function (title: string) {
     await this.workspacePage.expectWorkspaceName(title)
 })
@@ -56,6 +60,22 @@ Then('I do not see image thumbnail for question {string}', async function (quest
 
 Then('I see the quiz {string} in the workspace', async function (quizName: string) {
     await this.workspacePage.expectQuizVisible(quizName)
+})
+
+Then('I do not see quiz {string} in the workspace', async function (quizName: string) {
+    await this.workspacePage.expectQuizNotVisible(quizName)
+})
+
+When('I delete quiz {string} from the workspace', async function (quizName: string) {
+    await this.workspacePage.deleteQuiz(quizName)
+})
+
+When('I confirm the deletion', async function () {
+    await this.workspacePage.confirmDeletion()
+})
+
+When('I cancel the deletion', async function () {
+    await this.workspacePage.cancelDeletion()
 })
 
 Then('I take quiz {string}', async function (quiz: string) {

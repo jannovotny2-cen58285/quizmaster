@@ -1,6 +1,8 @@
 package cz.scrumdojo.quizmaster.quiz;
 
 import cz.scrumdojo.quizmaster.TestFixtures;
+import cz.scrumdojo.quizmaster.attempt.Attempt;
+import cz.scrumdojo.quizmaster.attempt.AttemptRepository;
 import cz.scrumdojo.quizmaster.question.Question;
 import cz.scrumdojo.quizmaster.workspace.Workspace;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -22,6 +25,9 @@ public class QuizMakeControllerTest {
 
     @Autowired
     private TestFixtures fixtures;
+
+    @Autowired
+    private AttemptRepository attemptRepository;
 
     @Test
     public void createQuizInWorkspace() throws Exception {
@@ -128,6 +134,43 @@ public class QuizMakeControllerTest {
                         "randomQuestionCount": 0
                     }
                     """))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void deleteQuizFromWorkspace() throws Exception {
+        Workspace workspace = fixtures.save(fixtures.workspace());
+        Question question = fixtures.save(fixtures.questionIn(workspace));
+        Quiz quiz = fixtures.save(fixtures.quiz(question).workspaceGuid(workspace.getGuid()).build());
+
+        mockMvc.perform(delete("/api/workspaces/{guid}/quizzes/{id}", workspace.getGuid(), quiz.getId()))
+            .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/quiz/{id}", quiz.getId()))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void deleteQuizAlsoCascadesAttempts() throws Exception {
+        Workspace workspace = fixtures.save(fixtures.workspace());
+        Question question = fixtures.save(fixtures.questionIn(workspace));
+        Quiz quiz = fixtures.save(fixtures.quiz(question).workspaceGuid(workspace.getGuid()).build());
+        Attempt attempt = fixtures.save(fixtures.attempt(quiz));
+
+        mockMvc.perform(delete("/api/workspaces/{guid}/quizzes/{id}", workspace.getGuid(), quiz.getId()))
+            .andExpect(status().isNoContent());
+
+        assertThat(attemptRepository.findById(attempt.getId())).isEmpty();
+    }
+
+    @Test
+    public void deleteQuizInWrongWorkspaceReturns404() throws Exception {
+        Workspace workspace1 = fixtures.save(fixtures.workspace());
+        Workspace workspace2 = fixtures.save(fixtures.workspace());
+        Question question = fixtures.save(fixtures.questionIn(workspace1));
+        Quiz quiz = fixtures.save(fixtures.quiz(question).workspaceGuid(workspace1.getGuid()).build());
+
+        mockMvc.perform(delete("/api/workspaces/{guid}/quizzes/{id}", workspace2.getGuid(), quiz.getId()))
             .andExpect(status().isNotFound());
     }
 }

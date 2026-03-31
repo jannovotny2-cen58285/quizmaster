@@ -20,6 +20,7 @@ export class WorkspacePage {
 
     expectQuestionCount = (count: number) => expect(this.questionsLocator()).toHaveCount(count)
     expectQuestionVisible = (question: string) => expect(this.questionLocator(question)).toBeVisible()
+    expectQuestionNotVisible = (question: string) => expect(this.questionLocator(question)).not.toBeVisible()
 
     // ── Question actions ─────────────────────────────
 
@@ -55,5 +56,10 @@ export class WorkspacePage {
     editQuiz = (quiz: string) => this.quizLocator(quiz).getByRole('link', { name: 'Edit' }).click()
     statsQuiz = (quiz: string) => this.quizLocator(quiz).getByRole('link', { name: 'Statistics' }).click()
 
+    deleteQuiz = (quiz: string) => this.quizLocator(quiz).getByRole('button', { name: 'Delete' }).click()
+    confirmDeletion = () => this.page.getByRole('dialog').getByRole('button', { name: 'Confirm' }).click()
+    cancelDeletion = () => this.page.getByRole('dialog').getByRole('button', { name: 'Cancel' }).click()
+
     expectQuizVisible = (quiz: string) => expect(this.quizLocator(quiz)).toBeVisible()
+    expectQuizNotVisible = (quiz: string) => expect(this.quizLocator(quiz)).not.toBeVisible()
 }

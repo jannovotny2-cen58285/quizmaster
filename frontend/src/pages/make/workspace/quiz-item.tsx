@@ -4,9 +4,10 @@ import { urls, useWorkspaceId } from 'urls.ts'
 
 interface Props {
     readonly quiz: QuizListItem
+    readonly onDeleteClick: (id: number) => void
 }
 
-export const QuizItem = ({ quiz }: Props) => {
+export const QuizItem = ({ quiz, onDeleteClick }: Props) => {
     const workspaceId = useWorkspaceId()
     return (
         <div className="quiz-item question-item">
@@ -14,6 +15,9 @@ export const QuizItem = ({ quiz }: Props) => {
             <LinkButton label="Edit" to={urls.workspaceQuizEdit(workspaceId, quiz.id)} />
             <LinkButton label="Take" to={urls.quizWelcome(quiz.id)} />
             <LinkButton label="Statistics" to={urls.workspaceQuizStats(workspaceId, quiz.id)} />
+            <button type="button" className="link-button" onClick={() => onDeleteClick(quiz.id)}>
+                Delete
+            </button>
         </div>
     )
 }
