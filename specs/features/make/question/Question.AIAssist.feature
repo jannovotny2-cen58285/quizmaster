@@ -34,3 +34,15 @@ Feature: Generate question and answers using AI
       * saved and bookmarked as "Czechia"
     When I enter question "What is the capital of Slovakia?"
     Then I do not see AI section
+
+  Scenario: Generate multiple-choice question and answers and explanations using AI assist
+      Given I start creating a question
+      When I ask AI:
+        | Generate a question about European capitals |
+        | with 2 correct answers   |
+        | and 2 incorrect answers  |
+        | with explanations        |
+      Then the question is multiple choice
+      And Question field is not empty
+      And AI assistant returns at least 2 generated answers with explanations
+      And AI assistant returns at least 2 correct answers with explanations

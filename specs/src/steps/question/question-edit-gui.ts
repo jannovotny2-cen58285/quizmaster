@@ -212,6 +212,14 @@ Then('AI assistant returns at least {int} correct answers', async function (coun
     this.questionEditPage.expectCorrectAnswerCountGreaterThanOrEqual(count)
 })
 
+Then('AI assistant returns at least {int} generated answers with explanations', async function (count: number) {
+    await this.questionEditPage.expectAnswerExplanationCountGreaterThanOrEqual(count)
+})
+
+Then('AI assistant returns at least {int} correct answers with explanations', async function (count: number) {
+    await this.questionEditPage.expectCorrectAnswerExplanationCountGreaterThanOrEqual(count)
+})
+
 Then('Question field is not empty', async function () {
     await this.questionEditPage.expectQuestionValueNotEmpty()
 })

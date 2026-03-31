@@ -146,6 +146,28 @@ export class QuestionEditPage {
 
     expectExactlyOneCorrectAnswer = () => expect(this.checkedAnswersLocator()).toHaveCount(1)
 
+    expectAnswerExplanationCountGreaterThanOrEqual = async (count: number) => {
+        const nonEmptyCount = await this.page
+            .locator('.answer-row input.explanation')
+            .evaluateAll(elements =>
+                elements.filter(element => (element as any).value.trim().length > 0).length,
+            )
+        expect(nonEmptyCount).toBeGreaterThanOrEqual(count)
+    }
+
+    expectCorrectAnswerExplanationCountGreaterThanOrEqual = async (count: number) => {
+        const correctWithExplanationCount = await this.page
+            .locator('.answer-row')
+            .evaluateAll(rows =>
+                rows.filter(row => {
+                    const input = (row as any).querySelector('input[type="checkbox"], input[type="radio"]') as any
+                    const explanation = (row as any).querySelector('input.explanation') as any
+                    return input?.checked && explanation?.value.trim().length > 0
+                }).length,
+            )
+        expect(correctWithExplanationCount).toBeGreaterThanOrEqual(count)
+    }
+
     expectCorrectAnswerCountGreaterThanOrEqual = async (count: number) =>
         expect(await this.checkedAnswersLocator().count()).toBeGreaterThanOrEqual(count)
 }

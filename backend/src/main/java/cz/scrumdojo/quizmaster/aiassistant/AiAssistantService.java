@@ -77,8 +77,14 @@ public class AiAssistantService {
             String content = root.path("choices").path(0).path("message").path("content").asText("").trim();
             AssistantResponse assistantResponse = objectMapper.readValue(content, AssistantResponse.class);
             validateResponse(assistantResponse);
+            String[] explanations = normalizeExplanations(assistantResponse);
 
-            return new AiAssistantResponse(assistantResponse.question(), assistantResponse.answers(), assistantResponse.correctAnswers());
+            return new AiAssistantResponse(
+                assistantResponse.question(),
+                assistantResponse.answers(),
+                assistantResponse.correctAnswers(),
+                explanations
+            );
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {
@@ -96,11 +102,26 @@ public class AiAssistantService {
         if (response.correctAnswers() == null || response.correctAnswers().length < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "AI assistant returned invalid response: need at least 1 correct answer.");
         }
+        if (response.explanations() != null && response.explanations().length != response.answers().length) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "AI assistant returned invalid response: explanations length mismatch.");
+        }
         boolean allInBounds = Arrays.stream(response.correctAnswers())
             .allMatch(i -> i >= 0 && i < response.answers().length);
         if (!allInBounds) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "AI assistant returned invalid response: correctAnswers index out of bounds.");
         }
+    }
+
+    private static String[] normalizeExplanations(AssistantResponse response) {
+        if (response.explanations() == null) {
+            return new String[response.answers().length];
+        }
+        if (response.explanations().length != response.answers().length) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "AI assistant returned invalid response: explanations length mismatch.");
+        }
+        return Arrays.stream(response.explanations())
+            .map(e -> e == null ? "" : e)
+            .toArray(String[]::new);
     }
 
     private record ChatRequest(String model, Message[] messages, @JsonProperty("response_format") ResponseFormat responseFormat) {}
@@ -109,5 +130,5 @@ public class AiAssistantService {
 
     private record Message(String role, String content) {}
 
-    record AssistantResponse(String question, String[] answers, int[] correctAnswers) {}
+    record AssistantResponse(String question, String[] answers, int[] correctAnswers, String[] explanations) {}
 }

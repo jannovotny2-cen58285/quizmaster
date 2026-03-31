@@ -22,10 +22,13 @@ Return ONLY valid JSON with no additional text, no markdown, no code fences:
 {
     "question": "...?",
     "answers": ["answer1", "answer2", ...],
-    "correctAnswers": [0]
+    "correctAnswers": [0],
+    "explanations": ["explanation1", "explanation2", ...]
 }
 
 The "correctAnswers" array contains the 0-based indices of all correct answers within the "answers" array.
+The "explanations" array must contain the same number of items as the "answers" array.
+If the user did not request explanations, return empty strings for each explanation.
 
 Rules:
 - The question must be clear, factual, and verifiable.

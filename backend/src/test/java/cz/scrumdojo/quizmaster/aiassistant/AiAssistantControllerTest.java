@@ -40,7 +40,9 @@ public class AiAssistantControllerTest {
             .andExpect(jsonPath("$.answers").isArray())
             .andExpect(jsonPath("$.answers.length()").value(3))
             .andExpect(jsonPath("$.correctAnswers").isArray())
-            .andExpect(jsonPath("$.correctAnswers.length()").value(1));
+            .andExpect(jsonPath("$.correctAnswers.length()").value(1))
+            .andExpect(jsonPath("$.explanations").isArray())
+            .andExpect(jsonPath("$.explanations.length()").value(3));
     }
 
     @Tag("ai")
@@ -60,7 +62,9 @@ public class AiAssistantControllerTest {
             .andExpect(jsonPath("$.answers").isArray())
             .andExpect(jsonPath("$.answers.length()").value(4))
             .andExpect(jsonPath("$.correctAnswers").isArray())
-            .andExpect(jsonPath("$.correctAnswers.length()").value(1));
+            .andExpect(jsonPath("$.correctAnswers.length()").value(1))
+            .andExpect(jsonPath("$.explanations").isArray())
+            .andExpect(jsonPath("$.explanations.length()").value(4));
     }
 
     @Test
