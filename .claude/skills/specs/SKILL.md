@@ -55,17 +55,28 @@ Feature: Quiz time limit
 
 No tags before the Feature keyword.
 
-### Continuation steps: use `*` not `And`
+### Continuation steps: `*` for fluent flows, `And` for discrete steps
+
+Use `*` for fluent sequences where steps form a cohesive flow (setup chains, multi-step actions that read as one thought):
 
 ```gherkin
 Given workspace "Score" with questions
   | question  | answers  |
   | 2 + 2 = ? | 4 (*), 5 |
-* a quiz "Quiz" with all questions
+And a quiz "Quiz" with all questions
 When I start the quiz
 * I answer 3 questions correctly
 * I proceed to the score page
 Then I see the result 3 correct out of 4, 75%, passed, required passScore 75%
+```
+
+Use `And` for discrete, independent steps that happen to follow each other:
+
+```gherkin
+When I delete quiz "Math Quiz" from the workspace
+And I confirm the deletion
+Then I do not see quiz "Math Quiz" in the workspace
+And I see question in list "2 + 2 = ?"
 ```
 
 ### Domain language, not UI language
