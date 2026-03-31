@@ -67,6 +67,7 @@ Then('I do not see quiz {string} in the workspace', async function (quizName: st
 })
 
 When('I delete quiz {string} from the workspace', async function (quizName: string) {
+    await this.workspacePage.goto(this.workspaceGuid)
     await this.workspacePage.deleteQuiz(quizName)
 })
 
