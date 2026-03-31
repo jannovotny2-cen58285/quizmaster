@@ -101,7 +101,7 @@ but runs in end-to-end tests in GitHub Actions CI/CD build.
 - on the backend, the feature flag is a static method `FeatureFlag.isEnabled()`
 
     ```java
-    import cz.scrumdojo.quizmaster.FeatureFlag;
+    import cz.scrumdojo.quizmaster.config.FeatureFlag;
 
     if (FeatureFlag.isEnabled()) {
         // Unfinished feature

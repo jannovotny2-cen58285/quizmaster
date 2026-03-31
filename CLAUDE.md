@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding assistants (Claude Code, GitHub Copilot) working with this repository.
 
 ## Project Overview
 
@@ -8,170 +8,146 @@ Quizmaster is a training application for Scrum workshops at ScrumDojo.cz. Core f
 - Create and manage questions, workspaces, and quizzes
 - Take standalone questions or complete quizzes
 
-Built incrementally using thin slices of functionality—a key learning objective of the Scrum training.
+Built incrementally using thin slices of functionality — a key learning objective of the training.
 
 ## Architecture
 
 **Monorepo with frontend built into backend:**
 - Frontend: React 19 SPA (Vite) → builds to `backend/src/main/resources/static/`
 - Backend: Spring Boot 3 serves frontend at `/` and REST APIs at `/api/*`
-- Database: PostgreSQL (JPA/Hibernate + Flyway migrations)
+- Database: PostgreSQL (JPA/Hibernate + Flyway migrations in `backend/src/main/resources/db/migration/`)
 - Deployment: Single JAR containing both frontend and backend
 
-**Key insight:** Frontend must be built with `pnpm build` before running backend to see changes.
+**Key insight:** Frontend must be built with `pnpm build` before running backend — changes don't auto-reflect.
 
 ## Tech Stack
 
-- **Backend:** Java 21, Spring Boot 3.3.3, Gradle (Kotlin DSL), Lombok
-- **Frontend:** TypeScript 5.7, React 19, Vite 6, Biome (linting)
+- **Backend:** Java 21, Spring Boot 3, Gradle (Kotlin DSL), Lombok
+- **Frontend:** TypeScript, React 19, Vite, Biome (linting)
 - **E2E Testing:** Cucumber + Playwright (separate `specs/` package)
 - **Database:** PostgreSQL
-- **Swagger UI:** http://localhost:8080/swagger-ui/index.html
 
 ## Development Commands
 
-**Setup:**
 ```bash
+# Setup
 cd frontend && pnpm install        # Frontend dependencies
 cd specs && pnpm ci:install        # E2E test dependencies + Playwright browsers
-```
 
-**Running (choose one):**
-```bash
-# Production-like: frontend → backend
-cd frontend && pnpm build && cd ../backend && ./gradlew bootRun  # :8080
-
-# Development with HMR (recommended):
+# Development with HMR (recommended)
 cd backend && ./gradlew bootRun     # :8080 backend
 cd frontend && pnpm dev             # :5173 dev server (proxies API to :8080)
-```
 
-**Code Quality:**
-```bash
-cd frontend && pnpm code           # TypeScript + Biome lint/format (frontend)
-cd specs && pnpm code              # TypeScript + Biome lint/format (specs)
-```
+# Production-like
+cd frontend && pnpm build && cd ../backend && ./gradlew bootRun  # :8080
 
-**E2E Testing:**
-```bash
-cd specs
-pnpm test:e2e          # E2E against :8080
-pnpm test:e2e:vite     # E2E against :5173
-pnpm test:e2e:ui       # Playwright UI at :3333
+# Code quality (run before committing)
+cd frontend && pnpm code           # TypeScript + Biome lint/format
+cd specs && pnpm code              # TypeScript + Biome lint/format
+
+# Backend tests
+cd backend && ./gradlew testLocal  # Local tests (no API key needed)
+
+# E2E tests
+cd specs && pnpm test:e2e          # Against :8080
+cd specs && pnpm test:e2e:vite     # Against :5173
 ```
 
 ## Domain Model
 
 **Three entities:**
-1. **Question** - Question text, multiple answers, correct answer indices, explanations
-   - Fields: `id`, `question`, `answers[]`, `correctAnswers[]`, `answerExplanations[]`, `questionExplanation`, `isEasyMode`, `editId` (UUID), `workspaceGuid`
-2. **Workspace** - Collection of questions and quizzes (identified by GUID/UUID)
-   - Fields: `guid`, `name`
-3. **Quiz** - Assessment configuration
-   - Fields: `id`, `title`, `description`, `questionIds[]`, `passScore`, `timeLimit`, `mode` (EXAM/LEARN), `finalCount`, `workspaceGuid`
+1. **Question** — `id`, `question`, `answers[]`, `correctAnswers[]`, `explanations[]`, `questionExplanation`, `isEasyMode`, `imageUrl`, `tolerance`, `workspaceGuid`
+   - Questions are edited by numeric `id`, scoped to a workspace
+2. **Workspace** — `guid` (UUID), `title`
+3. **Quiz** — `id`, `title`, `description`, `questionIds[]` (int array), `passScore`, `timeLimit`, `mode` (EXAM/LEARN), `difficulty` (EASY/HARD/KEEP_QUESTION), `randomQuestionCount`, `workspaceGuid`
 
 **Key concepts:**
-- **`mode` field**: `EXAM` = exam mode (feedback at end), `LEARN` = learning mode (feedback after each question)
-- **`finalCount` field**: Limits quiz to N random questions from the question pool
-- **`editId` field**: UUID used for editing questions without authentication (NOT encryption/hashing)
-- **Standalone questions**: Original feature; users can take individual questions outside quizzes
+- `EXAM` mode = feedback at end; `LEARN` mode = feedback after each question
+- `randomQuestionCount` limits quiz to N random questions from the pool
+
+## Backend Structure
+
+Each domain has its own package under `cz.scrumdojo.quizmaster`:
+- `question/` — `QuestionMakeController`, `QuestionTakeController`, `QuestionRepository`, `Question`, `QuestionRequest`, `QuestionResponse`
+- `quiz/` — `QuizMakeController`, `QuizTakeController`, `QuizService`, `QuizRepository`, `Quiz`, `QuizMode`, `Difficulty`, `QuizRequest`, `QuizResponse`
+- `workspace/` — `WorkspaceController`, `WorkspaceRepository`, `Workspace`, `WorkspaceRequest`, `WorkspaceResponse`, `WorkspaceCreateResponse`, `QuestionListItem`, `QuizListItem`
+- `attempt/` — `AttemptController`, `AttemptRepository`, `Attempt`, `AttemptStatus`, `AttemptRequest`, `AttemptResponse`
+- `common/` — `IdResponse` (shared record for POST/PUT responses), `ResponseHelper`
+- `config/` — `FeatureFlag`, `OpenApiConfig`, `WebMvcConfig`, `ResourceResolver`
+- `aiassistant/` — `AiAssistantController`, `AiAssistantService`, `AiAssistantRequest`, `AiAssistantResponse`
+
+**Style guides:** See `docs/controller-style.md` and `docs/code-style.md`.
 
 ## API Endpoints
 
-**Quiz Management:**
-- `GET /api/quiz/{id}` - Get quiz with all questions (returns `QuizResponse` DTO)
-- `POST /api/quiz` - Create quiz with question IDs array
-- `GET /api/workspaces/{guid}/quizzes` - Find quizzes in a workspace (returns array of `QuizListItem` DTOs)
+**Workspaces** (`WorkspaceController`):
+- `GET /api/workspaces/{guid}` — get workspace
+- `POST /api/workspaces` — create workspace
+- `GET /api/workspaces/{guid}/questions` — list questions in workspace
+- `GET /api/workspaces/{guid}/quizzes` — list quizzes in workspace
 
-**Question Management:**
-- `GET /api/question/{id}` - Get question (with `deletable` flag)
-- `POST /api/question` - Create question, returns `QuestionCreateResponse` DTO with `id` and `editId`
-- `PATCH /api/question/{editId}` - Update question by editId (UUID)
-- `GET /api/question/{editId}/edit` - Get question by editId for editing
-- `GET /api/workspaces/{guid}/questions` - Get questions in a workspace (returns array of `QuestionListItem` DTOs)
+**Questions — editing** (`QuestionMakeController`):
+- `GET /api/workspaces/{guid}/questions/{id}` — get question for editing
+- `POST /api/workspaces/{guid}/questions` — create question (returns `IdResponse`)
+- `PATCH /api/workspaces/{guid}/questions/{id}` — update question
+- `DELETE /api/workspaces/{guid}/questions/{id}` — delete question
 
-**Workspace Management:**
-- `GET /api/workspaces/{guid}` - Get workspace
-- `POST /api/workspaces` - Create workspace, returns `WorkspaceCreateResponse` DTO with GUID
+**Questions — taking** (`QuestionTakeController`):
+- `GET /api/question/{id}` — get question for taking
 
-**Feature Flags:**
-- `GET /api/feature-flag` - Returns whether feature flag is enabled
+**Quizzes — editing** (`QuizMakeController`):
+- `POST /api/workspaces/{guid}/quizzes` — create quiz (returns `IdResponse`)
+- `PUT /api/workspaces/{guid}/quizzes/{id}` — update quiz
 
-## API DTOs (Data Transfer Objects)
+**Quizzes — taking** (`QuizTakeController`):
+- `GET /api/quiz/{id}` — get quiz with questions
 
-The API uses type-safe DTOs for cleaner responses:
+**Attempts** (`AttemptController`):
+- `GET /api/attempt/quiz/{quizId}` — get attempts for a quiz
+- `GET /api/attempt/{id}` — get attempt
+- `POST /api/attempt` — create attempt
+- `PUT /api/attempt/{id}` — update attempt
+- `DELETE /api/attempt/{id}` — delete attempt
 
-**Backend DTOs:**
-- `QuestionCreateResponse` - `{id: number, editId: string}` - Returned when creating questions
-- `WorkspaceCreateResponse` - `{guid: string}` - Returned when creating workspaces
-- `QuizResponse` - Complete quiz data including all Quiz fields
-- `QuestionListItem` - `{id: number, question: string, editId: string}` - Lightweight question in workspace list
-- `QuizListItem` - `{id: number, title: string}` - Lightweight quiz in workspace list
-
-**Frontend Types:**
-- `/frontend/src/model/question-list-item.ts`
-- `/frontend/src/model/quiz-list-item.ts`
-
-These DTOs are part of an ongoing API refactoring (see `API_REFACTORING_PLAN.md`).
+**Other:**
+- `POST /api/ai-assistant` — AI question generation
+- `GET /api/feature-flag` — feature flag status
 
 ## Frontend Routes
 
-- `/` - Home (question/quiz creation)
-- `/question/new` - Create question
-- `/question/:id` - Take standalone question
-- `/question/:editId/edit` - Edit question (uses editId UUID)
-- `/workspace/new` - Create workspace
-- `/workspace/:guid` - View workspace (questions and quizzes)
-- `/quiz-create/new` - Create quiz
-- `/quiz/:id` - Quiz welcome/info page
-- `/quiz/:id/questions` - Take quiz
-
-## Feature Flags
-
-Hide unfinished features behind `FEATURE_FLAG=true` env var:
-
-```typescript
-// Frontend
-if (FEATURE_FLAG_ENABLED) { /* ... */ }
+```
+/                                          Home
+/question/:id                              Take standalone question
+/workspace/new                             Create workspace
+/workspace/:workspaceId                    View workspace
+/workspace/:workspaceId/question/new       Create question
+/workspace/:workspaceId/question/:id/edit  Edit question
+/workspace/:workspaceId/quiz/new           Create quiz
+/workspace/:workspaceId/quiz/:id/edit      Edit quiz
+/workspace/:workspaceId/quiz/:id/stats     Quiz statistics
+/quiz/:id                                  Quiz welcome page
+/quiz/:id/questions/:questionId?           Take quiz
 ```
 
-```java
-// Backend
-if (FeatureFlag.isEnabled()) { /* ... */ }
-```
+## E2E Testing
 
-```gherkin
-# Tests
-@feature-flag
-Scenario: New feature
-```
+BDD specs in `specs/features/`, organized into `make/` (creating) and `take/` (answering).
 
-## AI Assistant
+**Style guide:** See `docs/e2e-style-guide.md` and `docs/code-style.md`.
 
-Question generation uses OpenRouter. Configure via environment variables:
-- `OPENROUTER_API_KEY` - API key (required)
-- `OPENROUTER_MODEL` - Model to use (default: `openai/gpt-4o-mini`)
-
-Recommended models for quality quiz generation:
-- `anthropic/claude-sonnet-4` - Strong reasoning, good at nuanced distractors
-- `openai/gpt-4o` - Well-rounded, reliable structured output
-- `google/gemini-2.5-flash` - Fast, good quality-to-cost ratio
-- `deepseek/deepseek-v3-0324` - Capable and cost-effective
+**Test layers:**
+- **Page Objects** (`specs/src/pages/`) — DOM abstraction, queries and actions
+- **Ops** (`specs/src/steps/<feature>/ops.ts`) — multi-step workflows
+- **Expects** (`specs/src/steps/<feature>/expects.ts`) — domain assertions
+- **Steps** (`specs/src/steps/<feature>/*.ts`) — thin Gherkin-to-code glue
 
 ## Development Practices
 
-Training repository emphasizing:
-- **Trunk-Based Development** - All work on `master`
-- **Test-Driven Development** - Tests first
-- **Pair/Mob Programming** - Shared ownership
-- **Thin slices** - Minimal incremental features
+- **Trunk-Based Development** — all work on `master`, frequent pull/rebase/push
+- **Test-First** — write Gherkin spec before code
+- **Thin Slices** — one scenario at a time, code only what's needed to pass it
+- **Mob/Pair Programming** — shared ownership
 
-## Known Technical Debt / Future Improvements
+## AI Assistant
 
-1. **API Refactoring** → In progress (see `API_REFACTORING_PLAN.md`)
-   - ✅ Completed: Entity renames (QuizQuestion→Question), endpoint path cleanup, DTO implementations
-   - ⏳ Remaining: Additional DTO types, complete REST standardization
-2. **Question edit IDs** → Already using UUIDs (`editId` field) - originally planned as "encrypted IDs" but implemented more simply
-3. **Quiz-Question relationship** → Refactor int array to M:N junction table with referential integrity
-4. **Progress state endpoint** → May not be optimal implementation
-5. **Standalone questions** → Consider deprecation (kept for backward compatibility)
+Question generation uses OpenRouter. See `docs/dev-environment/how-to-develop.md` for configuration.

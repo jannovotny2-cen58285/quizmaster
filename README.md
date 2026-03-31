@@ -47,4 +47,4 @@ Prior to the class get yourself familiar with the tech stack:
 
 3. [How to run & develop Quizmaster](docs/dev-environment/how-to-develop.md)
 
-4. [Check the tutorials](docs/tutorial/README.md) for more details
+4. [How to develop Quizmaster](docs/dev-environment/how-to-develop.md)
