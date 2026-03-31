@@ -1,5 +1,6 @@
 package cz.scrumdojo.quizmaster.quiz;
 
+import cz.scrumdojo.quizmaster.IdResponse;
 import cz.scrumdojo.quizmaster.workspace.WorkspaceRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +18,17 @@ public class QuizMakeController {
     }
 
     @PostMapping
-    public ResponseEntity<QuizWriteResponse> createQuiz(
+    public ResponseEntity<IdResponse> createQuiz(
             @PathVariable String guid, @RequestBody QuizRequest request) {
         if (!workspaceRepository.existsById(guid))
             return ResponseEntity.notFound().build();
 
         Quiz output = quizRepository.save(request.toEntity());
-        return ResponseEntity.ok(new QuizWriteResponse(output.getId()));
+        return ResponseEntity.ok(new IdResponse(output.getId()));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<QuizWriteResponse> updateQuiz(
+    public ResponseEntity<IdResponse> updateQuiz(
             @PathVariable String guid, @PathVariable Integer id, @RequestBody QuizRequest request) {
         if (!workspaceRepository.existsById(guid))
             return ResponseEntity.notFound().build();
@@ -35,6 +36,6 @@ public class QuizMakeController {
         Quiz quiz = request.toEntity();
         quiz.setId(id);
         Quiz output = quizRepository.save(quiz);
-        return ResponseEntity.ok(new QuizWriteResponse(output.getId()));
+        return ResponseEntity.ok(new IdResponse(output.getId()));
     }
 }

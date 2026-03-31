@@ -1,5 +1,6 @@
 package cz.scrumdojo.quizmaster.question;
 
+import cz.scrumdojo.quizmaster.IdResponse;
 import cz.scrumdojo.quizmaster.ResponseHelper;
 import cz.scrumdojo.quizmaster.workspace.WorkspaceRepository;
 import org.springframework.http.ResponseEntity;
@@ -29,18 +30,18 @@ public class QuestionMakeController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<QuestionWriteResponse> createWorkspaceQuestion(
+    public ResponseEntity<IdResponse> createWorkspaceQuestion(
             @PathVariable String guid, @RequestBody QuestionRequest request) {
         if (!workspaceRepository.existsById(guid))
             return ResponseEntity.notFound().build();
 
         var created = questionRepository.save(request.toEntity(guid));
-        return ResponseEntity.ok(new QuestionWriteResponse(created.getId()));
+        return ResponseEntity.ok(new IdResponse(created.getId()));
     }
 
     @Transactional
     @PatchMapping("/{id}")
-    public ResponseEntity<QuestionWriteResponse> updateWorkspaceQuestion(
+    public ResponseEntity<IdResponse> updateWorkspaceQuestion(
             @PathVariable String guid, @PathVariable Integer id, @RequestBody QuestionRequest request) {
         if (!workspaceRepository.existsById(guid))
             return ResponseEntity.notFound().build();
@@ -50,7 +51,7 @@ public class QuestionMakeController {
                 var question = request.toEntity(guid);
                 question.setId(existing.getId());
                 questionRepository.save(question);
-                return ResponseEntity.ok(new QuestionWriteResponse(existing.getId()));
+                return ResponseEntity.ok(new IdResponse(existing.getId()));
             })
             .orElse(ResponseEntity.notFound().build());
     }
