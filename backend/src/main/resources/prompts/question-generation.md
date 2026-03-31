@@ -21,18 +21,43 @@ Return ONLY valid JSON with no additional text, no markdown, no code fences:
 
 {
     "question": "...?",
-    "answers": ["answer1", "answer2", ...],
-    "correctAnswers": [0],
-    "explanations": ["explanation1", "explanation2", ...]
+    "answers": ["answer1", "answer2", "answer3", "answer4"],
+    "correctAnswers": [0, 1],
+    "explanations": ["explanation for answer1", "explanation for answer2", "explanation for answer3", "explanation for answer4"]
 }
 
-The "correctAnswers" array contains the 0-based indices of all correct answers within the "answers" array.
-The "explanations" array must contain the same number of items as the "answers" array.
-If the user did not request explanations, return empty strings for each explanation.
+CRITICAL REQUIREMENTS FOR JSON RESPONSE:
+1. The "answers" array contains all answer options in order.
+2. The "correctAnswers" array contains 0-based indices (e.g., [0, 1] means answers[0] and answers[1] are correct).
+3. The "explanations" array MUST contain EXACTLY ONE explanation string per answer.
+   - explanations[0] explains answers[0]
+   - explanations[1] explains answers[1]
+   - explanations[2] explains answers[2]
+   - And so on...
+4. The length of "explanations" MUST EQUAL the length of "answers". ALWAYS.
+5. If the user did not request explanations, use empty strings ("") for each explanation.
+6. NEVER skip or omit any explanation. NEVER return fewer explanations than answers.
+
+Example with 3 answers (1 correct, 2 incorrect):
+{
+    "question": "What is the capital of France?",
+    "answers": ["Paris", "Lyon", "Marseille"],
+    "correctAnswers": [0],
+    "explanations": ["Paris is the capital city of France.", "Lyon is the third-largest city but not the capital.", "Marseille is a major port city but not the capital."]
+}
+
+Example with explanations as empty strings (if not requested):
+{
+    "question": "What is 2 + 2?",
+    "answers": ["4", "5", "3"],
+    "correctAnswers": [0],
+    "explanations": ["", "", ""]
+}
 
 Rules:
 - The question must be clear, factual, and verifiable.
 - All answers should be similar in length and style.
 - Incorrect answers should sound plausible but be clearly wrong.
 - The number of correct and incorrect answers MUST match exactly what the user requested.
-- No explanations, comments, or formatting outside the JSON.
+- NO explanations, comments, or formatting outside the JSON.
+- ARRAY LENGTHS MUST MATCH: length(answers) == length(correctAnswers indices are valid) == length(explanations)
