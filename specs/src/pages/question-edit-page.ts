@@ -147,24 +147,37 @@ export class QuestionEditPage {
     expectExactlyOneCorrectAnswer = () => expect(this.checkedAnswersLocator()).toHaveCount(1)
 
     expectAnswerExplanationCountGreaterThanOrEqual = async (count: number) => {
-        const nonEmptyCount = await this.page
-            .locator('.answer-row input.explanation')
-            .evaluateAll(elements =>
-                elements.filter(element => (element as any).value.trim().length > 0).length,
-            )
+        const answerExplanations = this.page.locator('.answer-row input.explanation')
+        const rowCount = await answerExplanations.count()
+        let nonEmptyCount = 0
+
+        for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+            const value = await answerExplanations.nth(rowIndex).inputValue()
+            if (value.trim().length > 0) {
+                nonEmptyCount++
+            }
+        }
+
         expect(nonEmptyCount).toBeGreaterThanOrEqual(count)
     }
 
     expectCorrectAnswerExplanationCountGreaterThanOrEqual = async (count: number) => {
-        const correctWithExplanationCount = await this.page
-            .locator('.answer-row')
-            .evaluateAll(rows =>
-                rows.filter(row => {
-                    const input = (row as any).querySelector('input[type="checkbox"], input[type="radio"]') as any
-                    const explanation = (row as any).querySelector('input.explanation') as any
-                    return input?.checked && explanation?.value.trim().length > 0
-                }).length,
-            )
+        const rows = this.page.locator('.answer-row')
+        const rowCount = await rows.count()
+        let correctWithExplanationCount = 0
+
+        for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+            const row = rows.nth(rowIndex)
+            const input = row.locator('input[type="checkbox"], input[type="radio"]')
+            const explanation = row.locator('input.explanation')
+            const checked = await input.isChecked()
+            const explanationText = await explanation.inputValue()
+
+            if (checked && explanationText.trim().length > 0) {
+                correctWithExplanationCount++
+            }
+        }
+
         expect(correctWithExplanationCount).toBeGreaterThanOrEqual(count)
     }
 
