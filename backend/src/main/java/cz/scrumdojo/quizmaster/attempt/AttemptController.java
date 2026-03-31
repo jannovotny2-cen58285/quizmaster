@@ -1,7 +1,6 @@
 package cz.scrumdojo.quizmaster.attempt;
 
 import cz.scrumdojo.quizmaster.ResponseHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,6 @@ public class AttemptController {
 
     private final AttemptRepository attemptRepository;
 
-    @Autowired
     public AttemptController(AttemptRepository attemptRepository) {
         this.attemptRepository = attemptRepository;
     }
