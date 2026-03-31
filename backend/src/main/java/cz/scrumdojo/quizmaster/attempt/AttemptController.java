@@ -17,7 +17,6 @@ public class AttemptController {
         this.attemptRepository = attemptRepository;
     }
 
-    @Transactional(readOnly = true)
     @GetMapping("/quiz/{quizId}")
     public ResponseEntity<List<AttemptResponse>> getAttemptsByQuiz(@PathVariable Integer quizId) {
         List<AttemptResponse> attempts = attemptRepository.findByQuizIdOrderByStartedAtDesc(quizId)
@@ -27,7 +26,6 @@ public class AttemptController {
         return ResponseEntity.ok(attempts);
     }
 
-    @Transactional(readOnly = true)
     @GetMapping("/{id}")
     public ResponseEntity<AttemptResponse> getAttempt(@PathVariable Integer id) {
         return ResponseHelper.okOrNotFound(
@@ -35,14 +33,12 @@ public class AttemptController {
         );
     }
 
-    @Transactional
     @PostMapping
     public ResponseEntity<AttemptResponse> createAttempt(@RequestBody AttemptRequest request) {
         Attempt attempt = attemptRepository.save(request.toEntity());
         return ResponseEntity.ok(AttemptResponse.from(attempt));
     }
 
-    @Transactional
     @PutMapping("/{id}")
     public ResponseEntity<AttemptResponse> updateAttempt(@PathVariable Integer id, @RequestBody AttemptRequest request) {
         Attempt attempt = request.toEntity();
