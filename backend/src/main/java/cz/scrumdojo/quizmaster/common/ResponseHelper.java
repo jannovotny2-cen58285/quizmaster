@@ -1,4 +1,4 @@
-package cz.scrumdojo.quizmaster;
+package cz.scrumdojo.quizmaster.common;
 
 import org.springframework.http.ResponseEntity;
 

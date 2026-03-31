@@ -4,7 +4,7 @@ import cz.scrumdojo.quizmaster.question.Question;
 import cz.scrumdojo.quizmaster.question.QuestionRepository;
 import cz.scrumdojo.quizmaster.quiz.Quiz;
 import cz.scrumdojo.quizmaster.quiz.QuizRepository;
-import cz.scrumdojo.quizmaster.ResponseHelper;
+import cz.scrumdojo.quizmaster.common.ResponseHelper;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;

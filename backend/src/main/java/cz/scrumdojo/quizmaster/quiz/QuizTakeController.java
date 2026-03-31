@@ -1,6 +1,6 @@
 package cz.scrumdojo.quizmaster.quiz;
 
-import cz.scrumdojo.quizmaster.ResponseHelper;
+import cz.scrumdojo.quizmaster.common.ResponseHelper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

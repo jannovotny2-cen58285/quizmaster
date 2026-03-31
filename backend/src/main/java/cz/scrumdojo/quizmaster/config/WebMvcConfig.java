@@ -1,4 +1,4 @@
-package cz.scrumdojo.quizmaster;
+package cz.scrumdojo.quizmaster.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.lang.NonNull;
 
 @Configuration
-public class Config implements WebMvcConfigurer {
+public class WebMvcConfig implements WebMvcConfigurer {
 
     /** Resolves to index.html any request that does not match a REST endpoint or a static resource. */
     @Override

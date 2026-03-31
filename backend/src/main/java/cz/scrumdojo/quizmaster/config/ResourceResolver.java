@@ -1,4 +1,4 @@
-package cz.scrumdojo.quizmaster;
+package cz.scrumdojo.quizmaster.config;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;

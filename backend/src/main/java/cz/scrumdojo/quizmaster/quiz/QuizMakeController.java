@@ -1,6 +1,6 @@
 package cz.scrumdojo.quizmaster.quiz;
 
-import cz.scrumdojo.quizmaster.IdResponse;
+import cz.scrumdojo.quizmaster.common.IdResponse;
 import cz.scrumdojo.quizmaster.workspace.WorkspaceRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
